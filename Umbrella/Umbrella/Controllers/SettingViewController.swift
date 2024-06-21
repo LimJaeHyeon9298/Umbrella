@@ -15,14 +15,14 @@ class SettingViewController:UIViewController {
     //MARK: - Properties
     
     let userDefaults = UserDefaults.standard
-
+    
     
     
     private let settingButton:UIButton = {
         
         let button = UIButton()
         
-       // button.backgroundColor = .white
+        // button.backgroundColor = .white
         button.addTarget(self, action: #selector(alertButtonTapped), for: .touchUpInside)
         
         return button
@@ -64,8 +64,8 @@ class SettingViewController:UIViewController {
         
         label.text = "알림"
         label.font = UIFont.boldSystemFont(ofSize: 18)
-       // label.textColor = .black
-       
+        // label.textColor = .black
+        
         return label
         
         
@@ -79,7 +79,7 @@ class SettingViewController:UIViewController {
         
         swicth.tintColor = UIColor.orange
         
-     
+        
         swicth.isOn = UserDefaults.standard.bool(forKey: "isDarkMode")
         
         
@@ -96,19 +96,16 @@ class SettingViewController:UIViewController {
         
         return ig
         
-        
-        
-        
     }()
     
     
-   
+    
     private let darkmodeLabel:UILabel = {
         
         let label = UILabel()
         label.text = "다크모드"
         label.font = UIFont.boldSystemFont(ofSize: 18)
-    
+        
         return label
         
         
@@ -122,7 +119,12 @@ class SettingViewController:UIViewController {
         
         
         configUI()
-      
+        
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = true
     }
     
     //MARK: - Functions
@@ -177,11 +179,11 @@ class SettingViewController:UIViewController {
     @objc func alertButtonTapped() {
         
         let controller = NotificationViewController()
-       
-        self.navigationController?.pushViewController(controller, animated: true)
-    
         
-      //  present(controller, animated: true)
+        self.navigationController?.pushViewController(controller, animated: true)
+        
+        
+        //  present(controller, animated: true)
         
         
     }
@@ -206,7 +208,7 @@ class SettingViewController:UIViewController {
         settingButton.backgroundColor = theme.backgroundColor
         titleLabel.textColor = theme.textColor
         darkmodeLabel.textColor = theme.textColor
-       
+        
         if true {
             self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
             
@@ -214,7 +216,7 @@ class SettingViewController:UIViewController {
             self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.red]
         }
         
-    
+        
         
         
         navigationController?.navigationBar.barTintColor = currentTheme.backgroundColor

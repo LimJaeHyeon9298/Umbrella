@@ -34,26 +34,11 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
          
         }
     }
-    
-  
-    
-    
     var weather: Weather?
     var hourWeather: HourWeather?
-  
-    
-  
-    
     let weatherService = WeatherService.shared
-    
-   
-        
-    
-        
- 
     var timer:Timer!
     
- 
     private let resetButton:UIButton = {
         
         let button = UIButton()
@@ -66,10 +51,6 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
         
         
     }()
-    
-    
-    
-    
     
     private let dateLabel:UILabel = {
         
@@ -141,9 +122,6 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
         
     }()
     
-
-    
-    
     private let button4: UIButton = {
         
         let button = UIButton()
@@ -197,9 +175,6 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
         
     }()
     
-    
-
-    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -226,7 +201,7 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         tempLabel.text = String(self.weather?.currentWeather.temperature.value ?? 0)
         NotificationCenter.default.addObserver(self, selector: #selector(test(_:)), name: NSNotification.Name("test"), object: nil)
-    
+        navigationController?.isNavigationBarHidden = true
         
     }
     

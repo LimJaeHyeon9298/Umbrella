@@ -61,27 +61,9 @@ class PrecipitationViewController:UIViewController,CLLocationManagerDelegate {
         
         
     }()
-    
-    
- 
-
-
-
-
-    
-    
-    
-    
-    
     private let tableView:UITableView = {
-        
         let view = UITableView()
-        
         return view
-        
-        
-        
-        
     }()
     
     
@@ -106,13 +88,13 @@ class PrecipitationViewController:UIViewController,CLLocationManagerDelegate {
       
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//
-//        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)), name: NSNotification.Name("test"), object: nil)
-//
-//
-//    }
-//
+    override func viewWillAppear(_ animated: Bool) {
+
+      //  NotificationCenter.default.addObserver(self, selector: #selector(test(_:)), name: NSNotification.Name("test"), object: nil)
+        navigationController?.isNavigationBarHidden = true
+
+    }
+
     
     
     
@@ -215,18 +197,11 @@ class PrecipitationViewController:UIViewController,CLLocationManagerDelegate {
        
         }
       
-        
     }
-    
-    
     
     //MARK: - Actions
 
-    
 }
-
-
-
 extension PrecipitationViewController : UITableViewDelegate,UITableViewDataSource {
     
     

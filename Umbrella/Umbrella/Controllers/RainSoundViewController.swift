@@ -133,12 +133,11 @@ class RainSoundViewController:UIViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         configUI()
-        
-        
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+      navigationController?.isNavigationBarHidden = true 
     }
     
     //MARK: - Functions

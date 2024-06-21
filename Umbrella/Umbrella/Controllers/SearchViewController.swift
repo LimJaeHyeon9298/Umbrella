@@ -19,9 +19,6 @@ class SearchViewController:UIViewController {
     var lat:String?
     var lon:String?
     
-
-    
-    
     var searchController: UISearchController!
     
     

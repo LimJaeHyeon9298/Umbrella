@@ -33,6 +33,7 @@
 		46AA83252C253B8F0065FFB0 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83232C253B8F0065FFB0 /* Theme.swift */; };
 		46AA832A2C253BF60065FFB0 /* Weatherkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83282C253BF60065FFB0 /* Weatherkit.swift */; };
 		46AA832C2C253CCC0065FFB0 /* 우산챙겨요.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46AA832B2C253CCC0065FFB0 /* 우산챙겨요.plist */; };
+		46AA832E2C256C690065FFB0 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA832D2C256C690065FFB0 /* MainTabController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +85,7 @@
 		46AA83232C253B8F0065FFB0 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		46AA83282C253BF60065FFB0 /* Weatherkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weatherkit.swift; sourceTree = "<group>"; };
 		46AA832B2C253CCC0065FFB0 /* 우산챙겨요.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "우산챙겨요.plist"; sourceTree = "<group>"; };
+		46AA832D2C256C690065FFB0 /* MainTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 		46AA830A2C253B3B0065FFB0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				46AA832D2C256C690065FFB0 /* MainTabController.swift */,
 				46AA83022C253B3B0065FFB0 /* MainViewController.swift */,
 				46AA83032C253B3B0065FFB0 /* NotificationViewController.swift */,
 				46AA83042C253B3B0065FFB0 /* PrecipitationViewController.swift */,
@@ -364,6 +367,7 @@
 				46AA830C2C253B3C0065FFB0 /* NotificationViewController.swift in Sources */,
 				46AA82D72C253A340065FFB0 /* ViewController.swift in Sources */,
 				46AA82D32C253A340065FFB0 /* AppDelegate.swift in Sources */,
+				46AA832E2C256C690065FFB0 /* MainTabController.swift in Sources */,
 				46AA83102C253B3C0065FFB0 /* SearchViewController.swift in Sources */,
 				46AA831C2C253B650065FFB0 /* extenstions.swift in Sources */,
 				46AA831E2C253B650065FFB0 /* SearchResultDelegate.swift in Sources */,
