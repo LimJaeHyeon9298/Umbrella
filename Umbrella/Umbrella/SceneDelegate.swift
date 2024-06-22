@@ -22,7 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       
         
     }
-
+    
+  
     func sceneDidDisconnect(_ scene: UIScene) {
     
     }
@@ -45,4 +46,40 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
+//
 
+
+//import UIKit
+//
+//class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+//    
+//    var window: UIWindow?
+//    
+//    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+//        
+//        guard let windowScene = (scene as? UIWindowScene) else { return }
+//        
+//        window = UIWindow(windowScene: windowScene)
+//        
+//        let firstViewController = MainViewController()
+//        firstViewController.view.backgroundColor = .gray
+//        firstViewController.tabBarItem.image = UIImage(systemName: "person.fill")
+//        let firstNavi = UINavigationController(rootViewController: firstViewController)
+//        
+//        let secondViewController = PrecipitationViewController()
+//        secondViewController.view.backgroundColor = .darkGray
+//        secondViewController.title = "Second"
+//        let secondNavi = UINavigationController(rootViewController: secondViewController)
+//        
+//        let thirdViewController = SearchViewController()
+//        thirdViewController.view.backgroundColor = .lightGray
+//        thirdViewController.title = "Third"
+//        let thirdNavi = UINavigationController(rootViewController: thirdViewController)
+//        
+//        let customTabBarController = CustomTabBarController()
+//        customTabBarController.setViewControllers([firstNavi, secondNavi, thirdNavi])
+//        
+//        window?.rootViewController = customTabBarController
+//        window?.makeKeyAndVisible()
+//    }
+//}

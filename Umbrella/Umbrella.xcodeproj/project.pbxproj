@@ -34,6 +34,11 @@
 		46AA832A2C253BF60065FFB0 /* Weatherkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83282C253BF60065FFB0 /* Weatherkit.swift */; };
 		46AA832C2C253CCC0065FFB0 /* 우산챙겨요.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46AA832B2C253CCC0065FFB0 /* 우산챙겨요.plist */; };
 		46AA832E2C256C690065FFB0 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA832D2C256C690065FFB0 /* MainTabController.swift */; };
+		46AA83322C2572690065FFB0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA83312C2572690065FFB0 /* SnapKit */; };
+		46AA83352C25727A0065FFB0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA83342C25727A0065FFB0 /* Then */; };
+		46AA83372C26DF380065FFB0 /* CumstomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83362C26DF380065FFB0 /* CumstomTabBar.swift */; };
+		46AA833A2C26DF780065FFB0 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA83392C26DF780065FFB0 /* RxCocoa */; };
+		46AA833C2C26DF780065FFB0 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA833B2C26DF780065FFB0 /* RxSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +91,7 @@
 		46AA83282C253BF60065FFB0 /* Weatherkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weatherkit.swift; sourceTree = "<group>"; };
 		46AA832B2C253CCC0065FFB0 /* 우산챙겨요.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "우산챙겨요.plist"; sourceTree = "<group>"; };
 		46AA832D2C256C690065FFB0 /* MainTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
+		46AA83362C26DF380065FFB0 /* CumstomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumstomTabBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +99,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46AA833A2C26DF780065FFB0 /* RxCocoa in Frameworks */,
+				46AA83322C2572690065FFB0 /* SnapKit in Frameworks */,
+				46AA833C2C26DF780065FFB0 /* RxSwift in Frameworks */,
+				46AA83352C25727A0065FFB0 /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,6 +202,7 @@
 			children = (
 				46AA83132C253B570065FFB0 /* SearchResultCell.swift */,
 				46AA83142C253B570065FFB0 /* WeatherCell.swift */,
+				46AA83362C26DF380065FFB0 /* CumstomTabBar.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -247,6 +258,12 @@
 			dependencies = (
 			);
 			name = Umbrella;
+			packageProductDependencies = (
+				46AA83312C2572690065FFB0 /* SnapKit */,
+				46AA83342C25727A0065FFB0 /* Then */,
+				46AA83392C26DF780065FFB0 /* RxCocoa */,
+				46AA833B2C26DF780065FFB0 /* RxSwift */,
+			);
 			productName = Umbrella;
 			productReference = 46AA82CF2C253A340065FFB0 /* Umbrella.app */;
 			productType = "com.apple.product-type.application";
@@ -319,6 +336,11 @@
 				Base,
 			);
 			mainGroup = 46AA82C62C253A340065FFB0;
+			packageReferences = (
+				46AA83302C2572690065FFB0 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				46AA83332C25727A0065FFB0 /* XCRemoteSwiftPackageReference "Then" */,
+				46AA83382C26DF780065FFB0 /* XCRemoteSwiftPackageReference "rxswift" */,
+			);
 			productRefGroup = 46AA82D02C253A340065FFB0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -366,6 +388,7 @@
 			files = (
 				46AA830C2C253B3C0065FFB0 /* NotificationViewController.swift in Sources */,
 				46AA82D72C253A340065FFB0 /* ViewController.swift in Sources */,
+				46AA83372C26DF380065FFB0 /* CumstomTabBar.swift in Sources */,
 				46AA82D32C253A340065FFB0 /* AppDelegate.swift in Sources */,
 				46AA832E2C256C690065FFB0 /* MainTabController.swift in Sources */,
 				46AA83102C253B3C0065FFB0 /* SearchViewController.swift in Sources */,
@@ -731,6 +754,56 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		46AA83302C2572690065FFB0 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.7.1;
+			};
+		};
+		46AA83332C25727A0065FFB0 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		46AA83382C26DF780065FFB0 /* XCRemoteSwiftPackageReference "rxswift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/reactivex/rxswift";
+			requirement = {
+				kind = exactVersion;
+				version = 6.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		46AA83312C2572690065FFB0 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46AA83302C2572690065FFB0 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		46AA83342C25727A0065FFB0 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46AA83332C25727A0065FFB0 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		46AA83392C26DF780065FFB0 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46AA83382C26DF780065FFB0 /* XCRemoteSwiftPackageReference "rxswift" */;
+			productName = RxCocoa;
+		};
+		46AA833B2C26DF780065FFB0 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46AA83382C26DF780065FFB0 /* XCRemoteSwiftPackageReference "rxswift" */;
+			productName = RxSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 46AA82C72C253A340065FFB0 /* Project object */;
 }

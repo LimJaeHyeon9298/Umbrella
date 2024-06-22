@@ -9,6 +9,8 @@ import UIKit
 import WeatherKit
 import CoreLocation
 import SafariServices
+import Then
+import SnapKit
 
 class MainViewController: UIViewController,CLLocationManagerDelegate {
     
@@ -87,17 +89,17 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
         
     }()
     
-    private let rainnyButton: UIButton = {
-        
-        let button = UIButton()
-        button.setTitle("시간대별 강수확률", for: .normal)
-        
-        button.addTarget(self, action: #selector(button1Tapped), for: .touchUpInside)
-        
-        return button
-        
-        
-    }()
+//    private let rainnyButton: UIButton = {
+//        
+//        let button = UIButton()
+//        button.setTitle("시간대별 강수확률", for: .normal)
+//        
+//        button.addTarget(self, action: #selector(button1Tapped), for: .touchUpInside)
+//        
+//        return button
+//        
+//        
+//    }()
     
     private let button2: UIButton = {
         
@@ -111,26 +113,26 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
     }()
     
     
-    private let button3: UIButton = {
-        
-        let button = UIButton()
-        button.setTitle("빗소리ASMR", for: .normal)
+//    private let button3: UIButton = {
+//        
+//        let button = UIButton()
+//        button.setTitle("빗소리ASMR", for: .normal)
+//    
+//        button.addTarget(self, action: #selector(button3Tapped), for: .touchUpInside)
+//        return button
+//        
+//        
+//    }()
     
-        button.addTarget(self, action: #selector(button3Tapped), for: .touchUpInside)
-        return button
-        
-        
-    }()
-    
-    private let button4: UIButton = {
-        
-        let button = UIButton()
-        button.setTitle("App Setting", for: .normal)
-     
-        button.addTarget(self, action: #selector(button4Tapped), for: .touchUpInside)
-        return button
-        
-    }()
+//    private let button4: UIButton = {
+//        
+//        let button = UIButton()
+//        button.setTitle("App Setting", for: .normal)
+//     
+//        button.addTarget(self, action: #selector(button4Tapped), for: .touchUpInside)
+//        return button
+//        
+//    }()
     
     private let umbrellaImage:UIImageView = {
         
@@ -283,15 +285,15 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
         view.addSubview(timeLabel)
         timeLabel.anchor(top:dateLabel.bottomAnchor,left: view.leftAnchor,paddingTop: 10,paddingLeft: 30)
         
-        view.addSubview(rainnyButton)
-        rainnyButton.anchor(top:view.topAnchor,right: view.rightAnchor,paddingTop: 470,paddingRight: 30)
+//        view.addSubview(rainnyButton)
+//        rainnyButton.anchor(top:view.topAnchor,right: view.rightAnchor,paddingTop: 470,paddingRight: 30)
         
-        view.addSubview(button2)
-        button2.anchor(top:rainnyButton.bottomAnchor,right: view.rightAnchor,paddingTop: 15,paddingRight: 30)
+//        view.addSubview(button2)
+//        button2.anchor(top:rainnyButton.bottomAnchor,right: view.rightAnchor,paddingTop: 15,paddingRight: 30)
+//        
         
-        
-        view.addSubview(button3)
-        button3.anchor(top:button2.bottomAnchor,right: view.rightAnchor,paddingTop: 15,paddingRight: 30)
+//        view.addSubview(button3)
+//        button3.anchor(top:button2.bottomAnchor,right: view.rightAnchor,paddingTop: 15,paddingRight: 30)
         
         
         
@@ -300,8 +302,8 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
         
         
         
-        view.addSubview(button4)
-        button4.anchor(top:button3.bottomAnchor,right: view.rightAnchor,paddingTop: 30,paddingRight: 30)
+//        view.addSubview(button4)
+//        button4.anchor(top:button3.bottomAnchor,right: view.rightAnchor,paddingTop: 30,paddingRight: 30)
         
         view.addSubview(umbrellaImage)
         umbrellaImage.anchor(top:dateLabel.bottomAnchor,left: view.leftAnchor,paddingTop: 50,paddingLeft: 50,width: 150,height: 150)
@@ -323,7 +325,7 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
         
         view.addSubview(resetButton)
         //resetButton.anchor(top: view.topAnchor,right: view.rightAnchor,paddingTop: 70,paddingRight: 30,width: 50,height: 50)
-        resetButton.anchor(bottom: rainnyButton.topAnchor,right: view.rightAnchor,paddingTop: 70,paddingRight: 30)
+        resetButton.anchor(bottom: view.topAnchor,right: view.rightAnchor,paddingTop: 470,paddingRight: 30)
         
         
     }
@@ -370,13 +372,13 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
     //MARK: - Actions
     
     
-    @objc func button1Tapped() {
-        //
-        let controller = PrecipitationViewController()
-        present(controller, animated: true)
-        
-    }
-    
+//    @objc func button1Tapped() {
+//        //
+//        let controller = PrecipitationViewController()
+//        present(controller, animated: true)
+//        
+//    }
+//    
     
     @objc func button2Tapped () {
         
@@ -387,20 +389,20 @@ class MainViewController: UIViewController,CLLocationManagerDelegate {
     }
     
     
-    @objc func button3Tapped () {
-        let controller = RainSoundViewController    ()
-        present(controller, animated: true)
-        
-    }
-    
+//    @objc func button3Tapped () {
+//        let controller = RainSoundViewController    ()
+//        present(controller, animated: true)
+//        
+//    }
+//    
     
 
     
-    @objc func button4Tapped () {
-        let controller = SettingViewController()
-        
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
+//    @objc func button4Tapped () {
+//        let controller = SettingViewController()
+//        
+//        self.navigationController?.pushViewController(controller, animated: true)
+//    }
     @objc func timerProc(timer:Timer){
         
         let date = Date()
