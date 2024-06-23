@@ -13,14 +13,15 @@ import RxCocoa
 
 
 enum TabItem:Int,CaseIterable,Equatable {
+    case sound
     case main
     case setting
-    case sound
+    
     
     var normalImage:UIImage? {
         switch self {
         case .main:
-            return UIImage(systemName: "person.fill")
+            return UIImage(named: "Home")
         case .setting:
             return UIImage(systemName: "person.fill")
         case .sound:
@@ -31,7 +32,7 @@ enum TabItem:Int,CaseIterable,Equatable {
     var selectedImage:UIImage? {
         switch self {
         case .main:
-            return UIImage(systemName: "person.fill")
+            return UIImage(named: "Home_Selected")
         case .setting:
             return UIImage(systemName: "person.fill")
         case .sound:

@@ -194,6 +194,19 @@ final class MainTabController:UIViewController {
     private var childVCs = [UIViewController]()
     private let disposeBag = DisposeBag()
     
+    private var backgroundImage:UIImageView = {
+        
+        let ig = UIImageView()
+        let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+
+        let theme = isDarkMode ? Theme.dark : Theme.light
+        ig.image = theme.backgroundImage
+        return ig
+        
+    }()
+    
+    
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         
@@ -211,14 +224,23 @@ final class MainTabController:UIViewController {
     }
     
     private func setUp() {
-        view.backgroundColor = .red
+        view.backgroundColor = .blue
         view.addSubview(tabBar)
         tabBar.backgroundColor = .red
+//        tabBar.snp.makeConstraints {
+//            $0.leading.trailing.equalToSuperview()
+//            $0.top.equalTo(view.snp.bottom).offset(-500)
+//            $0.bottom.equalTo(view.snp.bottom).offset(300)
+//        }
+        
         tabBar.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(view.snp.bottom).offset(-200)
-            $0.bottom.equalToSuperview().offset(-100)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom) // 안전 영역 하단에 맞춤
+            $0.height.equalTo(75) // 탭바의 높이를 50포인트로 설정
+            
         }
+        tabBar.layer.cornerRadius = 40 // 모서리 둥글기를 20포인트로 설정
+        tabBar.layer.masksToBounds = true // 뷰의 경계를 넘어가는 내용을 잘라냄
     }
     private func setUpTabBarControllers() {
         // Enum에 정의된 각 탭 아이템에 대응하는 뷰 컨트롤러 생성
@@ -235,6 +257,21 @@ final class MainTabController:UIViewController {
             
             // 뷰 컨트롤러의 배경색과 타이틀 설정
             vc.view.backgroundColor = .white
+            
+           
+            
+            
+            
+            //let imageView = UIImageView(image:Theme.light.backgroundImage)
+            backgroundImage.contentMode = .scaleAspectFill
+               view.insertSubview(backgroundImage, at: 0) // 이미지 뷰를 뷰 계층에서 가장 아래로 추가
+
+            backgroundImage.snp.makeConstraints { make in
+                   make.edges.equalToSuperview()
+               }
+            
+           //     view.addSubview(UIImageView(image: Theme.light.backgroundImage))
+            
            // addLabel(in: vc, text: String(describing: item))
 
             // 뷰 컨트롤러를 자식으로 추가하고 뷰 계층에 포함
@@ -257,15 +294,7 @@ final class MainTabController:UIViewController {
             view.bringSubviewToFront(firstView)
         }
     }
-//    private func setUpBind() {
-//        tabBar.rx.tabButton
-//            .bind(with: self) { ss, index in
-//                guard let shouldFrontView = ss.childVCs[index].view else { return }
-//                ss.view.bringSubviewToFront(shouldFrontView)
-//            }
-//            .disposed(by: disposeBag)
-//    }
-    
+
     private func setUpBind() {
         // 탭바의 tabButton Observable을 구독하여 인덱스에 따른 처리를 수행
         tabBar.rx.tabButton
