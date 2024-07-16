@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 
 
@@ -25,15 +26,13 @@ enum SettingCellType {
     
 }
 
-
-
-
 class SettingCell:UITableViewCell {
     static let reuseIdentifier = "SettingCell"
+    var disposeBag = DisposeBag()
     
     var iconImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
-        $0.image = UIImage(named: "Vector")
+        $0.image = UIImage(named: "Vector")?.withRenderingMode(.alwaysTemplate)
     }
     var titleLabel = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 16)
@@ -58,8 +57,8 @@ class SettingCell:UITableViewCell {
     
     func setUpLayout() {
         [iconImageView, titleLabel, accessorySwitch, accessoryButton].forEach {
-                   contentView.addSubview($0)
-               }
+            contentView.addSubview($0)
+        }
         
         iconImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -84,18 +83,50 @@ class SettingCell:UITableViewCell {
         self.selectionStyle = .none
     }
     
-    func configure(cellType:SettingCellType) {
+    func configure(cellType: SettingCellType, viewModel: SettingViewModel) {
         titleLabel.text = cellType.title
         
         switch cellType {
-            
         case .darkMode:
-            accessoryButton.isHidden = false
-            accessorySwitch.isHidden = true
-        case .alarm:
             accessoryButton.isHidden = true
             accessorySwitch.isHidden = false
+            accessorySwitch.isOn = viewModel.isDarkModeEnabled.value
+            
+            // 구독을 생성하기 전에 이전 구독을 해제해야 합니다.
+            disposeBag = DisposeBag()
+            
+            accessorySwitch.rx.isOn
+                .skip(1) // 초기 값 로드 시 트리거 방지
+                .distinctUntilChanged() // 값의 변화가 없다면 이벤트 발생 방지
+                .bind(to: viewModel.isDarkModeEnabled)
+                .disposed(by: disposeBag)
+            
+            viewModel.isDarkModeEnabled
+                .subscribe(onNext: { [weak self] isDarkMode in
+                    self?.updateUI(isDarkMode: isDarkMode)
+                })
+                .disposed(by: disposeBag)
+            
+        case .alarm:
+            accessoryButton.isHidden = false
+            accessorySwitch.isHidden = true
+            
+            viewModel.isDarkModeEnabled
+                .subscribe(onNext: { [weak self] isDarkMode in
+                    self?.updateUI(isDarkMode: isDarkMode)
+                })
+                .disposed(by: disposeBag)
         }
     }
     
+    
+    private func updateUI(isDarkMode: Bool) {
+        backgroundColor = isDarkMode ? Theme.dark.backgroundColor : Theme.light.backgroundColor
+        titleLabel.textColor = isDarkMode ? .white : .black
+        iconImageView.tintColor = isDarkMode ? Theme.light.backgroundColor : Theme.dark.backgroundColor
+    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
 }

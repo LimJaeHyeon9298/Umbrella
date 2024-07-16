@@ -26,7 +26,7 @@ class PrecipitationViewController:UIViewController,CLLocationManagerDelegate {
     var weather: Weather?
     var timeCollect:[Int] = []
     
-    var useWeatherkit = UseWeatherkit()
+   // var useWeatherkit = UseWeatherkit()
     
     
     
@@ -83,7 +83,7 @@ class PrecipitationViewController:UIViewController,CLLocationManagerDelegate {
         
         lon = controller.lon
         
-        runweatherkit(latitude: lat, longitude: lon)
+      //  runweatherkit(latitude: lat, longitude: lon)
         self.alert("지금버전은 현재지역 강수량만 확인가능합니다")
       
     }
@@ -144,7 +144,7 @@ class PrecipitationViewController:UIViewController,CLLocationManagerDelegate {
             lon = location.coordinate.longitude
 
             locationManger.stopUpdatingLocation()
-            runweatherkit(latitude: lat, longitude: lon)
+           // runweatherkit(latitude: lat, longitude: lon)
         }
     }
 
@@ -172,32 +172,32 @@ class PrecipitationViewController:UIViewController,CLLocationManagerDelegate {
     
     
     
-    func runweatherkit(latitude:Double,longitude:Double) {
-        
-        let myLocation = CLLocation(latitude: latitude, longitude: longitude)
-        
-        useWeatherkit.runWeatherkit(location: myLocation) { weathers in
-            self.weather = weathers
-            //let hiii = self.weather?.currentWeather.temperature.value ?? 12
-            for i in 0...23 {
-                
-                
-                let hourlyPrecipitationPercent = Int(round((self.weather?.hourlyForecast[i].precipitationChance ?? 1) * 100))
-                self.hourlyPrecipitation.append(hourlyPrecipitationPercent)
-                self.timeCollect.append(i)
-                
-                print("시간당강수확률\(self.hourlyPrecipitation)+\(self.lat)+\(self.lon)")
-                print("시간당강수확률퍼센트\(hourlyPrecipitationPercent)")
-                
-                
-            }
-            self.configUI()
-            self.tableView.reloadData()
-         
-       
-        }
-      
-    }
+//    func runweatherkit(latitude:Double,longitude:Double) {
+//        
+//        let myLocation = CLLocation(latitude: latitude, longitude: longitude)
+//        
+//        UseWeatherkit.shared.runWeatherkit(location: myLocation) { weathers in
+//            self.weather = weathers
+//            //let hiii = self.weather?.currentWeather.temperature.value ?? 12
+//            for i in 0...23 {
+//                
+//                
+//                let hourlyPrecipitationPercent = Int(round((self.weather?.hourlyForecast[i].precipitationChance ?? 1) * 100))
+//                self.hourlyPrecipitation.append(hourlyPrecipitationPercent)
+//                self.timeCollect.append(i)
+//                
+//                print("시간당강수확률\(self.hourlyPrecipitation)+\(self.lat)+\(self.lon)")
+//                print("시간당강수확률퍼센트\(hourlyPrecipitationPercent)")
+//                
+//                
+//            }
+//            self.configUI()
+//            self.tableView.reloadData()
+//         
+//       
+//        }
+//      
+//    }
     
     //MARK: - Actions
 

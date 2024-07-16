@@ -12,7 +12,7 @@ import CoreLocation
 
 class WeatherCell: UITableViewCell  {
     
-    let ssssss = UseWeatherkit()
+ //   let ssssss = UseWeatherkit()
     
    
     var weather: Weather?

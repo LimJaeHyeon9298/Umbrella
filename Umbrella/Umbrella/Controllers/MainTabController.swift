@@ -11,183 +11,6 @@ import Then
 import RxSwift
 import RxCocoa
 
-//class MainTabController:UITabBarController {
-//   
-//    
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        configureViewControllers()
-//        self.selectedIndex = 2
-//        let tabBarAppearance = UITabBarAppearance()
-//          tabBarAppearance.configureWithOpaqueBackground()
-//          tabBarAppearance.backgroundColor = UIColor.blue // 배경색을 파란색으로 설정
-//
-//          // iOS 15 이상의 버전에서는 아래와 같이 설정합니다.
-//          if #available(iOS 15.0, *) {
-//              self.tabBar.standardAppearance = tabBarAppearance
-//              self.tabBar.scrollEdgeAppearance = tabBarAppearance
-//          } else {
-//              // iOS 15 미만의 버전에서는 기존 방식을 사용합니다.
-//              self.tabBar.barTintColor = UIColor.blue
-//          }
-//        
-//    }
-//    
-//    func templateNavigationController(image:UIImage?,rootViewController:UIViewController) -> UINavigationController {
-//        
-//        let nav = UINavigationController(rootViewController: rootViewController)
-//        nav.tabBarItem.image = image
-//        nav.navigationBar.barTintColor = .red
-//        
-//        let appearance = UINavigationBarAppearance()
-//        appearance.configureWithOpaqueBackground()
-//        appearance.backgroundColor = .white
-//        nav.navigationBar.standardAppearance = appearance
-//        nav.navigationBar.scrollEdgeAppearance = nav.navigationBar.standardAppearance
-//        
-//        
-//        
-//        
-//        return nav
-//        
-//    }
-//    
-//    func configureViewControllers() {
-//        
-//        let mainVC = MainViewController()
-//        let precipitationVC = PrecipitationViewController()
-//        let rainSoundVC = RainSoundViewController()
-//        let searchVC = SearchViewController()
-//        let settingVC = SettingViewController()
-//        
-//        let nav1 = templateNavigationController(image: UIImage(systemName: "person.fill"), rootViewController: rainSoundVC)
-//        let nav2 = templateNavigationController(image: UIImage(systemName: "person.fill"), rootViewController: precipitationVC)
-//        let nav3 = templateNavigationController(image: UIImage(systemName: "person.fill"), rootViewController: mainVC)
-//        let nav4 = templateNavigationController(image: UIImage(systemName: "person.fill"), rootViewController: searchVC)
-//        let nav5 = templateNavigationController(image: UIImage(systemName: "person.fill"), rootViewController: settingVC)
-//        
-//        nav1.tabBarItem.title = "메인"
-//        nav2.tabBarItem.title = "메인"
-//        nav3.tabBarItem.title = "메인"
-//        nav4.tabBarItem.title = "메인"
-//        nav5.tabBarItem.title = "메인"
-//        
-//        viewControllers = [nav1,nav2,nav3,nav4,nav5]
-//     
-//    }
-//    
-//    
-//    
-//    
-//}
-//
-//
-
-
-//import UIKit
-//
-//final class CustomTabBarController: UIViewController {
-//    
-//    private lazy var viewControllers: [UIViewController] = []
-//    private lazy var buttons: [UIButton] = []
-//    
-//    
-//    
-//    
-//    
-//    private lazy var tabBarView: UIView = {
-//        let view = UIView()
-//        
-//        view.backgroundColor = .white
-//        view.layer.cornerRadius = 35
-//         
-//        return view
-//    }()
-//    
-//    var selectedIndex = 0 {
-//        willSet {
-//            previewsIndex = selectedIndex
-//        }
-//        didSet {
-//            updateView()
-//        }
-//    }
-//    private var previewsIndex = 0
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        setupTabBar()
-//    }
-//    
-//    func setViewControllers(_ viewControllers: [UIViewController]) {
-//        self.viewControllers = viewControllers
-//        setupButtons()
-//        updateView()
-//    }
-//    
-//    private func setupTabBar() {
-//        view.addSubview(tabBarView)
-//        
-//        tabBarView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            tabBarView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: -50),
-//            tabBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            tabBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            tabBarView.heightAnchor.constraint(equalToConstant: 90)
-//        ])
-//    }
-//    
-//    private func setupButtons() {
-//        // 버튼의 넓이는 tab 개수에 맞춰서 유동적으로 변함
-//        let buttonWidth = view.bounds.width / CGFloat(viewControllers.count)
-//        
-//        for (index, viewController) in viewControllers.enumerated() {
-//            let button = UIButton()
-//            button.tag = index
-//            button.setTitle(viewController.title, for: .normal)
-//            button.setTitleColor(.black, for: .normal)
-//            button.addTarget(self, action: #selector(tabButtonTapped(_:)), for: .touchUpInside)
-//            tabBarView.addSubview(button)
-//            
-//            button.translatesAutoresizingMaskIntoConstraints = false
-//            NSLayoutConstraint.activate([
-//                button.bottomAnchor.constraint(equalTo: tabBarView.bottomAnchor),
-//                button.leadingAnchor.constraint(equalTo: tabBarView.leadingAnchor, constant: CGFloat(index) * buttonWidth),
-//                button.widthAnchor.constraint(equalToConstant: buttonWidth),
-//                button.heightAnchor.constraint(equalTo: tabBarView.heightAnchor)
-//            ])
-//            button.setImage(UIImage(systemName: "person.fill"), for: .normal)
-//            buttons.append(button)
-//        }
-//    }
-//    private func updateView() {
-//        deleteView()
-//        setupView()
-//        
-//        buttons.forEach { $0.isSelected = ($0.tag == selectedIndex) }
-//    }
-//        
-//    private func deleteView() {
-//        let previousVC = viewControllers[previewsIndex]
-//        previousVC.willMove(toParent: nil)
-//        previousVC.view.removeFromSuperview()
-//        previousVC.removeFromParent()
-//    }
-//        
-//    private func setupView() {
-//        let selectedVC = viewControllers[selectedIndex]
-//        
-//        self.addChild(selectedVC)
-//        view.insertSubview(selectedVC.view, belowSubview: tabBarView)
-//        selectedVC.view.frame = view.bounds
-//        selectedVC.didMove(toParent: self)
-//    }
-//    
-//    @objc private func tabButtonTapped(_ sender: UIButton) {
-//        selectedIndex = sender.tag
-//    }
-//}
 
 final class MainTabController:UIViewController {
     fileprivate let tabBar = CustomTabBar()
@@ -248,11 +71,14 @@ final class MainTabController:UIViewController {
             let vc: UIViewController
             switch item {
             case .main:
-                vc = MainViewController()  // 메인 뷰 컨트롤러
+                vc = UINavigationController(rootViewController: MainViewController())
+               // vc = MainViewController()  // 메인 뷰 컨트롤러
             case .setting:
-                vc = SettingViewController()  // 설정 뷰 컨트롤러
+                vc = UINavigationController(rootViewController: SettingViewController())
+               // vc = SettingViewController()  // 설정 뷰 컨트롤러
             case .sound:
-                vc = RainSoundViewController()  // 사운드 설정 뷰 컨트롤러
+                vc = UINavigationController(rootViewController: RainSoundViewController())
+             //   vc = RainSoundViewController()  // 사운드 설정 뷰 컨트롤러
             }
             
             // 뷰 컨트롤러의 배경색과 타이틀 설정
