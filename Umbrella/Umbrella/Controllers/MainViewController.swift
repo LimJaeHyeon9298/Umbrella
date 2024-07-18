@@ -17,12 +17,9 @@ import RxCocoa
 class MainViewController: UIViewController {
     
     //MARK: - Properties
-    
-    
     var viewModel:MainViewModel!
     private let disposeBag = DisposeBag()
-    
-    //let useWeatherkit = UseWeatherkit()
+
     var mapItemArray:[String] = []
     var locationManger = CLLocationManager()
     var currentHour:Int?
@@ -33,67 +30,66 @@ class MainViewController: UIViewController {
     var hourWeather: HourWeather?
     let weatherService = WeatherService.shared
     var timer:Timer!
- 
-    private let dateLabel:UILabel = {
-        let label = UILabel()
-        label.text = "yyyy-MM-dd ".stringFromDate()
-        label.font = UIFont.boldSystemFont(ofSize: 25)
-        label.textColor = .white
-        return label
-    }()
-    
-    private let timeLabel:UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = .white
-        return label
-    }()
-    private var backgroundImage:UIImageView = {
-        let ig = UIImageView()
+
+    private let dateLabel = UILabel().then {
+        $0.text = "yyyy-MM-dd ".stringFromDate()
+        $0.font = UIFont.boldSystemFont(ofSize: 25)
+        $0.textColor = .white
+    }
+
+    private let timeLabel = UILabel().then {
+        $0.font = UIFont.boldSystemFont(ofSize: 20)
+        $0.textColor = .white
+    }
+
+    private var backgroundImage = UIImageView().then {
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
         let theme = isDarkMode ? Theme.dark : Theme.light
-        ig.image = theme.backgroundImage
-        return ig
+        $0.image = theme.backgroundImage
         
-    }()
-    private let umbrellaImage:UIImageView = {
-        let ig = UIImageView()
-        ig.image = #imageLiteral(resourceName: "symbolic")
-        return ig
-    }()
+    }
+
+    private let umbrellaImage = UIImageView().then { $0.image = #imageLiteral(resourceName: "rainCloud") }
+
     
+    private let precipitationLabel = UILabel().then {
+        $0.text = "강수확률 10%"
+        $0.numberOfLines = 1
+        $0.font = UIFont.boldSystemFont(ofSize: 20)
+    }
+ 
+    private let locationLabel = UILabel().then {
+        $0.text = "서울특별시"
+        $0.font = UIFont.boldSystemFont(ofSize: 32)
+        $0.numberOfLines = 0 // 여러 줄 표시를 위해 0으로 설정
+        $0.textColor = .white
+        $0.textAlignment = .center // 중앙 정렬
+    }
     
-    private let gangsoo: UILabel = {
-        let label = UILabel()
-        label.text = "강수량 10%"
-        label.numberOfLines = 1
-        return label
-        
-    }()
+    private lazy var tempLabel = UILabel().then { $0.font = UIFont.boldSystemFont(ofSize: 35) }
     
-    private let locationLabel:UILabel = {
-        let label = UILabel()
-        label.text = "서울특별시"
-        label.font = UIFont.boldSystemFont(ofSize: 40)
-        return label
-    }()
+    private let weatherCard1 = WeatherCard(iconImage: UIImage(named: "rainCloud")!, labelText: "Wind State", stateText: "5.6 km/h")
+    private let weatherCard2 = WeatherCard(iconImage: UIImage(named: "rainCloud")!, labelText: "Wind State", stateText: "5.6 km/h")
+    private let weatherCard3 = WeatherCard(iconImage: UIImage(named: "rainCloud")!, labelText: "Wind State", stateText: "5.6 km/h")
     
-   private lazy var tempLabel:UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 35)
-        return label
-    }()
+    private let hourlyLabel = UILabel().then {
+        $0.text = "시간대별 강수확률"
+        $0.font = UIFont.boldSystemFont(ofSize: 16)
+    }
+ 
+    private var collectionView:UICollectionView!
+    private var hourlyWeatherData: [HourlyWeather] = []
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-       // location()
+        configureCollectionView()
+        loadData()
         timer = Timer.scheduledTimer(timeInterval: 1, target:self, selector:#selector(timerProc),userInfo:nil, repeats: true)
         viewModel = MainViewModel()
-
-               bindViewModel()
-        
+        bindViewModel()
+        setupStackView()
         
         let name = Notification.Name("darkModeHasChanged")
         NotificationCenter.default.addObserver(self, selector: #selector(enableDarkmode), name: name, object: nil)
@@ -113,71 +109,108 @@ class MainViewController: UIViewController {
     func configureUI() {
         
         view.backgroundColor = .white
-        
+    
         view.addSubview(backgroundImage)
-        backgroundImage.anchor(top:view.topAnchor,left: view.leftAnchor,bottom: view.bottomAnchor,right: view.rightAnchor,paddingTop: 0,paddingLeft: 0,paddingBottom: 0,paddingRight: 0)
+        
+        backgroundImage.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         
         
-        view.addSubview(dateLabel)
-        dateLabel.anchor(top:view.topAnchor,left: view.leftAnchor,paddingTop: 400,paddingLeft: 30)
-        
-        
-        view.addSubview(timeLabel)
-        timeLabel.anchor(top:dateLabel.bottomAnchor,left: view.leftAnchor,paddingTop: 10,paddingLeft: 30)
-        
-
-        view.addSubview(umbrellaImage)
-        umbrellaImage.anchor(top:dateLabel.bottomAnchor,left: view.leftAnchor,paddingTop: 50,paddingLeft: 50,width: 150,height: 150)
-        
-        view.addSubview(gangsoo)
-        gangsoo.anchor(top:umbrellaImage.bottomAnchor,left: view.leftAnchor,paddingTop: 10,paddingLeft: 50)
-
         view.addSubview(locationLabel)
-        locationLabel.anchor(top: view.topAnchor,paddingTop: 100)
-        locationLabel.centerX(inView: self.view)
         
-       
+        locationLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(36)
+          //  $0.leading.equalTo(view.safeAreaLayoutGuide).offset(16)
+            $0.centerX.equalToSuperview()
+        }
         
         view.addSubview(tempLabel)
-        tempLabel.anchor(top: locationLabel.bottomAnchor,paddingTop: 20)
-        tempLabel.centerX(inView: self.view)
-        tempLabel.text = String(self.weather?.currentWeather.temperature.value ?? 0 )
+        
+        tempLabel.snp.makeConstraints {
+            $0.top.equalTo(locationLabel.snp.bottom).offset(8)
+            $0.centerX.equalToSuperview()
+        }
+        
+        view.addSubview(umbrellaImage)
+        
+        umbrellaImage.snp.makeConstraints {
+            $0.top.equalTo(tempLabel.snp.bottom).offset(16)
+            $0.centerX.equalToSuperview()
+            $0.width.height.equalTo(180)
+        }
+        
+        
+        view.addSubview(precipitationLabel)
+        
+        precipitationLabel.snp.makeConstraints {
+            $0.top.equalTo(umbrellaImage.snp.bottom).offset(8)
+            $0.centerX.equalToSuperview()
+        }
+        
+        
+        let weatherStackView = UIStackView(arrangedSubviews: [weatherCard1,weatherCard2,weatherCard3])
+        weatherStackView.axis = .horizontal
+        weatherStackView.distribution = .fillEqually
+        weatherStackView.spacing = 10
+        
+        view.addSubview(weatherStackView)
+        weatherStackView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(precipitationLabel.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        weatherStackView.backgroundColor = .red
+        
+        
+        view.addSubview(hourlyLabel)
+        
+        hourlyLabel.snp.makeConstraints {
+            $0.leading.equalTo(weatherStackView.snp.leading)
+            $0.top.equalTo(weatherStackView.snp.bottom).offset(14)
+        }
+        
+        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        collectionView.register(HourlyWeatherCell.self, forCellWithReuseIdentifier: HourlyWeatherCell.identifier)
+              collectionView.dataSource = self
+              
+              view.addSubview(collectionView)
+              collectionView.snp.makeConstraints {
+                  $0.leading.equalTo(hourlyLabel.snp.leading)
+                  $0.top.equalTo(hourlyLabel.snp.bottom).offset(8)
+                  $0.height.equalTo(110)
+                  $0.width.equalToSuperview()
+              }
+        
+        collectionView.backgroundColor = .clear
+
+    }
+
+    func setupStackView() {
     }
     
-//
-    
-    
-//    func runweatherkit(latitude:Double,longitude:Double) {
-//             let myLocation = CLLocation(latitude: latitude, longitude: longitude)
-//             let geocoder = CLGeocoder()
-//             let locale = Locale(identifier: "Ko-kr")
-//            geocoder.reverseGeocodeLocation(myLocation, preferredLocale: locale, completionHandler: {(placemarks, error) in
-//            if let address: [CLPlacemark] = placemarks {
-//                
-//                if let name: String = address.last?.subLocality,let name2:String = address.last?.locality
-//                
-//                    ,let thoroughfare = address.last?.thoroughfare,let subThoroughfare = address.last?.subThoroughfare
-//                
-//                { print("hihihihi\(name+name2)+ \(subThoroughfare)+ \(thoroughfare)//" )
-//                       
-//                    self.locationLabel.text = name2 + name
-//                
-//            }
-//            }
-//           })
-//
-//        UseWeatherkit.shared.runWeatherkit(location:myLocation) { weathers in
-//                self.weather = weathers
-//                print("weatherkit's 날씨 \(String(describing: self.weather?.dailyForecast.forecast))")
-//                let hourlyPrecipitationPercent = Int(round((self.weather?.hourlyForecast[self.currentHour ?? 0].precipitationChance ?? 1) * 100))
-//                self.gangsoo.text = "강수확률 \(hourlyPrecipitationPercent * 100)% "
-//                self.configureUI()
-//                
-//                
-//            }
-//        
-//    }
-    
+    private func configureCollectionView() {
+    }
+
+    private func createLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2),
+                                               heightDimension: .absolute(110))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 10
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
+    }
+  
     private func bindViewModel() {
             viewModel.weatherData
                 .compactMap { $0 }
@@ -208,12 +241,27 @@ class MainViewController: UIViewController {
                     .disposed(by: disposeBag)
 
     }
+    private func loadData() {
+           // 예시 데이터 로드
+           for hour in 0..<24 {
+               let time = hour == 0 ? "NOW" : "\(hour) AM"
+               let icon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
+               let temperature = "\(18 + hour % 5)°"
+               let precipitationChance = "\(hour % 2 == 0 ? "30%" : "50%")"
+               let weather = HourlyWeather(time: time, icon: icon, temperature: temperature, precipitationChance: precipitationChance)
+               hourlyWeatherData.append(weather)
+           }
+           
+           collectionView?.reloadData()
+       }
+    
+    
     
 
         private func updateWeatherUI(_ weather: Weather) {
             print("weather \(weather.currentWeather.temperature.value)")
             tempLabel.text = String(weather.currentWeather.temperature.value)
-            
+           
         }
     
         //MARK: - Actions
@@ -249,58 +297,31 @@ class MainViewController: UIViewController {
        mapItemArray = mapitem
         
          locationLabel.text = mapItemArray[0]
-//
         lat = Double(mapItemArray[2])!
         lon = Double(mapItemArray[3])!
         viewModel.locationManager.stopUpdatingLocation()
-                viewModel.locationManager.startUpdatingLocation()
-    //    runweatherkit(latitude: lat, longitude: lon)
+        viewModel.locationManager.startUpdatingLocation()
         
         }
     
 }
 
-extension MainViewController {
+extension MainViewController:UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return hourlyWeatherData.count
+    }
     
-//    func location() {
-//        locationManger.delegate = self
-//        // 거리 정확도 설정
-//        locationManger.desiredAccuracy = kCLLocationAccuracyBest
-//        // 사용자에게 허용 받기 alert 띄우기
-//        locationManger.requestWhenInUseAuthorization()
-//        
-//        // 아이폰 설정에서의 위치 서비스가 켜진 상태라면
-//        
-//        DispatchQueue.global().async   {
-//            if CLLocationManager.locationServicesEnabled() {
-//                print("위치 서비스 On 상태")
-//                self.locationManger.startUpdatingLocation() //위치 정보 받아오기 시작
-//                //print(self.locationManger.location?.coordinate)
-//                
-//                return
-//            } else {
-//                print("위치 서비스 Off 상태")
-//            }
-//        }
-//     
-//    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyWeatherCell.identifier, for: indexPath) as? HourlyWeatherCell else {
+                   return UICollectionViewCell()
+               }
+               
+               let weather = hourlyWeatherData[indexPath.item]
+               cell.configure(with: weather)
+        cell.backgroundColor = .white
+               return cell
+    }
     
-    // 위치 정보 계속 업데이트 -> 위도 경도 받아옴
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        print("didUpdateLocations")
-//        if let location = locations.first {
-//            print("위도: \(location.coordinate.latitude)")
-//            print("경도: \(location.coordinate.longitude)")
-//            lat = location.coordinate.latitude
-//            lon = location.coordinate.longitude
-//         //   runweatherkit(latitude: lat, longitude: lon)
-//            self.locationManger.stopUpdatingLocation()
-//        
-//        }
-//    }
-    // 위도 경도 받아오기 에러
-//    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-//        print(error)
-//    }
+
 }
 

@@ -42,6 +42,9 @@
 		46AA833F2C28332E0065FFB0 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA833E2C28332E0065FFB0 /* SettingCell.swift */; };
 		46AA83412C28342D0065FFB0 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83402C28342D0065FFB0 /* SettingViewModel.swift */; };
 		46AA83432C28343B0065FFB0 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83422C28343B0065FFB0 /* MainViewModel.swift */; };
+		46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8122C4906E8006D161D /* WeatherCard.swift */; };
+		46E3C8152C494DBA006D161D /* HourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8142C494DBA006D161D /* HourlyWeatherCell.swift */; };
+		46E3C8172C49505E006D161D /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8162C49505E006D161D /* HourlyWeather.swift */; };
 		46F109972C2AB133006AD5F6 /* SoundItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F109962C2AB133006AD5F6 /* SoundItems.swift */; };
 		46F109992C2AB1D0006AD5F6 /* RainSoundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F109982C2AB1D0006AD5F6 /* RainSoundViewModel.swift */; };
 		46F1099B2C2AB230006AD5F6 /* SoundCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F1099A2C2AB230006AD5F6 /* SoundCollectionViewCell.swift */; };
@@ -101,6 +104,9 @@
 		46AA833E2C28332E0065FFB0 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		46AA83402C28342D0065FFB0 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		46AA83422C28343B0065FFB0 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		46E3C8122C4906E8006D161D /* WeatherCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCard.swift; sourceTree = "<group>"; };
+		46E3C8142C494DBA006D161D /* HourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherCell.swift; sourceTree = "<group>"; };
+		46E3C8162C49505E006D161D /* HourlyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeather.swift; sourceTree = "<group>"; };
 		46F109962C2AB133006AD5F6 /* SoundItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundItems.swift; sourceTree = "<group>"; };
 		46F109982C2AB1D0006AD5F6 /* RainSoundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainSoundViewModel.swift; sourceTree = "<group>"; };
 		46F1099A2C2AB230006AD5F6 /* SoundCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -218,6 +224,8 @@
 				46AA83362C26DF380065FFB0 /* CumstomTabBar.swift */,
 				46AA833E2C28332E0065FFB0 /* SettingCell.swift */,
 				46F1099A2C2AB230006AD5F6 /* SoundCollectionViewCell.swift */,
+				46E3C8122C4906E8006D161D /* WeatherCard.swift */,
+				46E3C8142C494DBA006D161D /* HourlyWeatherCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -246,6 +254,7 @@
 			children = (
 				46AA83232C253B8F0065FFB0 /* Theme.swift */,
 				46F109962C2AB133006AD5F6 /* SoundItems.swift */,
+				46E3C8162C49505E006D161D /* HourlyWeather.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -415,9 +424,11 @@
 				46AA830C2C253B3C0065FFB0 /* NotificationViewController.swift in Sources */,
 				46AA82D72C253A340065FFB0 /* ViewController.swift in Sources */,
 				46F109992C2AB1D0006AD5F6 /* RainSoundViewModel.swift in Sources */,
+				46E3C8172C49505E006D161D /* HourlyWeather.swift in Sources */,
 				46AA83372C26DF380065FFB0 /* CumstomTabBar.swift in Sources */,
 				46AA82D32C253A340065FFB0 /* AppDelegate.swift in Sources */,
 				46AA832E2C256C690065FFB0 /* MainTabController.swift in Sources */,
+				46E3C8152C494DBA006D161D /* HourlyWeatherCell.swift in Sources */,
 				46AA83102C253B3C0065FFB0 /* SearchViewController.swift in Sources */,
 				46AA831C2C253B650065FFB0 /* extenstions.swift in Sources */,
 				46AA831E2C253B650065FFB0 /* SearchResultDelegate.swift in Sources */,
@@ -426,6 +437,7 @@
 				46AA830F2C253B3C0065FFB0 /* SearchController.swift in Sources */,
 				46AA833F2C28332E0065FFB0 /* SettingCell.swift in Sources */,
 				46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */,
+				46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */,
 				46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */,
 				46AA831D2C253B650065FFB0 /* MapKit+Extension.swift in Sources */,
 				46AA830D2C253B3C0065FFB0 /* PrecipitationViewController.swift in Sources */,

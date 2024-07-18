@@ -5,58 +5,14 @@
 //  Created by 임재현 on 6/23/24.
 //
 
-    import Foundation
-    import RxSwift
-    import CoreLocation
-    import RxCocoa
-    import WeatherKit
-
-
-    //class MainViewModel:NSObject,CLLocationManagerDelegate {
-    //    var weatherData = PublishSubject<Weather>()
-    //    var isLoading = BehaviorSubject<Bool>(value: false)
-    //    var error = PublishSubject<Error>()
-    //
-    //    private let locationManager = CLLocationManager()
-    //    private let weatherService:WeatherService
-    //    private let disposeBag = DisposeBag()
-    //    init(weatherService:WeatherService) {
-    //        self.weatherService = weatherService
-    //        super.init()
-    //        configureLocationManager()
-    //    }
-    //    func configureLocationManager() {
-    //        locationManager.delegate = self
-    //                locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    //                locationManager.requestWhenInUseAuthorization()
-    //                locationManager.startUpdatingLocation()
-    //    }
-    //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    //           guard let location = locations.last else { return }
-    //           fetchWeather(for: location)
-    //       }
-    //
-    //       private func fetchWeather(for location: CLLocation) {
-    //           isLoading.onNext(true)
-    //           weatherService.fetchWeather(location: location).subscribe(
-    //               onNext: { [weak self] weather in
-    //                   self?.isLoading.onNext(false)
-    //                   self?.weatherData.onNext(weather)
-    //               },
-    //               onError: { [weak self] error in
-    //                   self?.isLoading.onNext(false)
-    //                   self?.error.onNext(error)
-    //               }
-    //           ).disposed(by: disposeBag)
-    //       }
-    //
-    //
-    //
-
-    //}
-    import Foundation
-    import CoreLocation
-    import RxSwift
+import Foundation
+import RxSwift
+import CoreLocation
+import RxCocoa
+import WeatherKit
+import Foundation
+import CoreLocation
+import RxSwift
 
 class MainViewModel: NSObject, CLLocationManagerDelegate {
     private let disposeBag = DisposeBag()
@@ -91,14 +47,6 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
     
     private func fetchWeather(for location: CLLocation) {
         isLoading.onNext(true)
-        //        UseWeatherkit.shared.fetchWeather(location: location)
-        //            .subscribe(onNext: { [weak self] weather in
-        //                self?.isLoading.onNext(false)
-        //                self?.weatherData.onNext(weather)
-        //            }, onError: { [weak self] error in
-        //                self?.isLoading.onNext(false)
-        //                self?.error.onNext(error)
-        //            }).disposed(by: disposeBag)
         
         UseWeatherkit.shared.fetchWeather(location: location)
             .observe(on: MainScheduler.asyncInstance)
@@ -113,13 +61,14 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
     }
     
     private func reverseGeocodeLocation(location: CLLocation) {
-            let geocoder = CLGeocoder()
-            geocoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "ko-kr")) { [weak self] placemarks, error in
-                guard let self = self, let placemark = placemarks?.first else { return }
-                let address = "\(placemark.locality ?? "") \(placemark.subLocality ?? "")"
-                self.locationAddress.onNext(address)
-            }
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "ko-kr")) { [weak self] placemarks, error in
+            guard let self = self, let placemark = placemarks?.first else { return }
+            // let address = "\(placemark.locality ?? "") \(placemark.subLocality ?? "")"
+            let address = "\(placemark.locality ?? "")\n\(placemark.subLocality ?? "")"
+            self.locationAddress.onNext(address)
         }
+    }
     
     
     
