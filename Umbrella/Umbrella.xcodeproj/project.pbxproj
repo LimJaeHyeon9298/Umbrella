@@ -45,6 +45,7 @@
 		46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8122C4906E8006D161D /* WeatherCard.swift */; };
 		46E3C8152C494DBA006D161D /* HourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8142C494DBA006D161D /* HourlyWeatherCell.swift */; };
 		46E3C8172C49505E006D161D /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8162C49505E006D161D /* HourlyWeather.swift */; };
+		46E3C8192C49ECDC006D161D /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8182C49ECDC006D161D /* MapViewController.swift */; };
 		46F109972C2AB133006AD5F6 /* SoundItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F109962C2AB133006AD5F6 /* SoundItems.swift */; };
 		46F109992C2AB1D0006AD5F6 /* RainSoundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F109982C2AB1D0006AD5F6 /* RainSoundViewModel.swift */; };
 		46F1099B2C2AB230006AD5F6 /* SoundCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F1099A2C2AB230006AD5F6 /* SoundCollectionViewCell.swift */; };
@@ -107,6 +108,7 @@
 		46E3C8122C4906E8006D161D /* WeatherCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCard.swift; sourceTree = "<group>"; };
 		46E3C8142C494DBA006D161D /* HourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherCell.swift; sourceTree = "<group>"; };
 		46E3C8162C49505E006D161D /* HourlyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeather.swift; sourceTree = "<group>"; };
+		46E3C8182C49ECDC006D161D /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		46F109962C2AB133006AD5F6 /* SoundItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundItems.swift; sourceTree = "<group>"; };
 		46F109982C2AB1D0006AD5F6 /* RainSoundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainSoundViewModel.swift; sourceTree = "<group>"; };
 		46F1099A2C2AB230006AD5F6 /* SoundCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				46AA83072C253B3B0065FFB0 /* SearchViewController.swift */,
 				46AA83082C253B3B0065FFB0 /* SettingViewController.swift */,
 				46AA83092C253B3B0065FFB0 /* TimeSettingViewController.swift */,
+				46E3C8182C49ECDC006D161D /* MapViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 				46AA831E2C253B650065FFB0 /* SearchResultDelegate.swift in Sources */,
 				46AA83172C253B570065FFB0 /* WeatherCell.swift in Sources */,
 				46AA832A2C253BF60065FFB0 /* Weatherkit.swift in Sources */,
+				46E3C8192C49ECDC006D161D /* MapViewController.swift in Sources */,
 				46AA830F2C253B3C0065FFB0 /* SearchController.swift in Sources */,
 				46AA833F2C28332E0065FFB0 /* SettingCell.swift in Sources */,
 				46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */,

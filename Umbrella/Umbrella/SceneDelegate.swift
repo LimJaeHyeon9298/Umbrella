@@ -17,7 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
        
         window = UIWindow(windowScene: scene)
         UILabel.appearance().textColor = UIColor.white
-        window?.rootViewController = MainTabController()
+        window?.rootViewController = MapViewController()
+        //MainTabController()
         window?.makeKeyAndVisible()
         
       
