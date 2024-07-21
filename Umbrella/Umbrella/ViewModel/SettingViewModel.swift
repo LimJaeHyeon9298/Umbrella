@@ -15,7 +15,8 @@ class SettingViewModel {
     
     let items = Observable.just([
         SettingCellType.darkMode,
-        SettingCellType.alarm
+        SettingCellType.alarm,
+        SettingCellType.location
     
     ])
  

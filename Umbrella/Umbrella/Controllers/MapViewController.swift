@@ -8,14 +8,34 @@
 import UIKit
 import MapKit
 import SnapKit
+import Then
 
 class MapViewController:UIViewController {
     
     let mapView = MKMapView()
     private let geocoder = CLGeocoder()
     private var lastSelectedLocation: CLLocation?
+    let viewModel:MapViewModel
+    
+    private let changeButton = UIButton().then {
+        $0.backgroundColor = .red
+        $0.setTitle("위치 변경하기", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.layer.cornerRadius = 10
+    }
+    
+    init(viewModel:MapViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         configureUI()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapTap(_:)))
                mapView.addGestureRecognizer(tapGesture)
@@ -26,6 +46,18 @@ class MapViewController:UIViewController {
         mapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        view.addSubview(changeButton)
+        changeButton.snp.makeConstraints {
+            //$0.width.equalTo(200)
+            $0.height.equalTo(70)
+            $0.leading.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-20)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+        
+        }
+        changeButton.backgroundColor = .blue
+        changeButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        
         mapView.mapType = MKMapType.standard
        
         mapView.delegate = self
@@ -64,6 +96,7 @@ class MapViewController:UIViewController {
         addPin(at: coordinate)
             reverseGeocode(coordinate: coordinate)
         lastSelectedLocation = newLocation
+        viewModel.currentLocation = newLocation
         
     }
 
@@ -98,7 +131,14 @@ class MapViewController:UIViewController {
                }
            }
        }
-    
+    @objc func buttonTapped() {
+        print("hihi button Tapped")
+        guard let location = viewModel.currentLocation else {
+               print("No location selected")
+               return
+           }
+           viewModel.selectedLocation.onNext(location)
+    }
 }
 
 extension MapViewController:MKMapViewDelegate {

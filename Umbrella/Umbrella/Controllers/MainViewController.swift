@@ -17,7 +17,8 @@ import RxCocoa
 class MainViewController: UIViewController {
     
     //MARK: - Properties
-    var viewModel:MainViewModel!
+    var viewModel:MainViewModel
+    var mapViewModel: MapViewModel
     private let disposeBag = DisposeBag()
 
     var mapItemArray:[String] = []
@@ -81,6 +82,19 @@ class MainViewController: UIViewController {
     private var hourlyWeatherData: [HourlyWeather] = []
     
     //MARK: - LifeCycle
+    
+    init(viewModel:MainViewModel,mapViewModel:MapViewModel) {
+        self.viewModel = viewModel
+        self.mapViewModel = mapViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -239,6 +253,13 @@ class MainViewController: UIViewController {
                     .observe(on: MainScheduler.instance)
                     .bind(to: locationLabel.rx.text)
                     .disposed(by: disposeBag)
+        
+        mapViewModel.selectedLocation
+                   .subscribe(onNext: { location in
+                       print("Received location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                       // 여기서 location을 사용해 원하는 작업 수행
+                   })
+                   .disposed(by: disposeBag)
 
     }
     private func loadData() {

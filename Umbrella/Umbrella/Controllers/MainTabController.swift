@@ -13,6 +13,12 @@ import RxCocoa
 
 
 final class MainTabController:UIViewController {
+    let mainViewModel = MainViewModel()
+    let settingViewModel = SettingViewModel()
+    let soundViewModel = RainSoundViewModel()
+    let mapViewModel = MapViewModel()
+    
+    
     fileprivate let tabBar = CustomTabBar()
     private var childVCs = [UIViewController]()
     private let disposeBag = DisposeBag()
@@ -47,7 +53,7 @@ final class MainTabController:UIViewController {
     }
     
     private func setUp() {
-        view.backgroundColor = .blue
+        view.backgroundColor = .clear
         view.addSubview(tabBar)
         tabBar.backgroundColor = .red
 //        tabBar.snp.makeConstraints {
@@ -71,13 +77,16 @@ final class MainTabController:UIViewController {
             let vc: UIViewController
             switch item {
             case .main:
-                vc = UINavigationController(rootViewController: MainViewController())
+                let mainVC = MainViewController(viewModel: mainViewModel,mapViewModel: mapViewModel)
+                vc = UINavigationController(rootViewController: mainVC)
                // vc = MainViewController()  // 메인 뷰 컨트롤러
             case .setting:
-                vc = UINavigationController(rootViewController: SettingViewController())
+                let settingVC = SettingViewController(viewModel: settingViewModel, mapViewModel: mapViewModel)
+                vc = UINavigationController(rootViewController: settingVC)
                // vc = SettingViewController()  // 설정 뷰 컨트롤러
             case .sound:
-                vc = UINavigationController(rootViewController: RainSoundViewController())
+                let soundVC = RainSoundViewController(viewModel: soundViewModel)
+                vc = UINavigationController(rootViewController: soundVC)
              //   vc = RainSoundViewController()  // 사운드 설정 뷰 컨트롤러
             }
             
@@ -89,12 +98,12 @@ final class MainTabController:UIViewController {
             
             
             //let imageView = UIImageView(image:Theme.light.backgroundImage)
-            backgroundImage.contentMode = .scaleAspectFill
-               view.insertSubview(backgroundImage, at: 0) // 이미지 뷰를 뷰 계층에서 가장 아래로 추가
-
-            backgroundImage.snp.makeConstraints { make in
-                   make.edges.equalToSuperview()
-               }
+//            backgroundImage.contentMode = .scaleAspectFill
+//               view.insertSubview(backgroundImage, at: 0) // 이미지 뷰를 뷰 계층에서 가장 아래로 추가
+//
+//            backgroundImage.snp.makeConstraints { make in
+//                   make.edges.equalToSuperview()
+//               }
             
            //     view.addSubview(UIImageView(image: Theme.light.backgroundImage))
             

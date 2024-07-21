@@ -14,6 +14,7 @@ import RxSwift
 enum SettingCellType {
     case darkMode
     case alarm
+    case location
     
     var title: String {
         switch self {
@@ -21,6 +22,8 @@ enum SettingCellType {
             return "다크모드"
         case .alarm:
             return "알림"
+        case .location:
+            return "지역선택"
         }
     }
     
@@ -108,6 +111,15 @@ class SettingCell:UITableViewCell {
                 .disposed(by: disposeBag)
             
         case .alarm:
+            accessoryButton.isHidden = false
+            accessorySwitch.isHidden = true
+            
+            viewModel.isDarkModeEnabled
+                .subscribe(onNext: { [weak self] isDarkMode in
+                    self?.updateUI(isDarkMode: isDarkMode)
+                })
+                .disposed(by: disposeBag)
+        case .location:
             accessoryButton.isHidden = false
             accessorySwitch.isHidden = true
             

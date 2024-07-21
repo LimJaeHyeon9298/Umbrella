@@ -22,10 +22,24 @@ class SettingViewController:UIViewController {
         $0.register(SettingCell.self, forCellReuseIdentifier: SettingCell.reuseIdentifier)
     }
     
-    let viewModel = SettingViewModel()
+    let viewModel:SettingViewModel
+    let mapViewModel:MapViewModel
     let disposeBag = DisposeBag()
 
     //MARK: - LifeCycle
+  
+    init(viewModel:SettingViewModel,mapViewModel:MapViewModel) {
+        self.viewModel = viewModel
+        self.mapViewModel = mapViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -70,7 +84,7 @@ class SettingViewController:UIViewController {
                 cell.configure(cellType: cellType, viewModel: self.viewModel)
                 cell.accessoryButton.rx.tap
                     .subscribe(onNext: { [weak self] in
-                        self?.navigateToNotificationViewController()
+                        self?.handleAccessoryButtonTap(for: cellType)
                     })
                     .disposed(by: cell.disposeBag)
             }
@@ -104,6 +118,16 @@ class SettingViewController:UIViewController {
     
     //MARK: - Actions
     
+    private func handleAccessoryButtonTap(for cellType: SettingCellType) {
+        switch cellType {
+        case .alarm:
+            navigateToNotificationViewController()
+        case .location:
+            navigateToMapViewController()
+        default:
+            break
+        }
+    }
     
     private func navigateToNotificationViewController() {
         let controller = NotificationViewController()
@@ -113,6 +137,17 @@ class SettingViewController:UIViewController {
             print("Navigation controller is nil")
         }
         print("button Tapped")
+    }
+    
+    private func navigateToMapViewController() {
+       
+        let controller = MapViewController(viewModel: mapViewModel)
+        if let navigationController = self.navigationController {
+            navigationController.pushViewController(controller, animated: true)
+        } else {
+            print("Navigation controller is nil")
+        }
+        print("Another button tapped")
     }
 }
 

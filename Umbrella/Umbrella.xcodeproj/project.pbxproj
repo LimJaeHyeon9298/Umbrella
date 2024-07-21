@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		464E856A2C4C94BD004D1A1F /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464E85692C4C94BD004D1A1F /* MapViewModel.swift */; };
 		46AA82D32C253A340065FFB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D22C253A340065FFB0 /* AppDelegate.swift */; };
 		46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D42C253A340065FFB0 /* SceneDelegate.swift */; };
 		46AA82D72C253A340065FFB0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D62C253A340065FFB0 /* ViewController.swift */; };
@@ -69,6 +70,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		464E85692C4C94BD004D1A1F /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		46AA82CF2C253A340065FFB0 /* Umbrella.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Umbrella.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46AA82D22C253A340065FFB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46AA82D42C253A340065FFB0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -276,6 +278,7 @@
 				46AA83422C28343B0065FFB0 /* MainViewModel.swift */,
 				46AA83402C28342D0065FFB0 /* SettingViewModel.swift */,
 				46F109982C2AB1D0006AD5F6 /* RainSoundViewModel.swift */,
+				464E85692C4C94BD004D1A1F /* MapViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				464E856A2C4C94BD004D1A1F /* MapViewModel.swift in Sources */,
 				46AA830C2C253B3C0065FFB0 /* NotificationViewController.swift in Sources */,
 				46AA82D72C253A340065FFB0 /* ViewController.swift in Sources */,
 				46F109992C2AB1D0006AD5F6 /* RainSoundViewModel.swift in Sources */,

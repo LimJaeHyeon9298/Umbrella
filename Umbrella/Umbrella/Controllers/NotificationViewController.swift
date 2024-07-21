@@ -70,9 +70,9 @@ class NotificationViewController:UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(test(_:)), name: NSNotification.Name("test"), object: nil)
         view.backgroundColor = .white
-        //self.navigationController?.navigationBar.backgroundColor = .white
-//        self.navigationController?.navigationItem.title = "설정"
-//
+        self.navigationController?.navigationBar.backgroundColor = .white
+        self.navigationController?.navigationItem.title = "설정"
+     self.navigationController?.setNavigationBarHidden(false, animated: true)
         view.addSubview(alertLabel)
         alertLabel.anchor(top:view.topAnchor,left: view.leftAnchor,paddingTop:105,paddingLeft: 20)
         
