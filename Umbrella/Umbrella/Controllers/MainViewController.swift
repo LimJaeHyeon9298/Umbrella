@@ -258,6 +258,7 @@ class MainViewController: UIViewController {
                    .subscribe(onNext: { location in
                        print("Received location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
                        // 여기서 location을 사용해 원하는 작업 수행
+                       self.viewModel.updateLocation(location)
                    })
                    .disposed(by: disposeBag)
 

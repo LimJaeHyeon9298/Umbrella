@@ -138,6 +138,8 @@ class MapViewController:UIViewController {
                return
            }
            viewModel.selectedLocation.onNext(location)
+        self.navigationController?.popViewController(animated: true)
+        
     }
 }
 

@@ -36,14 +36,18 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        fetchWeather(for: location)
-        reverseGeocodeLocation(location: location)
-        locationManager.stopUpdatingLocation()
+        updateLocation(location)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         self.error.onNext(error)
     }
+    
+    func updateLocation(_ location: CLLocation) {
+           fetchWeather(for: location)
+           reverseGeocodeLocation(location: location)
+        locationManager.stopUpdatingLocation()
+       }
     
     private func fetchWeather(for location: CLLocation) {
         isLoading.onNext(true)
