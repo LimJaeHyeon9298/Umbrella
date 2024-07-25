@@ -19,6 +19,9 @@ class RainSoundViewController:UIViewController {
     var collectionView:UICollectionView!
     let viewModel: RainSoundViewModel
     let disposeBag = DisposeBag()
+    private var isDarkMode: Bool {
+            return UserDefaults.standard.bool(forKey: "isDarkMode")
+        }
     
     //MARK: - LifeCycle
    
@@ -36,7 +39,10 @@ class RainSoundViewController:UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpCollectionView()
+       
         binds()
+        let name = Notification.Name("darkModeHasChanged")
+        NotificationCenter.default.addObserver(self, selector: #selector(enableDarkmode), name: name, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,6 +65,7 @@ class RainSoundViewController:UIViewController {
             }
         })
         
+        collectionView.backgroundColor = isDarkMode ? Theme.dark.backgroundColor : Theme.light.backgroundColor
         
     }
     
@@ -69,6 +76,14 @@ class RainSoundViewController:UIViewController {
                 cell.configure(with: item)
             }
             .disposed(by: disposeBag)
+    }
+    
+    @objc func enableDarkmode() {
+        let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+        let theme = isDarkMode ? Theme.dark : Theme.light    
+        collectionView.backgroundColor = theme.backgroundColor
+  
+
     }
     
 }

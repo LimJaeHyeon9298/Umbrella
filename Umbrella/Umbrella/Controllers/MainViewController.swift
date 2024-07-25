@@ -161,7 +161,12 @@ class MainViewController: UIViewController {
             $0.top.equalTo(umbrellaImage.snp.bottom).offset(8)
             $0.centerX.equalToSuperview()
         }
+        weatherCard1.backgroundColor = .lightGray
+        weatherCard2.backgroundColor = .white
+        weatherCard3.backgroundColor = .white
         
+        weatherCard1.layer.masksToBounds = true
+        weatherCard1.layer.cornerRadius = 10
         
         let weatherStackView = UIStackView(arrangedSubviews: [weatherCard1,weatherCard2,weatherCard3])
         weatherStackView.axis = .horizontal
@@ -175,7 +180,7 @@ class MainViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
         
-        weatherStackView.backgroundColor = .red
+        weatherStackView.backgroundColor = .clear
         
         
         view.addSubview(hourlyLabel)
@@ -263,24 +268,57 @@ class MainViewController: UIViewController {
                    .disposed(by: disposeBag)
 
     }
+//    private func loadData() {
+//         
+//        
+//        let currentHour = Calendar.current.component(.hour, from: Date())
+//            
+//        
+//           for hour in 0..<24 {
+//               let time = hour == currentHour ? "NOW" : "\(hour) AM"
+//               let icon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
+//               let temperature = "\(18 + hour % 5)°"
+//               let precipitationChance = "\(hour % 2 == 0 ? "30%" : "50%")"
+//               let weather = HourlyWeather(time: time, icon: icon, temperature: temperature, precipitationChance: precipitationChance)
+//               hourlyWeatherData.append(weather)
+//           }
+//           
+//           collectionView?.reloadData()
+//       }
     private func loadData() {
-         
-        
+        hourlyWeatherData.removeAll() // 기존 데이터를 초기화합니다.
+
         let currentHour = Calendar.current.component(.hour, from: Date())
-            
         
-           for hour in 0..<24 {
-               let time = hour == currentHour ? "NOW" : "\(hour) AM"
-               let icon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
-               let temperature = "\(18 + hour % 5)°"
-               let precipitationChance = "\(hour % 2 == 0 ? "30%" : "50%")"
-               let weather = HourlyWeather(time: time, icon: icon, temperature: temperature, precipitationChance: precipitationChance)
-               hourlyWeatherData.append(weather)
-           }
-           
-           collectionView?.reloadData()
-       }
-    
+        // 현재 시간을 "NOW"로 표시
+        let nowIcon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
+        let nowTemperature = "\(18 + currentHour % 5)°"
+        let nowPrecipitationChance = "\(currentHour % 2 == 0 ? "30%" : "50%")"
+        let nowWeather = HourlyWeather(time: "NOW", icon: nowIcon, temperature: nowTemperature, precipitationChance: nowPrecipitationChance)
+        hourlyWeatherData.append(nowWeather)
+        
+        // 현재 시간 이후부터 23시까지
+        for hour in currentHour + 1..<24 {
+            let time = hour < 12 ? "\(hour) AM" : "\(hour - 12) PM"
+            let icon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
+            let temperature = "\(18 + hour % 5)°"
+            let precipitationChance = "\(hour % 2 == 0 ? "30%" : "50%")"
+            let weather = HourlyWeather(time: time, icon: icon, temperature: temperature, precipitationChance: precipitationChance)
+            hourlyWeatherData.append(weather)
+        }
+        
+        // 0시부터 현재 시간까지
+        for hour in 0..<currentHour {
+            let time = hour == 0 ? "12 AM" : "\(hour) AM"
+            let icon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
+            let temperature = "\(18 + hour % 5)°"
+            let precipitationChance = "\(hour % 2 == 0 ? "30%" : "50%")"
+            let weather = HourlyWeather(time: time, icon: icon, temperature: temperature, precipitationChance: precipitationChance)
+            hourlyWeatherData.append(weather)
+        }
+        
+        collectionView?.reloadData()
+    }
     
     
 
@@ -313,6 +351,7 @@ class MainViewController: UIViewController {
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
         let theme = isDarkMode ? Theme.dark : Theme.light        //view.backgroundColor = theme.backgroundColor
         backgroundImage.image = theme.backgroundImage
+        
 
     }
     @objc func test(_ notification:NSNotification){
@@ -346,7 +385,10 @@ extension MainViewController:UICollectionViewDataSource {
                
                let weather = hourlyWeatherData[indexPath.item]
                cell.configure(with: weather)
+        
         cell.backgroundColor = .white
+        cell.layer.masksToBounds = true
+        cell.layer.cornerRadius = 10
                return cell
     }
     

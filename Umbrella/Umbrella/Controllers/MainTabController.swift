@@ -18,22 +18,23 @@ final class MainTabController:UIViewController {
     let soundViewModel = RainSoundViewModel()
     let mapViewModel = MapViewModel()
     private var isHidden = false
-    
+    private var isDarkMode: Bool {
+           return UserDefaults.standard.bool(forKey: "isDarkMode")
+       }
     fileprivate let tabBar = CustomTabBar()
     private var childVCs = [UIViewController]()
     private let disposeBag = DisposeBag()
     
-    private var backgroundImage:UIImageView = {
-        
-        let ig = UIImageView()
-        let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
-
+    private lazy var backgroundImage = UIImageView().then {
+       
         let theme = isDarkMode ? Theme.dark : Theme.light
-        ig.image = theme.backgroundImage
-        return ig
+
+       
+        $0.image = theme.backgroundImage
+    }
         
-    }()
     
+   
     
     
     init() {
@@ -47,25 +48,27 @@ final class MainTabController:UIViewController {
         setUp()
         setUpTabBarControllers()
         setUpBind() // 탭 이벤트 바인딩 호출
-        
-        // NotificationCenter 구독
-//               NotificationCenter.default.addObserver(self, selector: #selector(hideTabController), name: .hideTabController, object: nil)
-//               NotificationCenter.default.addObserver(self, selector: #selector(showTabController), name: .showTabController, object: nil)
+        let name = Notification.Name("darkModeHasChanged")
+        NotificationCenter.default.addObserver(self, selector: #selector(enableDarkmode), name: name, object: nil)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func enableDarkmode() {
+        let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+        let theme = isDarkMode ? Theme.dark : Theme.light        //view.backgroundColor = theme.backgroundColor
+        view.backgroundColor = theme.backgroundColor
+        self.backgroundImage.image = theme.backgroundImage
+
+    }
+    
     private func setUp() {
-        view.backgroundColor = .brown
+        view.backgroundColor = isDarkMode ? Theme.dark.backgroundColor : Theme.light.backgroundColor
         view.addSubview(tabBar)
+        updateTheme()
         tabBar.backgroundColor = .red
-//        tabBar.snp.makeConstraints {
-//            $0.leading.trailing.equalToSuperview()
-//            $0.top.equalTo(view.snp.bottom).offset(-500)
-//            $0.bottom.equalTo(view.snp.bottom).offset(300)
-//        }
-        
+
         tabBar.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom) // 안전 영역 하단에 맞춤
@@ -76,6 +79,7 @@ final class MainTabController:UIViewController {
         tabBar.layer.masksToBounds = true // 뷰의 경계를 넘어가는 내용을 잘라냄
     }
     private func setUpTabBarControllers() {
+        tabBar.selectedIndex = 1
         // Enum에 정의된 각 탭 아이   @objc private 템에 대응하는 뷰 컨트롤러 생성
         tabBar.tabItems.forEach { item in
             let vc: UIViewController
@@ -102,12 +106,12 @@ final class MainTabController:UIViewController {
             
             
             //let imageView = UIImageView(image:Theme.light.backgroundImage)
-//            backgroundImage.contentMode = .scaleAspectFill
-//               view.insertSubview(backgroundImage, at: 0) // 이미지 뷰를 뷰 계층에서 가장 아래로 추가
+            backgroundImage.contentMode = .scaleAspectFill
+               view.insertSubview(backgroundImage, at: 0) // 이미지 뷰를 뷰 계층에서 가장 아래로 추가
 //
-//            backgroundImage.snp.makeConstraints { make in
-//                   make.edges.equalToSuperview()
-//               }
+            backgroundImage.snp.makeConstraints { make in
+                   make.edges.equalToSuperview()
+               }
             
            //     view.addSubview(UIImageView(image: Theme.light.backgroundImage))
             
@@ -136,51 +140,47 @@ final class MainTabController:UIViewController {
         
         
     }
-    @objc private func hideTabController() {
-      //  view.backgroundColor = .blue
-//        tabBar.isHidden = true
-//        view.isHidden = true
-//        childVCs.forEach { $0.view.isHidden = true } // 자식 뷰 컨트롤러들도 표시
-//        print("MainTabController: Hide tab bar and child views")
-        guard !isHidden else { return }
-        tabBar.isHidden = true
-               childVCs.forEach { $0.view.isHidden = true }
-        view.isHidden = true
-             print("MainTabController: Hide MainTabController and tab bar")
-       }
+    
+    private func updateTheme() {
+            let theme = isDarkMode ? Theme.dark : Theme.light
+            view.backgroundColor = theme.backgroundColor
+            backgroundImage.image = theme.backgroundImage
+        }
 
-       @objc private func showTabController() {
-//           view.isHidden = false
-//           tabBar.isHidden = false
-//           childVCs.forEach { $0.view.isHidden = false } // 자식 뷰 컨트롤러들도 표시
-//           print("MainTabController: Show tab bar and child views")
-          
-           
-           guard isHidden else { return }
-                  isHidden = false
-           view.alpha = 1
-                  print("MainTabController: Show MainTabController and tab bar")
-       }
+
        
        deinit {
            NotificationCenter.default.removeObserver(self)
        }
 
     private func setUpBind() {
-        // 탭바의 tabButton Observable을 구독하여 인덱스에 따른 처리를 수행
-        tabBar.rx.tabButton
-            .bind { [weak self] index in
-                guard let self = self, self.childVCs.indices.contains(index) else { return }
-                
-                // 현재 화면에 표시된 뷰 컨트롤러를 전환
-                let targetVC = self.childVCs[index]
-                self.view.bringSubviewToFront(targetVC.view)
-                
-                // 선택된 인덱스 업데이트
-                self.tabBar.selectedIndex = index
-            }
-            .disposed(by: disposeBag)
-    }
+            // 초기 탭 인덱스를 설정하고 MainViewController를 표시
+            tabBar.selectedIndex = 1
+            let initialVC = childVCs[1]
+            view.bringSubviewToFront(initialVC.view)
+            view.bringSubviewToFront(tabBar)
+            backgroundImage.isHidden = !(initialVC is UINavigationController && (initialVC as! UINavigationController).topViewController is MainViewController)
+            
+            // 탭바의 tabButton Observable을 구독하여 인덱스에 따른 처리를 수행
+            tabBar.rx.tabButton
+                .bind { [weak self] index in
+                    guard let self = self, self.childVCs.indices.contains(index) else { return }
+                    
+                    // 현재 화면에 표시된 뷰 컨트롤러를 전환
+                    let targetVC = self.childVCs[index]
+                    self.view.bringSubviewToFront(targetVC.view)
+                    
+                    // 선택된 인덱스 업데이트
+                    self.tabBar.selectedIndex = index
+                    if targetVC is UINavigationController, (targetVC as! UINavigationController).topViewController is MainViewController {
+                        self.backgroundImage.isHidden = false
+                    } else {
+                        self.backgroundImage.isHidden = true
+                    }
+                }
+                .disposed(by: disposeBag)
+        }
+      
     
    
 }
@@ -197,8 +197,6 @@ extension Reactive where Base: MainTabController {
     
 }
 
-
-//extension Notification.Name {
-//    static let hideTabController = Notification.Name("hideTabController")
-//    static let showTabController = Notification.Name("showTabController")
-//}
+extension Notification.Name {
+    static let themeDidChange = Notification.Name("themeDidChange")
+}
