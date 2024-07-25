@@ -17,7 +17,7 @@ final class MainTabController:UIViewController {
     let settingViewModel = SettingViewModel()
     let soundViewModel = RainSoundViewModel()
     let mapViewModel = MapViewModel()
-    
+    private var isHidden = false
     
     fileprivate let tabBar = CustomTabBar()
     private var childVCs = [UIViewController]()
@@ -47,13 +47,17 @@ final class MainTabController:UIViewController {
         setUp()
         setUpTabBarControllers()
         setUpBind() // 탭 이벤트 바인딩 호출
+        
+        // NotificationCenter 구독
+//               NotificationCenter.default.addObserver(self, selector: #selector(hideTabController), name: .hideTabController, object: nil)
+//               NotificationCenter.default.addObserver(self, selector: #selector(showTabController), name: .showTabController, object: nil)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private func setUp() {
-        view.backgroundColor = .clear
+        view.backgroundColor = .brown
         view.addSubview(tabBar)
         tabBar.backgroundColor = .red
 //        tabBar.snp.makeConstraints {
@@ -72,7 +76,7 @@ final class MainTabController:UIViewController {
         tabBar.layer.masksToBounds = true // 뷰의 경계를 넘어가는 내용을 잘라냄
     }
     private func setUpTabBarControllers() {
-        // Enum에 정의된 각 탭 아이템에 대응하는 뷰 컨트롤러 생성
+        // Enum에 정의된 각 탭 아이   @objc private 템에 대응하는 뷰 컨트롤러 생성
         tabBar.tabItems.forEach { item in
             let vc: UIViewController
             switch item {
@@ -122,13 +126,45 @@ final class MainTabController:UIViewController {
 
             // 생성된 뷰 컨트롤러를 배열에 추가
             childVCs.append(vc)
+           
         }
 
         // 첫 번째 뷰 컨트롤러를 화면 전면에 표시
         if let firstView = childVCs.first?.view {
             view.bringSubviewToFront(firstView)
         }
+        
+        
     }
+    @objc private func hideTabController() {
+      //  view.backgroundColor = .blue
+//        tabBar.isHidden = true
+//        view.isHidden = true
+//        childVCs.forEach { $0.view.isHidden = true } // 자식 뷰 컨트롤러들도 표시
+//        print("MainTabController: Hide tab bar and child views")
+        guard !isHidden else { return }
+        tabBar.isHidden = true
+               childVCs.forEach { $0.view.isHidden = true }
+        view.isHidden = true
+             print("MainTabController: Hide MainTabController and tab bar")
+       }
+
+       @objc private func showTabController() {
+//           view.isHidden = false
+//           tabBar.isHidden = false
+//           childVCs.forEach { $0.view.isHidden = false } // 자식 뷰 컨트롤러들도 표시
+//           print("MainTabController: Show tab bar and child views")
+          
+           
+           guard isHidden else { return }
+                  isHidden = false
+           view.alpha = 1
+                  print("MainTabController: Show MainTabController and tab bar")
+       }
+       
+       deinit {
+           NotificationCenter.default.removeObserver(self)
+       }
 
     private func setUpBind() {
         // 탭바의 tabButton Observable을 구독하여 인덱스에 따른 처리를 수행
@@ -155,4 +191,14 @@ extension Reactive where Base: MainTabController {
             base.tabBar.rx.changeIndex.onNext(index)
         }
     }
+    
+    
+    
+    
 }
+
+
+//extension Notification.Name {
+//    static let hideTabController = Notification.Name("hideTabController")
+//    static let showTabController = Notification.Name("showTabController")
+//}

@@ -138,17 +138,20 @@ class SettingViewController:UIViewController {
         }
         print("button Tapped")
     }
-    
+
+//
     private func navigateToMapViewController() {
-       
-        let controller = MapViewController(viewModel: mapViewModel)
-        if let navigationController = self.navigationController {
-            navigationController.pushViewController(controller, animated: true)
-        } else {
-            print("Navigation controller is nil")
-        }
-        print("Another button tapped")
+        let mapVC = MapViewController(viewModel: mapViewModel)
+        mapVC.modalPresentationStyle = .fullScreen
+        self.present(mapVC, animated: true, completion: nil)
     }
+    
+
+    
+    
+    
+    
+    
 }
 
 extension SettingViewController:UITableViewDelegate {

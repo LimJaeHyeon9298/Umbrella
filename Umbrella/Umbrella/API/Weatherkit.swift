@@ -33,15 +33,20 @@ extension UseWeatherkit {
                     
                     let weather = try await self.weatherService.weather(for: location)
                    
-                    print("--------이게 weatherkit의 낧씨다 \(weather) /n -------------------------------")
-                    if let dailyWeather = weather.dailyForecast.first {
-                        print("내일의 강수 확률은 \(dailyWeather.precipitationChance * 100)%입니다.")
-                        
-                    }
+                   // print("--------이게 weatherkit의 낧씨다 \(weather) /n -------------------------------")
+//                    if let dailyWeather = weather.dailyForecast.first {
+//                        print("내일의 강수 확률은 \(dailyWeather.precipitationChance * 100)%입니다.")
+//                        
+//                    }
+//                    
+//                    if let hourlyWeather = weather.hourlyForecast.first {
+//                        print("다음 시간의 강수 확률은 \(hourlyWeather.precipitationChance * 100)%입니다.")
+//                    }
                     
-                    if let hourlyWeather = weather.hourlyForecast.first {
-                        print("다음 시간의 강수 확률은 \(hourlyWeather.precipitationChance * 100)%입니다.")
-                    }
+                    let hourlyForecast = weather.hourlyForecast
+                                    for (index, hourly) in hourlyForecast.prefix(10).enumerated() { // 다음 3시간 예보
+                                        print("\(index + 1)시간 뒤의 강수 확률은 \(hourly.precipitationChance)%입니다.")
+                                    }
                     
                     observer.onNext(weather)
                     observer.onCompleted()

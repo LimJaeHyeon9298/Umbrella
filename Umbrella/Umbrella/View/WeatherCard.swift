@@ -34,9 +34,9 @@ class WeatherCard:UIView {
         weatherLabel.textAlignment = .center
         weatherState.text = stateText
         weatherState.textAlignment = .center
+        weatherIcon.tintColor = .blue
         
-        
-        
+       
         let vStack = UIStackView(arrangedSubviews: [weatherIcon,weatherLabel,weatherState])
         vStack.axis = .vertical
         vStack.alignment = .center

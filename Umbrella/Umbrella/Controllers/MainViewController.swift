@@ -69,9 +69,9 @@ class MainViewController: UIViewController {
     
     private lazy var tempLabel = UILabel().then { $0.font = UIFont.boldSystemFont(ofSize: 35) }
     
-    private let weatherCard1 = WeatherCard(iconImage: UIImage(named: "rainCloud")!, labelText: "Wind State", stateText: "5.6 km/h")
+    private let weatherCard1 = WeatherCard(iconImage: UIImage(systemName: "wind")!, labelText: "바람 세기", stateText: "5.6 km/h")
     private let weatherCard2 = WeatherCard(iconImage: UIImage(named: "rainCloud")!, labelText: "Wind State", stateText: "5.6 km/h")
-    private let weatherCard3 = WeatherCard(iconImage: UIImage(named: "rainCloud")!, labelText: "Wind State", stateText: "5.6 km/h")
+    private let weatherCard3 = WeatherCard(iconImage: UIImage(systemName: "sun.max.fill")!, labelText: "자외선 지수", stateText: "5.6 km/h")
     
     private let hourlyLabel = UILabel().then {
         $0.text = "시간대별 강수확률"
@@ -264,9 +264,13 @@ class MainViewController: UIViewController {
 
     }
     private func loadData() {
-           // 예시 데이터 로드
+         
+        
+        let currentHour = Calendar.current.component(.hour, from: Date())
+            
+        
            for hour in 0..<24 {
-               let time = hour == 0 ? "NOW" : "\(hour) AM"
+               let time = hour == currentHour ? "NOW" : "\(hour) AM"
                let icon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
                let temperature = "\(18 + hour % 5)°"
                let precipitationChance = "\(hour % 2 == 0 ? "30%" : "50%")"
@@ -282,6 +286,8 @@ class MainViewController: UIViewController {
 
         private func updateWeatherUI(_ weather: Weather) {
             print("weather \(weather.currentWeather.temperature.value)")
+            print("uvIndex\(weather.currentWeather.uvIndex)")
+            print("wind\(weather.currentWeather.wind)")
             tempLabel.text = String(weather.currentWeather.temperature.value)
            
         }

@@ -23,6 +23,11 @@ class MapViewController:UIViewController {
         $0.setTitleColor(.white, for: .normal)
         $0.layer.cornerRadius = 10
     }
+    private let backButton = UIButton().then {
+            let image = UIImage(systemName: "chevron.left")
+            $0.setImage(image, for: .normal)
+            $0.tintColor = .blue
+        }
     
     init(viewModel:MapViewModel) {
         self.viewModel = viewModel
@@ -37,14 +42,26 @@ class MapViewController:UIViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         configureUI()
+        view.backgroundColor = .blue
+        print("mapViewCOntroller init")
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapTap(_:)))
-               mapView.addGestureRecognizer(tapGesture)
+        mapView.addGestureRecognizer(tapGesture)
     }
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+        }
     
+    override func viewWillDisappear(_ animated: Bool) {
+           super.viewWillDisappear(animated)
+       
+       }
+
     private func configureUI() {
+        
         view.addSubview(mapView)
         mapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+            
         }
         view.addSubview(changeButton)
         changeButton.snp.makeConstraints {
@@ -53,13 +70,30 @@ class MapViewController:UIViewController {
             $0.leading.equalTo(view.safeAreaLayoutGuide).offset(20)
             $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-20)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
-        
+            
         }
         changeButton.backgroundColor = .blue
         changeButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         
+        let navigationBar = UIView()
+                navigationBar.backgroundColor = .clear
+                view.addSubview(navigationBar)
+                navigationBar.snp.makeConstraints {
+                    $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+                    $0.height.equalTo(50)
+                }
+                
+                // 뒤로가기 버튼 설정
+                navigationBar.addSubview(backButton)
+                backButton.snp.makeConstraints {
+                    $0.centerY.equalToSuperview()
+                    $0.leading.equalToSuperview().offset(16)
+                }
+               backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        
+        
         mapView.mapType = MKMapType.standard
-       
+        
         mapView.delegate = self
         
         
@@ -83,64 +117,69 @@ class MapViewController:UIViewController {
         let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
         let newLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         
-       
+        
         if let lastLocation = lastSelectedLocation {
             let distance = newLocation.distance(from: lastLocation)
-          
+            
             if distance < 1000 {
                 print("Selected location is too close to the previous location.")
                 return
             }
-           
+            
         }
         addPin(at: coordinate)
-            reverseGeocode(coordinate: coordinate)
+        reverseGeocode(coordinate: coordinate)
         lastSelectedLocation = newLocation
         viewModel.currentLocation = newLocation
         
     }
-
+    
     func addPin(at coordinate: CLLocationCoordinate2D) {
-            // 기존 핀 제거
-            mapView.removeAnnotations(mapView.annotations)
-            
-            // 새로운 핀 추가
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            mapView.addAnnotation(annotation)
-            
-            print("Selected coordinates: \(coordinate.latitude), \(coordinate.longitude)")
-        }
+        // 기존 핀 제거
+        mapView.removeAnnotations(mapView.annotations)
+        
+        // 새로운 핀 추가
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        mapView.addAnnotation(annotation)
+        
+        print("Selected coordinates: \(coordinate.latitude), \(coordinate.longitude)")
+    }
     
     func reverseGeocode(coordinate: CLLocationCoordinate2D) {
-           let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-           geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
-               guard let self = self else { return }
-               if let error = error {
-                   print("Reverse geocoding failed: \(error.localizedDescription)")
-                   return
-               }
-               guard let placemark = placemarks?.first else {
-                   print("No placemarks found")
-                   return
-               }
-               if let name = placemark.name, let locality = placemark.locality, let country = placemark.country {
-                   print("Location: \(name), \(locality), \(country)")
-               } else {
-                   print("Location details not found")
-               }
-           }
-       }
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print("Reverse geocoding failed: \(error.localizedDescription)")
+                return
+            }
+            guard let placemark = placemarks?.first else {
+                print("No placemarks found")
+                return
+            }
+            if let name = placemark.name, let locality = placemark.locality, let country = placemark.country {
+                print("Location: \(name), \(locality), \(country)")
+            } else {
+                print("Location details not found")
+            }
+        }
+    }
     @objc func buttonTapped() {
         print("hihi button Tapped")
         guard let location = viewModel.currentLocation else {
-               print("No location selected")
-               return
-           }
-           viewModel.selectedLocation.onNext(location)
-        self.navigationController?.popViewController(animated: true)
+            print("No location selected")
+            return
+        }
+        viewModel.selectedLocation.onNext(location)
+        self.dismiss(animated: true, completion: nil)
+      
         
     }
+    
+    @objc func backButtonTapped() {
+            self.dismiss(animated: true, completion: nil)
+        }
 }
 
 extension MapViewController:MKMapViewDelegate {
@@ -156,5 +195,19 @@ extension MapViewController:MKMapViewDelegate {
     }
     
     
-    
+    private func updateMapViewConstraints(hideTabBar: Bool) {
+        //        mapView.snp.remakeConstraints {
+        //            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        //            $0.leading.trailing.equalToSuperview()
+        //            if hideTabBar {
+        //                $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        //            } else {
+        //                $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-75)
+        //            }
+        //        }
+        mapView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        view.layoutIfNeeded()
+    }
 }
