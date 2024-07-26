@@ -13,6 +13,7 @@ import Then
 import SnapKit
 import RxSwift
 import RxCocoa
+import FLAnimatedImage
 
 class MainViewController: UIViewController {
     
@@ -50,8 +51,12 @@ class MainViewController: UIViewController {
         
     }
 
-    private let umbrellaImage = UIImageView().then { $0.image = #imageLiteral(resourceName: "rainCloud") }
+    private let umbrellaImage = UIImageView().then { $0.image = #imageLiteral(resourceName: "rainClould2") }
 
+//    private let umbrellaImage = FLAnimatedImageView().then {
+//           $0.contentMode = .scaleAspectFit
+//        $0.backgroundColor = .clear
+//       }
     
     private let precipitationLabel = UILabel().then {
         $0.text = "강수확률 10%"
@@ -69,9 +74,9 @@ class MainViewController: UIViewController {
     
     private lazy var tempLabel = UILabel().then { $0.font = UIFont.boldSystemFont(ofSize: 35) }
     
-    private let weatherCard1 = WeatherCard(iconImage: UIImage(systemName: "wind")!, labelText: "바람 세기", stateText: "5.6 km/h")
-    private let weatherCard2 = WeatherCard(iconImage: UIImage(named: "rainCloud")!, labelText: "Wind State", stateText: "5.6 km/h")
-    private let weatherCard3 = WeatherCard(iconImage: UIImage(systemName: "sun.max.fill")!, labelText: "자외선 지수", stateText: "5.6 km/h")
+    private let weatherCard1 = WeatherCard(iconImage: UIImage(named: "free-icon-wind-2204344")!, labelText: "바람 세기", stateText: "5.6 km/h")
+    private let weatherCard2 = WeatherCard(iconImage: UIImage(named: "rainCloud")!, labelText: "강수 확률", stateText: "5.6 km/h")
+    private let weatherCard3 = WeatherCard(iconImage: UIImage(named: "free-icon-sun-7604060")!, labelText: "자외선 지수", stateText: "5.6 km/h")
     
     private let hourlyLabel = UILabel().then {
         $0.text = "시간대별 강수확률"
@@ -97,10 +102,11 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("mainVC viewDidLoad")
         configureUI()
         configureCollectionView()
-        loadData()
-        timer = Timer.scheduledTimer(timeInterval: 1, target:self, selector:#selector(timerProc),userInfo:nil, repeats: true)
+     
+        //timer = Timer.scheduledTimer(timeInterval: 1, target:self, selector:#selector(timerProc),userInfo:nil, repeats: true)
         viewModel = MainViewModel()
         bindViewModel()
         setupStackView()
@@ -113,9 +119,12 @@ class MainViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        tempLabel.text = String(self.weather?.currentWeather.temperature.value ?? 0)
-        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)), name: NSNotification.Name("test"), object: nil)
+       // tempLabel.text = String(self.weather?.currentWeather.temperature.value ?? 0)
+//        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)), name: NSNotification.Name("test"), object: nil)
         navigationController?.isNavigationBarHidden = true
+        
+        
+        
         
     }
     
@@ -125,7 +134,7 @@ class MainViewController: UIViewController {
         view.backgroundColor = .white
     
         view.addSubview(backgroundImage)
-        
+//        backgroundImage.alpha = 0.85
         backgroundImage.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -154,6 +163,18 @@ class MainViewController: UIViewController {
             $0.width.height.equalTo(180)
         }
         
+        // GIF 파일을 로드하여 FLAnimatedImageView에 설정
+//               if let gifPath = Bundle.main.path(forResource: "free-animated-icon-umbrella-6455007", ofType: "gif") {
+//                   let gifURL = URL(fileURLWithPath: gifPath)
+//                   do {
+//                       let gifData = try Data(contentsOf: gifURL)
+//                       let animatedImage = FLAnimatedImage(animatedGIFData: gifData)
+//                       umbrellaImage.animatedImage = animatedImage
+//                   } catch {
+//                       print("GIF 파일을 로드하는 데 실패했습니다: \(error)")
+//                   }
+//               }
+        
         
         view.addSubview(precipitationLabel)
         
@@ -161,17 +182,14 @@ class MainViewController: UIViewController {
             $0.top.equalTo(umbrellaImage.snp.bottom).offset(8)
             $0.centerX.equalToSuperview()
         }
-        weatherCard1.backgroundColor = .lightGray
-        weatherCard2.backgroundColor = .white
-        weatherCard3.backgroundColor = .white
-        
-        weatherCard1.layer.masksToBounds = true
-        weatherCard1.layer.cornerRadius = 10
         
         let weatherStackView = UIStackView(arrangedSubviews: [weatherCard1,weatherCard2,weatherCard3])
         weatherStackView.axis = .horizontal
         weatherStackView.distribution = .fillEqually
-        weatherStackView.spacing = 10
+        weatherStackView.spacing = 15
+        
+        
+        
         
         view.addSubview(weatherStackView)
         weatherStackView.snp.makeConstraints {
@@ -268,66 +286,59 @@ class MainViewController: UIViewController {
                    .disposed(by: disposeBag)
 
     }
-//    private func loadData() {
-//         
-//        
-//        let currentHour = Calendar.current.component(.hour, from: Date())
-//            
-//        
-//           for hour in 0..<24 {
-//               let time = hour == currentHour ? "NOW" : "\(hour) AM"
-//               let icon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
-//               let temperature = "\(18 + hour % 5)°"
-//               let precipitationChance = "\(hour % 2 == 0 ? "30%" : "50%")"
-//               let weather = HourlyWeather(time: time, icon: icon, temperature: temperature, precipitationChance: precipitationChance)
-//               hourlyWeatherData.append(weather)
-//           }
-//           
-//           collectionView?.reloadData()
-//       }
-    private func loadData() {
+
+    private func fetchHourlyWeather(with weather: Weather) {
         hourlyWeatherData.removeAll() // 기존 데이터를 초기화합니다.
 
-        let currentHour = Calendar.current.component(.hour, from: Date())
-        
-        // 현재 시간을 "NOW"로 표시
-        let nowIcon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
-        let nowTemperature = "\(18 + currentHour % 5)°"
-        let nowPrecipitationChance = "\(currentHour % 2 == 0 ? "30%" : "50%")"
-        let nowWeather = HourlyWeather(time: "NOW", icon: nowIcon, temperature: nowTemperature, precipitationChance: nowPrecipitationChance)
-        hourlyWeatherData.append(nowWeather)
-        
-        // 현재 시간 이후부터 23시까지
-        for hour in currentHour + 1..<24 {
-            let time = hour < 12 ? "\(hour) AM" : "\(hour - 12) PM"
-            let icon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
-            let temperature = "\(18 + hour % 5)°"
-            let precipitationChance = "\(hour % 2 == 0 ? "30%" : "50%")"
-            let weather = HourlyWeather(time: time, icon: icon, temperature: temperature, precipitationChance: precipitationChance)
-            hourlyWeatherData.append(weather)
-        }
-        
-        // 0시부터 현재 시간까지
-        for hour in 0..<currentHour {
-            let time = hour == 0 ? "12 AM" : "\(hour) AM"
-            let icon = UIImage(named: "rainCloud")! // 실제 이미지를 사용해야 합니다
-            let temperature = "\(18 + hour % 5)°"
-            let precipitationChance = "\(hour % 2 == 0 ? "30%" : "50%")"
-            let weather = HourlyWeather(time: time, icon: icon, temperature: temperature, precipitationChance: precipitationChance)
-            hourlyWeatherData.append(weather)
-        }
-        
-        collectionView?.reloadData()
-    }
-    
+           let currentHour = Calendar.current.component(.hour, from: Date())
+           
+           // 현재 시간을 "NOW"로 표시 (hourlyForecast의 첫 번째 값을 사용)
+           if let currentWeather = weather.hourlyForecast.first {
+               let nowIcon = currentWeather.precipitationChance == 0.0 ?
+                                     UIImage(named: "free-icon-umbrella-3430143")! :
+                                     UIImage(named: "free-icon-umbrella-1628865")!
+               let nowPrecipitationChance = String(format: "%.0f%%", currentWeather.precipitationChance * 100)
+               let nowWeather = HourlyWeather(time: "NOW", icon: nowIcon, precipitationChance: nowPrecipitationChance)
+               hourlyWeatherData.append(nowWeather)
+               
+               weatherCard2.updateStateText("\(nowPrecipitationChance)")
+           }
+           
+           // 현재 시간 이후부터 23시까지 (두 번째 값부터 사용)
+           for (index, hourly) in weather.hourlyForecast.prefix(24).dropFirst().enumerated() {
+               let hour = currentHour + index + 1
+               let displayHour = hour % 24
+               let period = displayHour < 12 ? "AM" : "PM"
+               let formattedHour = displayHour == 0 ? 12 : (displayHour > 12 ? displayHour - 12 : displayHour)
+               let time = "\(formattedHour) \(period)"
+               let icon = hourly.precipitationChance == 0.0 ?
+                                  UIImage(named: "free-icon-umbrella-3430143")! :
+                                  UIImage(named: "free-icon-umbrella-1628865")!
+              // let temperature = "\(18 + displayHour % 5)°"
+               let precipitationChance = String(format: "%.0f%%", hourly.precipitationChance * 100)
+               let weather = HourlyWeather(time: time, icon: icon, precipitationChance: precipitationChance)
+               hourlyWeatherData.append(weather)
+           }
+           
+           collectionView?.reloadData()
+       }
     
 
         private func updateWeatherUI(_ weather: Weather) {
             print("weather \(weather.currentWeather.temperature.value)")
             print("uvIndex\(weather.currentWeather.uvIndex)")
             print("wind\(weather.currentWeather.wind)")
+           // print("wind\(weather.currentWeather.precipitationChance)")
             tempLabel.text = String(weather.currentWeather.temperature.value)
-           
+            fetchHourlyWeather(with: weather)
+            
+            
+            weatherCard1.updateStateText("\(weather.currentWeather.wind.speed.value) km/h")
+         
+               weatherCard3.updateStateText("\(weather.currentWeather.uvIndex.value)")
+
+            
+            
         }
     
         //MARK: - Actions
@@ -366,8 +377,8 @@ class MainViewController: UIViewController {
          locationLabel.text = mapItemArray[0]
         lat = Double(mapItemArray[2])!
         lon = Double(mapItemArray[3])!
-        viewModel.locationManager.stopUpdatingLocation()
-        viewModel.locationManager.startUpdatingLocation()
+//        viewModel.locationManager.stopUpdatingLocation()
+//        viewModel.locationManager.startUpdatingLocation()
         
         }
     

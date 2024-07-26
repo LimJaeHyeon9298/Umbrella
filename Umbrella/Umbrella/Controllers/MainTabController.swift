@@ -108,7 +108,7 @@ final class MainTabController:UIViewController {
             //let imageView = UIImageView(image:Theme.light.backgroundImage)
             backgroundImage.contentMode = .scaleAspectFill
                view.insertSubview(backgroundImage, at: 0) // 이미지 뷰를 뷰 계층에서 가장 아래로 추가
-//
+//            backgroundImage.alpha = 0.85
             backgroundImage.snp.makeConstraints { make in
                    make.edges.equalToSuperview()
                }

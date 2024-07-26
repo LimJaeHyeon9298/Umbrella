@@ -46,6 +46,7 @@ class SettingViewController:UIViewController {
         setUpTableView()
         binds()
         tableView.delegate = self
+        print("settingVC viewDidLoad")
     }
     
     
@@ -77,24 +78,38 @@ class SettingViewController:UIViewController {
     }
     
     
-    func binds() {
+        func binds() {
 
-        viewModel.items
-            .bind(to: tableView.rx.items(cellIdentifier: SettingCell.reuseIdentifier, cellType: SettingCell.self)) { row, cellType, cell in
-                cell.configure(cellType: cellType, viewModel: self.viewModel)
-                cell.accessoryButton.rx.tap
-                    .subscribe(onNext: { [weak self] in
-                        self?.handleAccessoryButtonTap(for: cellType)
-                    })
-                    .disposed(by: cell.disposeBag)
-            }
-            .disposed(by: disposeBag)
+            viewModel.items
+                .bind(to: tableView.rx.items(cellIdentifier: SettingCell.reuseIdentifier, cellType: SettingCell.self)) { row, cellType, cell in
+                    cell.configure(cellType: cellType, viewModel: self.viewModel)
+                    cell.accessoryButton.rx.tap
+                        .subscribe(onNext: { [weak self] in
+                            self?.handleAccessoryButtonTap(for: cellType)
+                            print("selectec\(cellType)")
+                        })
+                    
+                        .disposed(by: cell.disposeBag)
+                }
+                .disposed(by: disposeBag)
         
-           tableView.rx.modelSelected(SettingCellType.self)
-               .subscribe(onNext: { cellType in
-                   print("Selected \(cellType.title)")
-               })
-               .disposed(by: disposeBag)
+//           tableView.rx.modelSelected(SettingCellType.self)
+//               .subscribe(onNext: { cellType in
+//                   print("Selected \(cellType.title)")
+//                   self.handleAccessoryButtonTap(for: cellType)
+//                   if let selectedRow = self?.tableView.indexPathForSelectedRow {
+//                       self?.tableView.deselectRow(at: selectedRow, animated: true)
+//                   }
+//               })
+//               .disposed(by: disposeBag)
+            tableView.rx.modelSelected(SettingCellType.self)
+                        .subscribe(onNext: { [weak self] cellType in
+                            self?.handleAccessoryButtonTap(for: cellType)
+                            if let selectedRow = self?.tableView.indexPathForSelectedRow {
+                                self?.tableView.deselectRow(at: selectedRow, animated: true)
+                            }
+                        })
+                        .disposed(by: disposeBag)
 
         
         viewModel.theme
@@ -130,13 +145,17 @@ class SettingViewController:UIViewController {
     }
     
     private func navigateToNotificationViewController() {
-        let controller = NotificationViewController()
-        if let navigationController = self.navigationController {
-            navigationController.pushViewController(controller, animated: true)
-        } else {
-            print("Navigation controller is nil")
-        }
-        print("button Tapped")
+//        let controller = NotificationViewController()
+//        if let navigationController = self.navigationController {
+//            navigationController.pushViewController(controller, animated: true)
+//        } else {
+//            print("Navigation controller is nil")
+//        }
+//        print("button Tapped")
+        
+        let mapVC = NotificationViewController()
+        mapVC.modalPresentationStyle = .fullScreen
+        self.present(mapVC, animated: true, completion: nil)
     }
 
 //
@@ -158,4 +177,10 @@ extension SettingViewController:UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            if let cellType = try? tableView.rx.model(at: indexPath) as SettingCellType {
+                handleAccessoryButtonTap(for: cellType)
+            }
+        }
 }

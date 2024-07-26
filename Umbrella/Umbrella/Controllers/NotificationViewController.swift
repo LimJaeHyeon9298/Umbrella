@@ -6,9 +6,19 @@
 //
 
 import UIKit
+import Then
+import SnapKit
 
 
 class NotificationViewController:UIViewController {
+    
+    private let backButton = UIButton().then {
+            let image = UIImage(systemName: "chevron.left")
+            $0.setImage(image, for: .normal)
+            $0.tintColor = .blue
+        }
+    
+    
     
     private let alertLabel:UILabel = {
         let label = UILabel()
@@ -68,6 +78,23 @@ class NotificationViewController:UIViewController {
  
     override func viewDidLoad() {
         
+        let navigationBar = UIView()
+                navigationBar.backgroundColor = .clear
+                view.addSubview(navigationBar)
+                navigationBar.snp.makeConstraints {
+                    $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+                    $0.height.equalTo(50)
+                }
+                
+                // 뒤로가기 버튼 설정
+                navigationBar.addSubview(backButton)
+                backButton.snp.makeConstraints {
+                    $0.centerY.equalToSuperview()
+                    $0.leading.equalToSuperview().offset(16)
+                }
+               backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        
+        
         NotificationCenter.default.addObserver(self, selector: #selector(test(_:)), name: NSNotification.Name("test"), object: nil)
         view.backgroundColor = .white
         self.navigationController?.navigationBar.backgroundColor = .white
@@ -106,6 +133,13 @@ class NotificationViewController:UIViewController {
         
         let controller = TimeSettingViewController()
         present(controller, animated: true)
+    }
+    
+    
+    
+    
+    @objc func backButtonTapped() {
+        self.dismiss(animated: true)
     }
     
     @objc func test(_ notification:NSNotification){

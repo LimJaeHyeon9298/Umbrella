@@ -11,7 +11,7 @@ import SnapKit
 import Then
 
 class MapViewController:UIViewController {
-    
+    private var isInitialLocationSet = false
     let mapView = MKMapView()
     private let geocoder = CLGeocoder()
     private var lastSelectedLocation: CLLocation?
@@ -188,10 +188,18 @@ extension MapViewController:MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        let region = MKCoordinateRegion(center: userLocation.coordinate,
-                                        latitudinalMeters: 5000,
-                                        longitudinalMeters: 5000)
-        mapView.setRegion(region, animated: true)
+//        let region = MKCoordinateRegion(center: userLocation.coordinate,
+//                                        latitudinalMeters: 5000,
+//                                        longitudinalMeters: 5000)
+//        mapView.setRegion(region, animated: true)
+        
+        if !isInitialLocationSet {
+                let region = MKCoordinateRegion(center: userLocation.coordinate,
+                                                latitudinalMeters: 5000,
+                                                longitudinalMeters: 5000)
+                mapView.setRegion(region, animated: true)
+                isInitialLocationSet = true
+            }
     }
     
     

@@ -23,7 +23,7 @@ enum TabItem:Int,CaseIterable,Equatable {
         case .main:
             return UIImage(named: "Home")
         case .setting:
-            return UIImage(systemName: "person.fill")
+            return UIImage(systemName: "gearshape")
         case .sound:
             return UIImage(systemName: "person.fill")
         }
@@ -34,7 +34,7 @@ enum TabItem:Int,CaseIterable,Equatable {
         case .main:
             return UIImage(named: "Home_Selected")
         case .setting:
-            return UIImage(systemName: "person.fill")
+            return UIImage(systemName: "gearshape")
         case .sound:
             return UIImage(systemName: "person.fill")
         }

@@ -39,6 +39,7 @@ class RainSoundViewController:UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpCollectionView()
+        print("rainSoundVC viewDidLoad")
        
         binds()
         let name = Notification.Name("darkModeHasChanged")
