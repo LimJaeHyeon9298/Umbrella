@@ -45,8 +45,13 @@ extension UseWeatherkit {
                     
                     let hourlyForecast = weather.hourlyForecast
                                     for (index, hourly) in hourlyForecast.prefix(24).enumerated() {
-                                        print("\(index)시간 뒤의 강수 확률은 \(hourly.precipitationChance)%입니다.")
+                                        print("\(index)시간 뒤의 강수 확률은 \(hourly.precipitationAmount)%입니다.")
                                     }
+                    
+//                    weather.currentWeather.precipitationIntensity
+//                    ㅙㅕㄱ
+                    
+                    print(" gkgkgkgkgkgk\( weather.currentWeather.precipitationIntensity)")
                     
                     observer.onNext(weather)
                     observer.onCompleted()

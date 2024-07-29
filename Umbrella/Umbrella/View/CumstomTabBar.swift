@@ -21,22 +21,23 @@ enum TabItem:Int,CaseIterable,Equatable {
     var normalImage:UIImage? {
         switch self {
         case .main:
-            return UIImage(named: "Home")
+            return UIImage(named: "free-icon-font-umbrella-3914416")
+           
         case .setting:
-            return UIImage(systemName: "gearshape")
+            return UIImage(named: "free-icon-font-settings-3917035")
         case .sound:
-            return UIImage(systemName: "person.fill")
+            return UIImage(named: "free-icon-font-music-alt-3914938")
         }
     }
     
     var selectedImage:UIImage? {
         switch self {
         case .main:
-            return UIImage(named: "Home_Selected")
+            return UIImage(named: "free-icon-font-umbrella-3914522 (1)")
         case .setting:
-            return UIImage(systemName: "gearshape")
+            return UIImage(named: "free-icon-font-settings-3917110")
         case .sound:
-            return UIImage(systemName: "person.fill")
+            return UIImage(named:"free-icon-font-music-alt-3915153")
         }
     }
     

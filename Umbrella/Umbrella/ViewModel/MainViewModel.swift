@@ -21,6 +21,8 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
     var error = PublishSubject<Error>()
     var locationAddress = BehaviorSubject<String>(value: "위치를 확인할 수 없습니다.")
     var locationManager = CLLocationManager()
+    var currentLocation: CLLocation?
+    var selectedLocation: CLLocation?
     
     override init() {
         super.init()
@@ -36,6 +38,7 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
+        currentLocation = location
         updateLocation(location)
     }
     
@@ -44,6 +47,7 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
     }
     
     func updateLocation(_ location: CLLocation) {
+        selectedLocation = location
            fetchWeather(for: location)
            reverseGeocodeLocation(location: location)
         locationManager.stopUpdatingLocation()
@@ -73,8 +77,11 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
             self.locationAddress.onNext(address)
         }
     }
-    
-    
+//    func updateWeatherData(lat: Double, lon: Double) {
+//            let location = CLLocation(latitude: lat, longitude: lon)
+//            updateLocation(location)
+//        }
+//    
     
     
 }

@@ -31,6 +31,7 @@ class MapViewController:UIViewController {
     
     init(viewModel:MapViewModel) {
         self.viewModel = viewModel
+      //  viewModel.currentLocation = nil
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -49,6 +50,7 @@ class MapViewController:UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
+        viewModel.currentLocation = nil
         }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -169,6 +171,7 @@ class MapViewController:UIViewController {
         print("hihi button Tapped")
         guard let location = viewModel.currentLocation else {
             print("No location selected")
+            showAlert(title: "알림", message: "지역이 선택되지 않았습니다.")
             return
         }
         viewModel.selectedLocation.onNext(location)
@@ -180,6 +183,13 @@ class MapViewController:UIViewController {
     @objc func backButtonTapped() {
             self.dismiss(animated: true, completion: nil)
         }
+    
+    private func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alertController.addAction(confirmAction)
+        present(alertController, animated: true, completion: nil)
+    }
 }
 
 extension MapViewController:MKMapViewDelegate {

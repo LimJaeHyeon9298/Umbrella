@@ -17,21 +17,25 @@ import FLAnimatedImage
 
 class MainViewController: UIViewController {
     
-    //MARK: - Properties
-    var viewModel:MainViewModel
+    // MARK: - Properties
+    var viewModel: MainViewModel
     var mapViewModel: MapViewModel
     private let disposeBag = DisposeBag()
-
-    var mapItemArray:[String] = []
-    var locationManger = CLLocationManager()
-    var currentHour:Int?
     
-    var lat:Double = 0.0 { didSet {print("latChanged\(lat)")}}
-    var lon:Double = 0.0 { didSet { print("lonChanged\(lon)")}}
+    let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+    lazy var theme = isDarkMode ? Theme.dark : Theme.light
+
+    var mapItemArray: [String] = []
+    var locationManger = CLLocationManager()
+    var currentHour: Int?
+    
+    var lat: Double = 0.0 { didSet { print("latChanged\(lat)") } }
+    var lon: Double = 0.0 { didSet { print("lonChanged\(lon)") } }
     var weather: Weather?
     var hourWeather: HourWeather?
     let weatherService = WeatherService.shared
-    var timer:Timer!
+    
+    private let refreshControl = UIRefreshControl()
 
     private let dateLabel = UILabel().then {
         $0.text = "yyyy-MM-dd ".stringFromDate()
@@ -44,22 +48,10 @@ class MainViewController: UIViewController {
         $0.textColor = .white
     }
 
-    private var backgroundImage = UIImageView().then {
-        let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
-        let theme = isDarkMode ? Theme.dark : Theme.light
-        $0.image = theme.backgroundImage
-        
-    }
-
     private let umbrellaImage = UIImageView().then { $0.image = #imageLiteral(resourceName: "rainClould2") }
-
-//    private let umbrellaImage = FLAnimatedImageView().then {
-//           $0.contentMode = .scaleAspectFit
-//        $0.backgroundColor = .clear
-//       }
     
     private let precipitationLabel = UILabel().then {
-        $0.text = "강수확률 10%"
+        $0.text = "123"
         $0.numberOfLines = 1
         $0.font = UIFont.boldSystemFont(ofSize: 20)
     }
@@ -83,12 +75,15 @@ class MainViewController: UIViewController {
         $0.font = UIFont.boldSystemFont(ofSize: 16)
     }
  
-    private var collectionView:UICollectionView!
+    private var collectionView: UICollectionView!
     private var hourlyWeatherData: [HourlyWeather] = []
     
-    //MARK: - LifeCycle
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     
-    init(viewModel:MainViewModel,mapViewModel:MapViewModel) {
+    // MARK: - Lifecycle
+    
+    init(viewModel: MainViewModel, mapViewModel: MapViewModel) {
         self.viewModel = viewModel
         self.mapViewModel = mapViewModel
         super.init(nibName: nil, bundle: nil)
@@ -98,100 +93,76 @@ class MainViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("mainVC viewDidLoad")
         configureUI()
         configureCollectionView()
-     
-        //timer = Timer.scheduledTimer(timeInterval: 1, target:self, selector:#selector(timerProc),userInfo:nil, repeats: true)
-        viewModel = MainViewModel()
+        configureRefreshControl()
         bindViewModel()
         setupStackView()
         
         let name = Notification.Name("darkModeHasChanged")
         NotificationCenter.default.addObserver(self, selector: #selector(enableDarkmode), name: name, object: nil)
-        
-
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
-       // tempLabel.text = String(self.weather?.currentWeather.temperature.value ?? 0)
-//        NotificationCenter.default.addObserver(self, selector: #selector(test(_:)), name: NSNotification.Name("test"), object: nil)
+        super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
-        
-        
-        
-        
     }
     
-    //MARK: - Functions
+    // MARK: - Functions
     func configureUI() {
         
-        view.backgroundColor = .white
+        
+
+       // 배경색 설정
+        view.backgroundColor = theme.backgroundColor
     
-        view.addSubview(backgroundImage)
-//        backgroundImage.alpha = 0.85
-        backgroundImage.snp.makeConstraints {
+
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
+        scrollView.addSubview(contentView)
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
         
-        view.addSubview(locationLabel)
-        
+        contentView.addSubview(locationLabel)
+        //locationLabel.textColor = .black
         locationLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(36)
-          //  $0.leading.equalTo(view.safeAreaLayoutGuide).offset(16)
+            $0.top.equalTo(contentView.safeAreaLayoutGuide).offset(36)
             $0.centerX.equalToSuperview()
         }
         
-        view.addSubview(tempLabel)
-        
+        contentView.addSubview(tempLabel)
         tempLabel.snp.makeConstraints {
             $0.top.equalTo(locationLabel.snp.bottom).offset(8)
             $0.centerX.equalToSuperview()
         }
         
-        view.addSubview(umbrellaImage)
-        
+        contentView.addSubview(umbrellaImage)
         umbrellaImage.snp.makeConstraints {
             $0.top.equalTo(tempLabel.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(180)
         }
         
-        // GIF 파일을 로드하여 FLAnimatedImageView에 설정
-//               if let gifPath = Bundle.main.path(forResource: "free-animated-icon-umbrella-6455007", ofType: "gif") {
-//                   let gifURL = URL(fileURLWithPath: gifPath)
-//                   do {
-//                       let gifData = try Data(contentsOf: gifURL)
-//                       let animatedImage = FLAnimatedImage(animatedGIFData: gifData)
-//                       umbrellaImage.animatedImage = animatedImage
-//                   } catch {
-//                       print("GIF 파일을 로드하는 데 실패했습니다: \(error)")
-//                   }
-//               }
-        
-        
-        view.addSubview(precipitationLabel)
-        
+        contentView.addSubview(precipitationLabel)
         precipitationLabel.snp.makeConstraints {
             $0.top.equalTo(umbrellaImage.snp.bottom).offset(8)
             $0.centerX.equalToSuperview()
         }
         
-        let weatherStackView = UIStackView(arrangedSubviews: [weatherCard1,weatherCard2,weatherCard3])
+        let weatherStackView = UIStackView(arrangedSubviews: [weatherCard1, weatherCard2, weatherCard3])
         weatherStackView.axis = .horizontal
         weatherStackView.distribution = .fillEqually
         weatherStackView.spacing = 15
         
-        
-        
-        
-        view.addSubview(weatherStackView)
+        contentView.addSubview(weatherStackView)
         weatherStackView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(precipitationLabel.snp.bottom).offset(10)
@@ -200,34 +171,34 @@ class MainViewController: UIViewController {
         
         weatherStackView.backgroundColor = .clear
         
-        
-        view.addSubview(hourlyLabel)
-        
+        contentView.addSubview(hourlyLabel)
         hourlyLabel.snp.makeConstraints {
             $0.leading.equalTo(weatherStackView.snp.leading)
             $0.top.equalTo(weatherStackView.snp.bottom).offset(14)
         }
         
-        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.register(HourlyWeatherCell.self, forCellWithReuseIdentifier: HourlyWeatherCell.identifier)
-              collectionView.dataSource = self
-              
-              view.addSubview(collectionView)
-              collectionView.snp.makeConstraints {
-                  $0.leading.equalTo(hourlyLabel.snp.leading)
-                  $0.top.equalTo(hourlyLabel.snp.bottom).offset(8)
-                  $0.height.equalTo(110)
-                  $0.width.equalToSuperview()
-              }
+        collectionView.dataSource = self
+        
+        contentView.addSubview(collectionView)
+        collectionView.snp.makeConstraints {
+            $0.leading.equalTo(hourlyLabel.snp.leading)
+            $0.top.equalTo(hourlyLabel.snp.bottom).offset(8)
+            $0.height.equalTo(110)
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview() // To ensure the collectionView's bottom is constrained to contentView
+        }
         
         collectionView.backgroundColor = .clear
-
     }
-
+    
     func setupStackView() {
+        // Configure stack view if needed
     }
     
     private func configureCollectionView() {
+        // Additional configuration if needed
     }
 
     private func createLayout() -> UICollectionViewLayout {
@@ -249,160 +220,131 @@ class MainViewController: UIViewController {
     }
   
     private func bindViewModel() {
-            viewModel.weatherData
-                .compactMap { $0 }
-                .observe(on: MainScheduler.instance)
-                .subscribe(onNext: { [weak self] weather in
-                    self?.updateWeatherUI(weather)
-                })
-                .disposed(by: disposeBag)
+        viewModel.weatherData
+            .compactMap { $0 }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] weather in
+                self?.updateWeatherUI(weather)
+            })
+            .disposed(by: disposeBag)
 
-            viewModel.isLoading
-                .observe(on: MainScheduler.instance)
-                .subscribe(onNext: { [weak self] isLoading in
-                    // Show loading indicator
-                })
-                .disposed(by: disposeBag)
+        viewModel.isLoading
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] isLoading in
+                // Show loading indicator
+            })
+            .disposed(by: disposeBag)
 
-            viewModel.error
-                .observe(on: MainScheduler.instance)
-                .subscribe(onNext: { error in
-                    // Show error message
-                })
-                .disposed(by: disposeBag)
-    
+        viewModel.error
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { error in
+                // Show error message
+            })
+            .disposed(by: disposeBag)
 
         viewModel.locationAddress
-                    .observe(on: MainScheduler.instance)
-                    .bind(to: locationLabel.rx.text)
-                    .disposed(by: disposeBag)
+            .observe(on: MainScheduler.instance)
+            .bind(to: locationLabel.rx.text)
+            .disposed(by: disposeBag)
         
         mapViewModel.selectedLocation
-                   .subscribe(onNext: { location in
-                       print("Received location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
-                       // 여기서 location을 사용해 원하는 작업 수행
-                       self.viewModel.updateLocation(location)
-                   })
-                   .disposed(by: disposeBag)
-
+            .subscribe(onNext: { location in
+                print("Received location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                self.viewModel.updateLocation(location)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func configureRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(refreshWeatherData), for: .valueChanged)
+        scrollView.refreshControl = refreshControl
     }
 
     private func fetchHourlyWeather(with weather: Weather) {
         hourlyWeatherData.removeAll() // 기존 데이터를 초기화합니다.
 
-           let currentHour = Calendar.current.component(.hour, from: Date())
-           
-           // 현재 시간을 "NOW"로 표시 (hourlyForecast의 첫 번째 값을 사용)
-           if let currentWeather = weather.hourlyForecast.first {
-               let nowIcon = currentWeather.precipitationChance == 0.0 ?
-                                     UIImage(named: "free-icon-umbrella-3430143")! :
-                                     UIImage(named: "free-icon-umbrella-1628865")!
-               let nowPrecipitationChance = String(format: "%.0f%%", currentWeather.precipitationChance * 100)
-               let nowWeather = HourlyWeather(time: "NOW", icon: nowIcon, precipitationChance: nowPrecipitationChance)
-               hourlyWeatherData.append(nowWeather)
-               
-               weatherCard2.updateStateText("\(nowPrecipitationChance)")
-           }
-           
-           // 현재 시간 이후부터 23시까지 (두 번째 값부터 사용)
-           for (index, hourly) in weather.hourlyForecast.prefix(24).dropFirst().enumerated() {
-               let hour = currentHour + index + 1
-               let displayHour = hour % 24
-               let period = displayHour < 12 ? "AM" : "PM"
-               let formattedHour = displayHour == 0 ? 12 : (displayHour > 12 ? displayHour - 12 : displayHour)
-               let time = "\(formattedHour) \(period)"
-               let icon = hourly.precipitationChance == 0.0 ?
-                                  UIImage(named: "free-icon-umbrella-3430143")! :
-                                  UIImage(named: "free-icon-umbrella-1628865")!
-              // let temperature = "\(18 + displayHour % 5)°"
-               let precipitationChance = String(format: "%.0f%%", hourly.precipitationChance * 100)
-               let weather = HourlyWeather(time: time, icon: icon, precipitationChance: precipitationChance)
-               hourlyWeatherData.append(weather)
-           }
-           
-           collectionView?.reloadData()
-       }
-    
-
-        private func updateWeatherUI(_ weather: Weather) {
-            print("weather \(weather.currentWeather.temperature.value)")
-            print("uvIndex\(weather.currentWeather.uvIndex)")
-            print("wind\(weather.currentWeather.wind)")
-           // print("wind\(weather.currentWeather.precipitationChance)")
-            tempLabel.text = String(weather.currentWeather.temperature.value)
-            fetchHourlyWeather(with: weather)
+        let currentHour = Calendar.current.component(.hour, from: Date())
+        
+        // 현재 시간을 "NOW"로 표시 (hourlyForecast의 첫 번째 값을 사용)
+        if let currentWeather = weather.hourlyForecast.first {
+            let nowIcon = currentWeather.precipitationChance == 0.0 ?
+                                UIImage(named: "free-icon-umbrella-3430143")! :
+                                UIImage(named: "free-icon-umbrella-1628865")!
+            let nowPrecipitationChance = String(format: "%.0f%%", currentWeather.precipitationChance * 100)
+            let nowWeather = HourlyWeather(time: "NOW", icon: nowIcon, precipitationChance: nowPrecipitationChance)
+            hourlyWeatherData.append(nowWeather)
             
+            weatherCard2.updateStateText("\(nowPrecipitationChance)")
             
-            weatherCard1.updateStateText("\(weather.currentWeather.wind.speed.value) km/h")
-         
-               weatherCard3.updateStateText("\(weather.currentWeather.uvIndex.value)")
-
-            
-            
+            precipitationLabel.text = currentWeather.precipitationChance == 0.0 ? " " : "123"
         }
-    
-        //MARK: - Actions
-
-    @objc func timerProc(timer:Timer){
-        let date = Date()
-        let formatter = DateFormatter();
-        formatter.dateFormat = "a hh:mm:ss "
-        formatter.amSymbol = "AM"
-        formatter.pmSymbol = "PM"
         
-        let msg = formatter.string(from: date)
-        timeLabel.text = msg
-        let formatter2 = DateFormatter();
-        formatter2.dateFormat = "HH"
-        let msg2 = formatter2.string(from: date)
-        currentHour = Int(msg2)
+        // 현재 시간 이후부터 23시까지 (두 번째 값부터 사용)
+        for (index, hourly) in weather.hourlyForecast.prefix(24).dropFirst().enumerated() {
+            let hour = currentHour + index + 1
+            let displayHour = hour % 24
+            let period = displayHour < 12 ? "AM" : "PM"
+            let formattedHour = displayHour == 0 ? 12 : (displayHour > 12 ? displayHour - 12 : displayHour)
+            let time = "\(formattedHour) \(period)"
+            let icon = hourly.precipitationChance == 0.0 ?
+                               UIImage(named: "free-icon-umbrella-3430143")! :
+                               UIImage(named: "free-icon-umbrella-1628865")!
+            let precipitationChance = String(format: "%.0f%%", hourly.precipitationChance * 100)
+            let weather = HourlyWeather(time: time, icon: icon, precipitationChance: precipitationChance)
+            hourlyWeatherData.append(weather)
+        }
         
+        collectionView?.reloadData()
     }
+
+    private func updateWeatherUI(_ weather: Weather) {
+        print("weather \(weather.currentWeather.temperature.value)")
+        print("uvIndex \(weather.currentWeather.uvIndex)")
+        print("wind \(weather.currentWeather.wind)")
+
+        tempLabel.text = String(weather.currentWeather.temperature.value)
+        fetchHourlyWeather(with: weather)
+
+        precipitationLabel.text = "예상 강수량 - \(weather.currentWeather.precipitationIntensity.value) mm"
+        
+        weatherCard1.updateStateText("\(weather.currentWeather.wind.speed.value) km/h")
+        weatherCard3.updateStateText("\(weather.currentWeather.uvIndex.value)")
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func refreshWeatherData() {
+        let location = viewModel.selectedLocation ?? viewModel.currentLocation ?? CLLocation(latitude: lat, longitude: lon)
+        viewModel.updateLocation(location)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.refreshControl.endRefreshing()
+        }
+    }
+
     @objc func enableDarkmode() {
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
-        let theme = isDarkMode ? Theme.dark : Theme.light        //view.backgroundColor = theme.backgroundColor
-        backgroundImage.image = theme.backgroundImage
+        let theme = isDarkMode ? Theme.dark : Theme.light
+        view.backgroundColor = theme.backgroundColor
         
-
     }
-    @objc func test(_ notification:NSNotification){
-           
-        
-        guard let mapitem = notification.object as? [String] else {return}
-        
-        print("map\(mapitem)")
-        
-       mapItemArray = mapitem
-        
-         locationLabel.text = mapItemArray[0]
-        lat = Double(mapItemArray[2])!
-        lon = Double(mapItemArray[3])!
-//        viewModel.locationManager.stopUpdatingLocation()
-//        viewModel.locationManager.startUpdatingLocation()
-        
-        }
-    
 }
 
-extension MainViewController:UICollectionViewDataSource {
+extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return hourlyWeatherData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyWeatherCell.identifier, for: indexPath) as? HourlyWeatherCell else {
-                   return UICollectionViewCell()
-               }
-               
-               let weather = hourlyWeatherData[indexPath.item]
-               cell.configure(with: weather)
+            return UICollectionViewCell()
+        }
+        
+        let weather = hourlyWeatherData[indexPath.item]
+        cell.configure(with: weather)
         
         cell.backgroundColor = .white
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 10
-               return cell
+        return cell
     }
-    
-
 }
-

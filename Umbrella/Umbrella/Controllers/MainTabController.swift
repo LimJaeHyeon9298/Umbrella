@@ -25,13 +25,13 @@ final class MainTabController:UIViewController {
     private var childVCs = [UIViewController]()
     private let disposeBag = DisposeBag()
     
-    private lazy var backgroundImage = UIImageView().then {
-       
-        let theme = isDarkMode ? Theme.dark : Theme.light
-
-       
-        $0.image = theme.backgroundImage
-    }
+//    private lazy var backgroundImage = UIImageView().then {
+//       
+//        let theme = isDarkMode ? Theme.dark : Theme.light
+//
+//       
+//        $0.image = theme.backgroundImage
+//    }
         
     
    
@@ -59,16 +59,18 @@ final class MainTabController:UIViewController {
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
         let theme = isDarkMode ? Theme.dark : Theme.light        //view.backgroundColor = theme.backgroundColor
         view.backgroundColor = theme.backgroundColor
-        self.backgroundImage.image = theme.backgroundImage
+      //  self.backgroundImage.image = theme.backgroundImage
+        tabBar.backgroundColor = theme.tabBarColor
 
     }
     
     private func setUp() {
         view.backgroundColor = isDarkMode ? Theme.dark.backgroundColor : Theme.light.backgroundColor
         view.addSubview(tabBar)
+        
         updateTheme()
-        tabBar.backgroundColor = .red
-
+       
+        tabBar.backgroundColor =  isDarkMode ? Theme.dark.tabBarColor : Theme.light.tabBarColor
         tabBar.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom) // 안전 영역 하단에 맞춤
@@ -105,14 +107,21 @@ final class MainTabController:UIViewController {
             
             
             
-            //let imageView = UIImageView(image:Theme.light.backgroundImage)
-            backgroundImage.contentMode = .scaleAspectFill
-               view.insertSubview(backgroundImage, at: 0) // 이미지 뷰를 뷰 계층에서 가장 아래로 추가
-//            backgroundImage.alpha = 0.85
-            backgroundImage.snp.makeConstraints { make in
-                   make.edges.equalToSuperview()
-               }
+//            let imageView = UIImageView(image:Theme.light.backgroundImage)
+//            backgroundImage.contentMode = .scaleAspectFill
+//               view.insertSubview(backgroundImage, at: 0) // 이미지 뷰를 뷰 계층에서 가장 아래로 추가
+////            backgroundImage.alpha = 0.85
+//            backgroundImage.snp.makeConstraints { make in
+//                   make.edges.equalToSuperview()
+//               }
+//            
+                
+
             
+         //   view.backgroundColor = color
+            
+            
+//
            //     view.addSubview(UIImageView(image: Theme.light.backgroundImage))
             
            // addLabel(in: vc, text: String(describing: item))
@@ -144,7 +153,7 @@ final class MainTabController:UIViewController {
     private func updateTheme() {
             let theme = isDarkMode ? Theme.dark : Theme.light
             view.backgroundColor = theme.backgroundColor
-            backgroundImage.image = theme.backgroundImage
+         //   backgroundImage.image = theme.backgroundImage
         }
 
 
@@ -159,7 +168,7 @@ final class MainTabController:UIViewController {
             let initialVC = childVCs[1]
             view.bringSubviewToFront(initialVC.view)
             view.bringSubviewToFront(tabBar)
-            backgroundImage.isHidden = !(initialVC is UINavigationController && (initialVC as! UINavigationController).topViewController is MainViewController)
+//            backgroundImage.isHidden = !(initialVC is UINavigationController && (initialVC as! UINavigationController).topViewController is MainViewController)
             
             // 탭바의 tabButton Observable을 구독하여 인덱스에 따른 처리를 수행
             tabBar.rx.tabButton
@@ -172,11 +181,11 @@ final class MainTabController:UIViewController {
                     
                     // 선택된 인덱스 업데이트
                     self.tabBar.selectedIndex = index
-                    if targetVC is UINavigationController, (targetVC as! UINavigationController).topViewController is MainViewController {
-                        self.backgroundImage.isHidden = false
-                    } else {
-                        self.backgroundImage.isHidden = true
-                    }
+//                    if targetVC is UINavigationController, (targetVC as! UINavigationController).topViewController is MainViewController {
+//                    //    self.backgroundImage.isHidden = false
+//                    } else {
+//                      //  self.backgroundImage.isHidden = true
+//                    }
                 }
                 .disposed(by: disposeBag)
         }
