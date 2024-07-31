@@ -24,7 +24,7 @@ class MainViewController: UIViewController {
     
     let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
     lazy var theme = isDarkMode ? Theme.dark : Theme.light
-
+    
     var mapItemArray: [String] = []
     var locationManger = CLLocationManager()
     var currentHour: Int?
@@ -36,18 +36,18 @@ class MainViewController: UIViewController {
     let weatherService = WeatherService.shared
     
     private let refreshControl = UIRefreshControl()
-
+    
     private let dateLabel = UILabel().then {
         $0.text = "yyyy-MM-dd ".stringFromDate()
         $0.font = UIFont.boldSystemFont(ofSize: 25)
         $0.textColor = .white
     }
-
+    
     private let timeLabel = UILabel().then {
         $0.font = UIFont.boldSystemFont(ofSize: 20)
         $0.textColor = .white
     }
-
+    
     private let umbrellaImage = UIImageView().then { $0.image = #imageLiteral(resourceName: "rainClould2") }
     
     private let precipitationLabel = UILabel().then {
@@ -55,13 +55,18 @@ class MainViewController: UIViewController {
         $0.numberOfLines = 1
         $0.font = UIFont.boldSystemFont(ofSize: 20)
     }
- 
+    
     private let locationLabel = UILabel().then {
         $0.text = "서울특별시"
         $0.font = UIFont.boldSystemFont(ofSize: 32)
         $0.numberOfLines = 0 // 여러 줄 표시를 위해 0으로 설정
         $0.textColor = .white
         $0.textAlignment = .center // 중앙 정렬
+    }
+    
+    private let resetButton = UIButton().then {
+        $0.setImage(UIImage(named: "reload"), for: .normal)
+        
     }
     
     private lazy var tempLabel = UILabel().then { $0.font = UIFont.boldSystemFont(ofSize: 35) }
@@ -74,7 +79,7 @@ class MainViewController: UIViewController {
         $0.text = "시간대별 강수확률"
         $0.font = UIFont.boldSystemFont(ofSize: 16)
     }
- 
+    
     private var collectionView: UICollectionView!
     private var hourlyWeatherData: [HourlyWeather] = []
     
@@ -115,11 +120,11 @@ class MainViewController: UIViewController {
     func configureUI() {
         
         
-
-       // 배경색 설정
+        
+        // 배경색 설정
         view.backgroundColor = theme.backgroundColor
-    
-
+        
+        
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -130,6 +135,16 @@ class MainViewController: UIViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
+        
+        contentView.addSubview(resetButton)
+        resetButton.snp.makeConstraints {
+            $0.top.equalTo(contentView.safeAreaLayoutGuide).offset(16)
+            $0.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(20)
+            $0.width.height.equalTo(25)
+        }
+        
+        resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
+        
         
         contentView.addSubview(locationLabel)
         //locationLabel.textColor = .black
@@ -200,7 +215,7 @@ class MainViewController: UIViewController {
     private func configureCollectionView() {
         // Additional configuration if needed
     }
-
+    
     private func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalHeight(1.0))
@@ -218,7 +233,7 @@ class MainViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-  
+    
     private func bindViewModel() {
         viewModel.weatherData
             .compactMap { $0 }
@@ -227,21 +242,21 @@ class MainViewController: UIViewController {
                 self?.updateWeatherUI(weather)
             })
             .disposed(by: disposeBag)
-
+        
         viewModel.isLoading
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] isLoading in
                 // Show loading indicator
             })
             .disposed(by: disposeBag)
-
+        
         viewModel.error
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { error in
                 // Show error message
             })
             .disposed(by: disposeBag)
-
+        
         viewModel.locationAddress
             .observe(on: MainScheduler.instance)
             .bind(to: locationLabel.rx.text)
@@ -259,17 +274,17 @@ class MainViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(refreshWeatherData), for: .valueChanged)
         scrollView.refreshControl = refreshControl
     }
-
+    
     private func fetchHourlyWeather(with weather: Weather) {
         hourlyWeatherData.removeAll() // 기존 데이터를 초기화합니다.
-
+        
         let currentHour = Calendar.current.component(.hour, from: Date())
         
         // 현재 시간을 "NOW"로 표시 (hourlyForecast의 첫 번째 값을 사용)
         if let currentWeather = weather.hourlyForecast.first {
             let nowIcon = currentWeather.precipitationChance == 0.0 ?
-                                UIImage(named: "free-icon-umbrella-3430143")! :
-                                UIImage(named: "free-icon-umbrella-1628865")!
+            UIImage(named: "free-icon-umbrella-3430143")! :
+            UIImage(named: "free-icon-umbrella-1628865")!
             let nowPrecipitationChance = String(format: "%.0f%%", currentWeather.precipitationChance * 100)
             let nowWeather = HourlyWeather(time: "NOW", icon: nowIcon, precipitationChance: nowPrecipitationChance)
             hourlyWeatherData.append(nowWeather)
@@ -287,8 +302,8 @@ class MainViewController: UIViewController {
             let formattedHour = displayHour == 0 ? 12 : (displayHour > 12 ? displayHour - 12 : displayHour)
             let time = "\(formattedHour) \(period)"
             let icon = hourly.precipitationChance == 0.0 ?
-                               UIImage(named: "free-icon-umbrella-3430143")! :
-                               UIImage(named: "free-icon-umbrella-1628865")!
+            UIImage(named: "free-icon-umbrella-3430143")! :
+            UIImage(named: "free-icon-umbrella-1628865")!
             let precipitationChance = String(format: "%.0f%%", hourly.precipitationChance * 100)
             let weather = HourlyWeather(time: time, icon: icon, precipitationChance: precipitationChance)
             hourlyWeatherData.append(weather)
@@ -296,15 +311,15 @@ class MainViewController: UIViewController {
         
         collectionView?.reloadData()
     }
-
+    
     private func updateWeatherUI(_ weather: Weather) {
         print("weather \(weather.currentWeather.temperature.value)")
         print("uvIndex \(weather.currentWeather.uvIndex)")
         print("wind \(weather.currentWeather.wind)")
-
+        
         tempLabel.text = String(weather.currentWeather.temperature.value)
         fetchHourlyWeather(with: weather)
-
+        
         precipitationLabel.text = "예상 강수량 - \(weather.currentWeather.precipitationIntensity.value) mm"
         
         weatherCard1.updateStateText("\(weather.currentWeather.wind.speed.value) km/h")
@@ -320,15 +335,22 @@ class MainViewController: UIViewController {
             self.refreshControl.endRefreshing()
         }
     }
-
+    
     @objc func enableDarkmode() {
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
         let theme = isDarkMode ? Theme.dark : Theme.light
         view.backgroundColor = theme.backgroundColor
         
     }
+    
+    @objc func resetButtonTapped() {
+        print("Reset button tapped")
+        if let currentLocation = viewModel.currentLocation {
+            viewModel.updateLocation(currentLocation)
+        }
+    }
+    
 }
-
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return hourlyWeatherData.count

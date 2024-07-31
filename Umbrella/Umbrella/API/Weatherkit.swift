@@ -49,7 +49,7 @@ extension UseWeatherkit {
                                     }
                     
 //                    weather.currentWeather.precipitationIntensity
-//                    ㅙㅕㄱ
+
                     
                     print(" gkgkgkgkgkgk\( weather.currentWeather.precipitationIntensity)")
                     

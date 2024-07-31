@@ -22,12 +22,15 @@ class RainSoundViewController:UIViewController {
     private var isDarkMode: Bool {
             return UserDefaults.standard.bool(forKey: "isDarkMode")
         }
+    private var audioPlayers: [String: AVAudioPlayer] = [:]
     
     //MARK: - LifeCycle
    
     init(viewModel:RainSoundViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        setupAudioPlayers()
+        configureAudioSession()
     }
     
     required init?(coder: NSCoder) {
@@ -70,14 +73,67 @@ class RainSoundViewController:UIViewController {
         
     }
     
+    func setupAudioPlayers() {
+            viewModel.items
+                .subscribe(onNext: { [weak self] items in
+                    items.forEach { item in
+                        guard let url = Bundle.main.url(forResource: item.fileName, withExtension: item.fileType) else {
+                            print("Failed to find sound file: \(item.fileName).\(item.fileType)")
+                            return
+                        }
+                        do {
+                            let player = try AVAudioPlayer(contentsOf: url)
+                            self?.audioPlayers[item.fileName] = player
+                            print("Loaded sound file: \(item.fileName).\(item.fileType)")
+                        } catch {
+                            print("Failed to load sound: \(error.localizedDescription)")
+                        }
+                    }
+                })
+                .disposed(by: disposeBag)
+        }
+    
+    func configureAudioSession() {
+           do {
+               try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+               try AVAudioSession.sharedInstance().setActive(true)
+               print("Audio session configured successfully")
+           } catch {
+               print("Failed to configure audio session: \(error.localizedDescription)")
+           }
+       }
+    
     func binds() {
-        viewModel.items
-            .bind(to: collectionView.rx.items(cellIdentifier: SoundCollectionViewCell.reuseIdentifier,
-                                              cellType: SoundCollectionViewCell.self)) { index, item, cell in
-                cell.configure(with: item)
+            viewModel.items
+                .bind(to: collectionView.rx.items(cellIdentifier: SoundCollectionViewCell.reuseIdentifier,
+                                                  cellType: SoundCollectionViewCell.self)) { [weak self] index, item, cell in
+                    guard let self = self else { return }
+                    cell.configure(with: item)
+                    cell.tapSubject
+                        .subscribe(onNext: { [weak self] (fileName, fileType) in
+                            print("Tapped on sound: \(fileName).\(fileType)")
+                            self?.toggleSound(for: fileName, fileType: fileType)
+                        })
+                        .disposed(by: cell.disposeBag)
+                }
+                .disposed(by: disposeBag)
+        }
+    
+    func toggleSound(for fileName: String, fileType: String) {
+            guard let player = audioPlayers[fileName] else {
+                print("No player found for sound file: \(fileName).\(fileType)")
+                return
             }
-            .disposed(by: disposeBag)
-    }
+            
+            if player.isPlaying {
+                print("Stopping sound: \(fileName).\(fileType)")
+                player.stop()
+            } else {
+                print("Playing sound: \(fileName).\(fileType)")
+                player.play()
+            }
+        }
+        
     
     @objc func enableDarkmode() {
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")

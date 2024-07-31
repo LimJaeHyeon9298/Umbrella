@@ -9,12 +9,14 @@ import UIKit
 import Then
 import SnapKit
 import AVFoundation
+import RxSwift
 
 class SoundCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "SoundCell" 
     
-    
+    let tapSubject = PublishSubject<(String, String)>()
+       let disposeBag = DisposeBag()
     
     var imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -57,7 +59,7 @@ class SoundCollectionViewCell: UICollectionViewCell {
         }
         
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleSound))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         contentView.addGestureRecognizer(tapGesture)
         
         
@@ -72,24 +74,10 @@ class SoundCollectionViewCell: UICollectionViewCell {
     
     
     
-    @objc func toggleSound() {
-        if let player = player, player.isPlaying {
-            player.stop()
-        } else {
-            guard let fileName = soundFileName, let fileType = soundFileType else {return}
-            guard let url = Bundle.main.url(forResource: fileName, withExtension: fileType) else {return}
-            
-            
-            print("\(fileName) play start")
-            
-            do {
-                player = try AVAudioPlayer(contentsOf: url)
-                player?.play()
-            } catch {
-                print("Failed to play sound: \(error.localizedDescription)")
-            }
+    @objc func handleTap() {
+            guard let fileName = soundFileName, let fileType = soundFileType else { return }
+            tapSubject.onNext((fileName, fileType))
         }
-    }
     
     
     
