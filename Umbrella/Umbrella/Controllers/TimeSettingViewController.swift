@@ -183,9 +183,6 @@ class TimeSettingViewController:UIViewController {
         requestSendNoti(seconds: 1)
         requestAuthNoti()
 
-
-            
-
         }
     
     

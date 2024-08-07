@@ -24,17 +24,14 @@ final class MainTabController:UIViewController {
     fileprivate let tabBar = CustomTabBar()
     private var childVCs = [UIViewController]()
     private let disposeBag = DisposeBag()
-    
-//    private lazy var backgroundImage = UIImageView().then {
-//       
-//        let theme = isDarkMode ? Theme.dark : Theme.light
-//
-//       
-//        $0.image = theme.backgroundImage
-//    }
-        
-    
-   
+
+    private let copyrightLabel = UILabel().then {
+        $0.text = "Weather:Copyright © 2024 Apple Inc. All rights reserved."
+        //$0.textColor = .white
+        $0.numberOfLines = 0
+        $0.font = UIFont.systemFont(ofSize: 12)
+        $0.isUserInteractionEnabled = true // 사용자 인터랙션을 활성화합니다.
+    }
     
     
     init() {
@@ -61,6 +58,7 @@ final class MainTabController:UIViewController {
         view.backgroundColor = theme.backgroundColor
       //  self.backgroundImage.image = theme.backgroundImage
         tabBar.backgroundColor = theme.tabBarColor
+        copyrightLabel.textColor = theme.textColor
 
     }
     
@@ -77,8 +75,18 @@ final class MainTabController:UIViewController {
             $0.height.equalTo(75) // 탭바의 높이를 50포인트로 설정
             
         }
+        
         tabBar.layer.cornerRadius = 40 // 모서리 둥글기를 20포인트로 설정
         tabBar.layer.masksToBounds = true // 뷰의 경계를 넘어가는 내용을 잘라냄
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLabelTap))
+          copyrightLabel.addGestureRecognizer(tapGesture)
+        view.addSubview(copyrightLabel)
+        copyrightLabel.snp.makeConstraints {
+            $0.top.equalTo(tabBar.snp.bottom).offset(6)
+            $0.centerX.equalToSuperview()
+        }
+        copyrightLabel.textColor = isDarkMode ? .white : .black
     }
     private func setUpTabBarControllers() {
         tabBar.selectedIndex = 1
@@ -102,29 +110,7 @@ final class MainTabController:UIViewController {
             
             // 뷰 컨트롤러의 배경색과 타이틀 설정
             vc.view.backgroundColor = .white
-            
-           
-            
-            
-            
-//            let imageView = UIImageView(image:Theme.light.backgroundImage)
-//            backgroundImage.contentMode = .scaleAspectFill
-//               view.insertSubview(backgroundImage, at: 0) // 이미지 뷰를 뷰 계층에서 가장 아래로 추가
-////            backgroundImage.alpha = 0.85
-//            backgroundImage.snp.makeConstraints { make in
-//                   make.edges.equalToSuperview()
-//               }
-//            
-                
 
-            
-         //   view.backgroundColor = color
-            
-            
-//
-           //     view.addSubview(UIImageView(image: Theme.light.backgroundImage))
-            
-           // addLabel(in: vc, text: String(describing: item))
 
             // 뷰 컨트롤러를 자식으로 추가하고 뷰 계층에 포함
             addChild(vc)
@@ -154,6 +140,7 @@ final class MainTabController:UIViewController {
             let theme = isDarkMode ? Theme.dark : Theme.light
             view.backgroundColor = theme.backgroundColor
          //   backgroundImage.image = theme.backgroundImage
+        copyrightLabel.textColor = theme.textColor
         }
 
 
@@ -168,7 +155,7 @@ final class MainTabController:UIViewController {
             let initialVC = childVCs[1]
             view.bringSubviewToFront(initialVC.view)
             view.bringSubviewToFront(tabBar)
-//            backgroundImage.isHidden = !(initialVC is UINavigationController && (initialVC as! UINavigationController).topViewController is MainViewController)
+
             
             // 탭바의 tabButton Observable을 구독하여 인덱스에 따른 처리를 수행
             tabBar.rx.tabButton
@@ -181,16 +168,17 @@ final class MainTabController:UIViewController {
                     
                     // 선택된 인덱스 업데이트
                     self.tabBar.selectedIndex = index
-//                    if targetVC is UINavigationController, (targetVC as! UINavigationController).topViewController is MainViewController {
-//                    //    self.backgroundImage.isHidden = false
-//                    } else {
-//                      //  self.backgroundImage.isHidden = true
-//                    }
+
                 }
                 .disposed(by: disposeBag)
         }
       
-    
+    @objc func handleLabelTap() {
+        guard let url = URL(string: "https://developer.apple.com/weatherkit/data-source-attribution/"),
+                   UIApplication.shared.canOpenURL(url) else { return }
+             
+             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
    
 }
 

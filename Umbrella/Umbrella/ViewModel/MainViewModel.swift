@@ -39,10 +39,12 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         currentLocation = location
+        print("DEBUG:\(location)")
         updateLocation(location)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location Manager failed with error: \(error.localizedDescription)")
         self.error.onNext(error)
     }
     
@@ -74,6 +76,7 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
             guard let self = self, let placemark = placemarks?.first else { return }
             // let address = "\(placemark.locality ?? "") \(placemark.subLocality ?? "")"
             let address = "\(placemark.locality ?? "")\n\(placemark.subLocality ?? "")"
+            print("DEBUG2: \(address)")
             self.locationAddress.onNext(address)
         }
     }

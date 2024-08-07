@@ -198,10 +198,7 @@ extension MapViewController:MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-//        let region = MKCoordinateRegion(center: userLocation.coordinate,
-//                                        latitudinalMeters: 5000,
-//                                        longitudinalMeters: 5000)
-//        mapView.setRegion(region, animated: true)
+
         
         if !isInitialLocationSet {
                 let region = MKCoordinateRegion(center: userLocation.coordinate,
@@ -214,15 +211,7 @@ extension MapViewController:MKMapViewDelegate {
     
     
     private func updateMapViewConstraints(hideTabBar: Bool) {
-        //        mapView.snp.remakeConstraints {
-        //            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-        //            $0.leading.trailing.equalToSuperview()
-        //            if hideTabBar {
-        //                $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        //            } else {
-        //                $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-75)
-        //            }
-        //        }
+      
         mapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

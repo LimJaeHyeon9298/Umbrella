@@ -19,10 +19,7 @@
 		46AA82F62C253A360065FFB0 /* UmbrellaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82F52C253A360065FFB0 /* UmbrellaUITestsLaunchTests.swift */; };
 		46AA830B2C253B3C0065FFB0 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83022C253B3B0065FFB0 /* MainViewController.swift */; };
 		46AA830C2C253B3C0065FFB0 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83032C253B3B0065FFB0 /* NotificationViewController.swift */; };
-		46AA830D2C253B3C0065FFB0 /* PrecipitationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83042C253B3B0065FFB0 /* PrecipitationViewController.swift */; };
 		46AA830E2C253B3C0065FFB0 /* RainSoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83052C253B3B0065FFB0 /* RainSoundViewController.swift */; };
-		46AA830F2C253B3C0065FFB0 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83062C253B3B0065FFB0 /* SearchController.swift */; };
-		46AA83102C253B3C0065FFB0 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83072C253B3B0065FFB0 /* SearchViewController.swift */; };
 		46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83082C253B3B0065FFB0 /* SettingViewController.swift */; };
 		46AA83122C253B3C0065FFB0 /* TimeSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83092C253B3B0065FFB0 /* TimeSettingViewController.swift */; };
 		46AA83162C253B570065FFB0 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83132C253B570065FFB0 /* SearchResultCell.swift */; };
@@ -94,10 +91,7 @@
 		46AA82F52C253A360065FFB0 /* UmbrellaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UmbrellaUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		46AA83022C253B3B0065FFB0 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		46AA83032C253B3B0065FFB0 /* NotificationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
-		46AA83042C253B3B0065FFB0 /* PrecipitationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecipitationViewController.swift; sourceTree = "<group>"; };
 		46AA83052C253B3B0065FFB0 /* RainSoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RainSoundViewController.swift; sourceTree = "<group>"; };
-		46AA83062C253B3B0065FFB0 /* SearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
-		46AA83072C253B3B0065FFB0 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		46AA83082C253B3B0065FFB0 /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		46AA83092C253B3B0065FFB0 /* TimeSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeSettingViewController.swift; sourceTree = "<group>"; };
 		46AA83132C253B570065FFB0 /* SearchResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
@@ -233,10 +227,7 @@
 				46AA832D2C256C690065FFB0 /* MainTabController.swift */,
 				46AA83022C253B3B0065FFB0 /* MainViewController.swift */,
 				46AA83032C253B3B0065FFB0 /* NotificationViewController.swift */,
-				46AA83042C253B3B0065FFB0 /* PrecipitationViewController.swift */,
 				46AA83052C253B3B0065FFB0 /* RainSoundViewController.swift */,
-				46AA83062C253B3B0065FFB0 /* SearchController.swift */,
-				46AA83072C253B3B0065FFB0 /* SearchViewController.swift */,
 				46AA83082C253B3B0065FFB0 /* SettingViewController.swift */,
 				46AA83092C253B3B0065FFB0 /* TimeSettingViewController.swift */,
 				46E3C8182C49ECDC006D161D /* MapViewController.swift */,
@@ -596,18 +587,15 @@
 				46AA82D32C253A340065FFB0 /* AppDelegate.swift in Sources */,
 				46AA832E2C256C690065FFB0 /* MainTabController.swift in Sources */,
 				46E3C8152C494DBA006D161D /* HourlyWeatherCell.swift in Sources */,
-				46AA83102C253B3C0065FFB0 /* SearchViewController.swift in Sources */,
 				46AA831C2C253B650065FFB0 /* extenstions.swift in Sources */,
 				46AA831E2C253B650065FFB0 /* SearchResultDelegate.swift in Sources */,
 				46AA83172C253B570065FFB0 /* WeatherCell.swift in Sources */,
 				46AA832A2C253BF60065FFB0 /* Weatherkit.swift in Sources */,
 				46E3C8192C49ECDC006D161D /* MapViewController.swift in Sources */,
-				46AA830F2C253B3C0065FFB0 /* SearchController.swift in Sources */,
 				46AA833F2C28332E0065FFB0 /* SettingCell.swift in Sources */,
 				46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */,
 				46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */,
 				46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */,
-				46AA830D2C253B3C0065FFB0 /* PrecipitationViewController.swift in Sources */,
 				46AA830B2C253B3C0065FFB0 /* MainViewController.swift in Sources */,
 				46AA830E2C253B3C0065FFB0 /* RainSoundViewController.swift in Sources */,
 				46AA83162C253B570065FFB0 /* SearchResultCell.swift in Sources */,
@@ -725,7 +713,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -782,7 +770,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -799,24 +787,29 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Umbrella/Umbrella.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"우산챙겨요(Umbrella) 앱의 지역 온도와 강수량 데이터를 불러오기 위한 현재 위치 정보수집을 동의하십니까? 설정에서 이를 변경 할 수 있습니다.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jaeHyeonLim9298.Umbrella;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jaehyeonLim9298;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -830,24 +823,29 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Umbrella/Umbrella.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"우산챙겨요(Umbrella) 앱의 지역 온도와 강수량 데이터를 불러오기 위한 현재 위치 정보수집을 동의하십니까? 설정에서 이를 변경 할 수 있습니다.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jaeHyeonLim9298.Umbrella;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jaehyeonLim9298;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

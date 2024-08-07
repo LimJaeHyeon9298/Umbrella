@@ -92,16 +92,7 @@ class SettingViewController:UIViewController {
                         .disposed(by: cell.disposeBag)
                 }
                 .disposed(by: disposeBag)
-        
-//           tableView.rx.modelSelected(SettingCellType.self)
-//               .subscribe(onNext: { cellType in
-//                   print("Selected \(cellType.title)")
-//                   self.handleAccessoryButtonTap(for: cellType)
-//                   if let selectedRow = self?.tableView.indexPathForSelectedRow {
-//                       self?.tableView.deselectRow(at: selectedRow, animated: true)
-//                   }
-//               })
-//               .disposed(by: disposeBag)
+
             tableView.rx.modelSelected(SettingCellType.self)
                         .subscribe(onNext: { [weak self] cellType in
                             self?.handleAccessoryButtonTap(for: cellType)

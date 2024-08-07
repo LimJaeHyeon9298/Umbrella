@@ -208,6 +208,9 @@ class MainViewController: UIViewController {
         collectionView.backgroundColor = .clear
     }
     
+
+    
+    
     func setupStackView() {
         // Configure stack view if needed
     }
