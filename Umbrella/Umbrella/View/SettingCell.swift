@@ -9,10 +9,6 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-//import rxdatasource
-
-
-
 
 enum SettingCellType {
     case darkMode
@@ -32,20 +28,6 @@ enum SettingCellType {
     
     
 }
-
-//
-//extension SettingCellType: IdentifiableType, Equatable {
-//    typealias Identity = String
-//    
-//    var identity: String {
-//        return title
-//    }
-//    
-//    static func == (lhs: SettingCellType, rhs: SettingCellType) -> Bool {
-//        return lhs.identity == rhs.identity
-//    }
-//}
-
 
 class SettingCell:UITableViewCell {
     static let reuseIdentifier = "SettingCell"

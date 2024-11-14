@@ -13,7 +13,10 @@ import RxSwift
 
 class SoundCollectionViewCell: UICollectionViewCell {
     
-    static let reuseIdentifier = "SoundCell" 
+    static let reuseIdentifier = "SoundCell"
+    var player:AVAudioPlayer?
+    var soundFileName:String?
+    var soundFileType:String?
     
     let tapSubject = PublishSubject<(String, String)>()
        let disposeBag = DisposeBag()
@@ -30,13 +33,7 @@ class SoundCollectionViewCell: UICollectionViewCell {
         $0.textAlignment = .center
         
     }
-    
-    var player:AVAudioPlayer?
-    var soundFileName:String?
-    var soundFileType:String?
-    
-    
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpLayout()
@@ -58,11 +55,8 @@ class SoundCollectionViewCell: UICollectionViewCell {
             $0.center.equalToSuperview()
         }
         
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         contentView.addGestureRecognizer(tapGesture)
-        
-        
     }
     
     func configure(with item:SoundItems) {
@@ -72,16 +66,10 @@ class SoundCollectionViewCell: UICollectionViewCell {
         soundFileType = item.fileType
     }
     
-    
-    
     @objc func handleTap() {
             guard let fileName = soundFileName, let fileType = soundFileType else { return }
             tapSubject.onNext((fileName, fileType))
-        }
-    
-    
-    
-    
+     }
 }
 
 

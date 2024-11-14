@@ -10,7 +10,6 @@
 		464E856A2C4C94BD004D1A1F /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464E85692C4C94BD004D1A1F /* MapViewModel.swift */; };
 		46AA82D32C253A340065FFB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D22C253A340065FFB0 /* AppDelegate.swift */; };
 		46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D42C253A340065FFB0 /* SceneDelegate.swift */; };
-		46AA82D72C253A340065FFB0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D62C253A340065FFB0 /* ViewController.swift */; };
 		46AA82DA2C253A340065FFB0 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 46AA82D92C253A340065FFB0 /* Base */; };
 		46AA82DC2C253A360065FFB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46AA82DB2C253A360065FFB0 /* Assets.xcassets */; };
 		46AA82DF2C253A360065FFB0 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 46AA82DE2C253A360065FFB0 /* Base */; };
@@ -79,7 +78,6 @@
 		46AA82CF2C253A340065FFB0 /* Umbrella.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Umbrella.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46AA82D22C253A340065FFB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46AA82D42C253A340065FFB0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		46AA82D62C253A340065FFB0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		46AA82D92C253A340065FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		46AA82DB2C253A360065FFB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		46AA82DE2C253A360065FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 				46AA831F2C253B760065FFB0 /* Umbrella.entitlements */,
 				46AA82D22C253A340065FFB0 /* AppDelegate.swift */,
 				46AA82D42C253A340065FFB0 /* SceneDelegate.swift */,
-				46AA82D62C253A340065FFB0 /* ViewController.swift */,
 				46AA82D82C253A340065FFB0 /* Main.storyboard */,
 				46AA82DB2C253A360065FFB0 /* Assets.xcassets */,
 				46AA82DD2C253A360065FFB0 /* LaunchScreen.storyboard */,
@@ -580,7 +577,6 @@
 			files = (
 				464E856A2C4C94BD004D1A1F /* MapViewModel.swift in Sources */,
 				46AA830C2C253B3C0065FFB0 /* NotificationViewController.swift in Sources */,
-				46AA82D72C253A340065FFB0 /* ViewController.swift in Sources */,
 				46F109992C2AB1D0006AD5F6 /* RainSoundViewModel.swift in Sources */,
 				46E3C8172C49505E006D161D /* HourlyWeather.swift in Sources */,
 				46AA83372C26DF380065FFB0 /* CumstomTabBar.swift in Sources */,

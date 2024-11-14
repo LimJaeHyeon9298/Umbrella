@@ -118,12 +118,9 @@ class MainViewController: UIViewController {
     
     // MARK: - Functions
     func configureUI() {
-        
-        
-        
+
         // 배경색 설정
         view.backgroundColor = theme.backgroundColor
-        
         
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints {
@@ -319,12 +316,9 @@ class MainViewController: UIViewController {
         print("weather \(weather.currentWeather.temperature.value)")
         print("uvIndex \(weather.currentWeather.uvIndex)")
         print("wind \(weather.currentWeather.wind)")
-        
         tempLabel.text = String(weather.currentWeather.temperature.value)
         fetchHourlyWeather(with: weather)
-        
         precipitationLabel.text = "예상 강수량 - \(weather.currentWeather.precipitationIntensity.value) mm"
-        
         weatherCard1.updateStateText("\(weather.currentWeather.wind.speed.value) km/h")
         weatherCard3.updateStateText("\(weather.currentWeather.uvIndex.value)")
     }
@@ -363,10 +357,8 @@ extension MainViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyWeatherCell.identifier, for: indexPath) as? HourlyWeatherCell else {
             return UICollectionViewCell()
         }
-        
         let weather = hourlyWeatherData[indexPath.item]
         cell.configure(with: weather)
-        
         cell.backgroundColor = .white
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 10

@@ -104,45 +104,41 @@ class RainSoundViewController:UIViewController {
        }
     
     func binds() {
-            viewModel.items
-                .bind(to: collectionView.rx.items(cellIdentifier: SoundCollectionViewCell.reuseIdentifier,
-                                                  cellType: SoundCollectionViewCell.self)) { [weak self] index, item, cell in
-                    guard let self = self else { return }
+        viewModel.items
+            .bind(to: collectionView.rx.items(cellIdentifier: SoundCollectionViewCell.reuseIdentifier,
+                                              cellType: SoundCollectionViewCell.self)) { [weak self] index, item, cell in
+                guard let self = self else { return }
                     cell.configure(with: item)
                     cell.tapSubject
                         .subscribe(onNext: { [weak self] (fileName, fileType) in
-                            print("Tapped on sound: \(fileName).\(fileType)")
-                            self?.toggleSound(for: fileName, fileType: fileType)
-                        })
-                        .disposed(by: cell.disposeBag)
-                }
-                .disposed(by: disposeBag)
-        }
+                        print("Tapped on sound: \(fileName).\(fileType)")
+                        self?.toggleSound(for: fileName, fileType: fileType)
+                    })
+                      .disposed(by: cell.disposeBag)
+                  }
+                  .disposed(by: disposeBag)
+              }
     
     func toggleSound(for fileName: String, fileType: String) {
-            guard let player = audioPlayers[fileName] else {
-                print("No player found for sound file: \(fileName).\(fileType)")
+        guard let player = audioPlayers[fileName] else {
+            print("No player found for sound file: \(fileName).\(fileType)")
                 return
             }
             
-            if player.isPlaying {
-                print("Stopping sound: \(fileName).\(fileType)")
-                player.stop()
-            } else {
-                print("Playing sound: \(fileName).\(fileType)")
-                player.play()
-            }
+        if player.isPlaying {
+            print("Stopping sound: \(fileName).\(fileType)")
+            player.stop()
+        } else {
+            print("Playing sound: \(fileName).\(fileType)")
+            player.play()
         }
+    }
         
-    
     @objc func enableDarkmode() {
         let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
         let theme = isDarkMode ? Theme.dark : Theme.light    
         collectionView.backgroundColor = theme.backgroundColor
-  
-
     }
-    
 }
 
 

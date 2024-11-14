@@ -9,9 +9,6 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate{
-
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self // <- 추가
         
@@ -35,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
 
 }
-
 // 추가
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -49,7 +45,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
 
         // deep link처리 시 아래 url값 가지고 처리
-        let url = response.notification.request.content.userInfo
+        _ = response.notification.request.content.userInfo
 
         completionHandler()
     }

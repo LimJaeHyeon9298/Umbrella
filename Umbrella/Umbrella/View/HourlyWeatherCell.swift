@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 class HourlyWeatherCell:UICollectionViewCell {
-    
     static let identifier = "HourlyWeatherCell"
     
     private let timeLabel = UILabel().then {$0.textColor = .black}
@@ -54,9 +53,5 @@ class HourlyWeatherCell:UICollectionViewCell {
            timeLabel.text = weather.time
            iconImageView.image = weather.icon
            precipitationLabel.text = weather.precipitationChance
-      
     }
-    
-    
-    
 }

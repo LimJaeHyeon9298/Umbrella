@@ -39,7 +39,6 @@ final class MainTabController:UIViewController {
         
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
@@ -80,7 +79,7 @@ final class MainTabController:UIViewController {
         tabBar.layer.masksToBounds = true // 뷰의 경계를 넘어가는 내용을 잘라냄
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLabelTap))
-          copyrightLabel.addGestureRecognizer(tapGesture)
+        copyrightLabel.addGestureRecognizer(tapGesture)
         view.addSubview(copyrightLabel)
         copyrightLabel.snp.makeConstraints {
             $0.top.equalTo(tabBar.snp.bottom).offset(6)
@@ -188,10 +187,6 @@ extension Reactive where Base: MainTabController {
             base.tabBar.rx.changeIndex.onNext(index)
         }
     }
-    
-    
-    
-    
 }
 
 extension Notification.Name {

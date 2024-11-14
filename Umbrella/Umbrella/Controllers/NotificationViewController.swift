@@ -13,13 +13,11 @@ import SnapKit
 class NotificationViewController:UIViewController {
     
     private let backButton = UIButton().then {
-            let image = UIImage(systemName: "chevron.left")
-            $0.setImage(image, for: .normal)
-            $0.tintColor = .blue
-        }
-    
-    
-    
+        let image = UIImage(systemName: "chevron.left")
+        $0.setImage(image, for: .normal)
+        $0.tintColor = .blue
+    }
+ 
     private let alertLabel:UILabel = {
         let label = UILabel()
         label.text = "알림"
@@ -48,7 +46,6 @@ class NotificationViewController:UIViewController {
         return picker
     }()
     
-    
     private let timeSettingLabel:UILabel = {
         let label = UILabel()
         label.text = "시간 선택"
@@ -70,36 +67,30 @@ class NotificationViewController:UIViewController {
         ig.image = #imageLiteral(resourceName: "Vector (1)")
         return ig
     }()
-    
-    
-    
-    
-   // let userNotiCenter = UNUserNotificationCenter.current() // 추가
- 
+
     override func viewDidLoad() {
-        
         let navigationBar = UIView()
-                navigationBar.backgroundColor = .clear
-                view.addSubview(navigationBar)
-                navigationBar.snp.makeConstraints {
-                    $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-                    $0.height.equalTo(50)
-                }
+        navigationBar.backgroundColor = .clear
+        view.addSubview(navigationBar)
+        navigationBar.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(50)
+        }
                 
-                // 뒤로가기 버튼 설정
-                navigationBar.addSubview(backButton)
-                backButton.snp.makeConstraints {
-                    $0.centerY.equalToSuperview()
-                    $0.leading.equalToSuperview().offset(16)
-                }
-               backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        // 뒤로가기 버튼 설정
+        navigationBar.addSubview(backButton)
+        backButton.snp.makeConstraints {
+        $0.centerY.equalToSuperview()
+        $0.leading.equalToSuperview().offset(16)
+    }
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(test(_:)), name: NSNotification.Name("test"), object: nil)
         view.backgroundColor = .white
         self.navigationController?.navigationBar.backgroundColor = .white
         self.navigationController?.navigationItem.title = "설정"
-     self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         view.addSubview(alertLabel)
         alertLabel.anchor(top:view.topAnchor,left: view.leftAnchor,paddingTop:105,paddingLeft: 20)
         
@@ -124,26 +115,16 @@ class NotificationViewController:UIViewController {
         
     }
     
-    
-    func configUI() {
-//        timeLabel.text = aaa
-    }
-    
     @objc func buttonTapped() {
-        
         let controller = TimeSettingViewController()
         present(controller, animated: true)
     }
-    
-    
-    
     
     @objc func backButtonTapped() {
         self.dismiss(animated: true)
     }
     
-    @objc func test(_ notification:NSNotification){
+    @objc func test(_ notification:NSNotification) {
           timeLabel.text = "\(notification.userInfo!["이름"]!)"
     }
-    
 }
