@@ -93,7 +93,7 @@ class SettingViewController:UIViewController {
 
         
          viewModel.theme
-             subscribe(onNext: { [weak self] theme in
+             .subscribe(onNext: { [weak self] theme in
                  self?.updateUI(with: theme)
                  self?.tableView.reloadData()  // 테마 변경시 테이블 뷰 전체 업데이트
                })
