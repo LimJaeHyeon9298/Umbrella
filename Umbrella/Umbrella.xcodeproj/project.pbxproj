@@ -797,6 +797,8 @@
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "우산챙겨요";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"우산챙겨요(Umbrella) 앱의 지역 온도와 강수량 데이터를 불러오기 위한 현재 위치 정보수집을 동의하십니까? 설정에서 이를 변경 할 수 있습니다.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -808,7 +810,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaehyeonLim9298;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -833,6 +835,8 @@
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "우산챙겨요";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"우산챙겨요(Umbrella) 앱의 지역 온도와 강수량 데이터를 불러오기 위한 현재 위치 정보수집을 동의하십니까? 설정에서 이를 변경 할 수 있습니다.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -844,7 +848,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaehyeonLim9298;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -318,7 +318,7 @@ class MainViewController: UIViewController {
         print("wind \(weather.currentWeather.wind)")
         tempLabel.text = String(format: "%.2f" ,weather.currentWeather.temperature.value)
         fetchHourlyWeather(with: weather)
-        precipitationLabel.text = "예상 강수량 - \(weather.currentWeather.precipitationIntensity.value) mm"
+        precipitationLabel.text = String(format: "예상 강수량 - %.2f mm", weather.currentWeather.precipitationIntensity.value)
         weatherCard1.updateStateText(String(format: "%.2f km/h", weather.currentWeather.wind.speed.value))
         weatherCard3.updateStateText("\(weather.currentWeather.uvIndex.value)")
     }
