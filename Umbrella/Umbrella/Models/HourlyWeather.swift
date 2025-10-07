@@ -11,6 +11,5 @@ import UIKit
 struct HourlyWeather {
     let time: String
     let icon: UIImage
-   // let temperature: String
     let precipitationChance: String
 }

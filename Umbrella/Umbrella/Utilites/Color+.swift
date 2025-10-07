@@ -56,3 +56,30 @@ extension UIColor {
 
 
 
+extension NSString {
+    func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
+        return ceil(boundingBox.height)
+    }
+}
+
+extension NSAttributedString {
+    func height(withConstrainedWidth width: CGFloat) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, context: nil)
+        return ceil(boundingBox.height)
+    }
+}
+
+
+
+
+//extension CommunityDetailViewController: UIScrollViewDelegate {
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
+//       
+//        
+//        self.imagePageCount.text = "\(pageIndex + 1)/\(self.contentImages.count)"
+//    }
+//}

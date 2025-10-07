@@ -9,23 +9,13 @@ import UIKit
 
 
 class TimeSettingViewController:UIViewController {
-    
-    
-    
-    
-    
     //MARK: - Properties
     let userNotiCenter = UNUserNotificationCenter.current() // 추가
     var currentTime = ""
     var selectedTime = ""
     var alarm: Bool = true
-    
-//    var currentTime = UILabel()
-    
-//    var selectedTime = UILabel()
-   
+
     private let datePicker:UIDatePicker = {
-        
         let picker = UIDatePicker()
         picker.addTarget(self, action: #selector(pickerChanged), for: .valueChanged)
         
@@ -33,7 +23,6 @@ class TimeSettingViewController:UIViewController {
     }()
     
     private let testLabel:UIButton = {
-        
         let button = UIButton()
         button.setTitle("선택", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -41,11 +30,6 @@ class TimeSettingViewController:UIViewController {
         return button
         
     }()
-    
-    
-    
-    
-    
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,38 +40,25 @@ class TimeSettingViewController:UIViewController {
                 sheetPresentationController.detents = [.medium()]
             }
         }
-        
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
-        
-        
     }
     
-    
-    
-    
-    
     func configUI() {
-        
         view.addSubview(datePicker)
-        datePicker.anchor(top: view.topAnchor,left: view.leftAnchor,bottom: view.bottomAnchor,right: view.rightAnchor,paddingTop: 80,paddingLeft: 0,paddingBottom: 20,paddingRight: 0,width: 100, height: 100)
+        datePicker.anchor(top: view.topAnchor,left: view.leftAnchor,
+                          bottom: view.bottomAnchor,right: view.rightAnchor,
+                          paddingTop: 80,paddingLeft: 0,paddingBottom: 20,paddingRight: 0,width: 100, height: 100)
         
-     datePicker.preferredDatePickerStyle = .wheels
-     datePicker.datePickerMode = .time
-     datePicker.backgroundColor = .red
-     datePicker.locale = Locale(identifier: "ko-KR")
-     datePicker.timeZone = .autoupdatingCurrent
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.datePickerMode = .time
+        datePicker.backgroundColor = .red
+        datePicker.locale = Locale(identifier: "ko-KR")
+        datePicker.timeZone = .autoupdatingCurrent
         datePicker.backgroundColor = .lightGray
         
         view.addSubview(testLabel)
         testLabel.anchor(top: view.topAnchor,left: view.leftAnchor,paddingTop: 20,paddingLeft: 20)
-        
-        
-        
-        
-        
     }
-    
-    
     // 사용자에게 알림 권한 요청
      func requestAuthNoti() {
          let notiAuthOptions = UNAuthorizationOptions(arrayLiteral: [.alert, .badge, .sound])
@@ -121,71 +92,38 @@ class TimeSettingViewController:UIViewController {
       }
     
     @objc func buttonTapped() {
-        
-        
         self.dismiss(animated: true)
         NotificationCenter.default.post(name: NSNotification.Name("test"), object: nil, userInfo: ["이름":selectedTime])
-      
     }
     
     @objc func pickerChanged() {
-        
-        
-            let dateformatter = DateFormatter()
-
-               dateformatter.dateStyle = .none
-
-               dateformatter.timeStyle = .short
-
-               let date = dateformatter.string(from: datePicker.date)
-
-                 selectedTime = date
-//        print("hi\(selectedTime)")
-//
-        
-        
+        let dateformatter = DateFormatter()
+        let date = dateformatter.string(from: datePicker.date)
+        dateformatter.dateStyle = .none
+        dateformatter.timeStyle = .short
+        selectedTime = date
     }
     
     @objc func updateTime(){
-
             let date = NSDate()
-
             let dateformatter = DateFormatter()
-
-           dateformatter.dateStyle = .none
-
-             dateformatter.timeStyle = .short
-
+            dateformatter.dateStyle = .none
+            dateformatter.timeStyle = .short
 
              currentTime = dateformatter.string(from: date as Date)
-
-            
-
              if currentTime == selectedTime {
-
-                
-
-                if alarm {
-
+                 if alarm {
                     callAlert()
-                    
-                   alarm = false
-
+                    alarm = false
                 }
-
             }
-
         }
     
     
     func callAlert(){
-
         requestSendNoti(seconds: 1)
         requestAuthNoti()
-
-        }
-    
-    
+    }
 }
 
 

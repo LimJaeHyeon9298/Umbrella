@@ -17,12 +17,10 @@ enum TabItem:Int,CaseIterable,Equatable {
     case main
     case setting
     
-    
     var normalImage:UIImage? {
         switch self {
         case .main:
             return UIImage(named: "free-icon-font-umbrella-3914416")
-           
         case .setting:
             return UIImage(named: "free-icon-font-settings-3917035")
         case .sound:
@@ -40,10 +38,14 @@ enum TabItem:Int,CaseIterable,Equatable {
             return UIImage(named:"free-icon-font-music-alt-3915153")
         }
     }
-    
 }
 
 final class CustomTabBar:UIView {
+    
+    private let disposeBag = DisposeBag()
+    fileprivate var tabSubject = PublishSubject<Int>()
+    private var buttons = [UIButton]()
+    let tabItems = TabItem.allCases
     
     private let stackView = UIStackView().then {
         $0.axis = .horizontal
@@ -51,21 +53,14 @@ final class CustomTabBar:UIView {
         $0.alignment = .center
     }
     
-    private var buttons = [UIButton]()
-    
-    let tabItems = TabItem.allCases
-    
      var selectedIndex = 0 {
         didSet {
             buttons.enumerated()
                 .forEach { index,button in
                     button.isSelected = index == selectedIndex
-                }
+            }
         }
     }
-    private let disposeBag = DisposeBag()
-    fileprivate var tabSubject = PublishSubject<Int>()
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -97,7 +92,6 @@ final class CustomTabBar:UIView {
             .disposed(by: disposeBag)
         
         backgroundColor = .white
-        
         addSubview(stackView)
         buttons.forEach(stackView.addArrangedSubview(_:))
         
@@ -105,9 +99,7 @@ final class CustomTabBar:UIView {
             $0.edges.equalToSuperview()
         }
     }
-    
 }
-
 
 extension Reactive where Base:CustomTabBar {
     var tabButton:Observable<Int> {

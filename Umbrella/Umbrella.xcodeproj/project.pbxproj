@@ -10,7 +10,6 @@
 		464E856A2C4C94BD004D1A1F /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464E85692C4C94BD004D1A1F /* MapViewModel.swift */; };
 		46AA82D32C253A340065FFB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D22C253A340065FFB0 /* AppDelegate.swift */; };
 		46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D42C253A340065FFB0 /* SceneDelegate.swift */; };
-		46AA82D72C253A340065FFB0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D62C253A340065FFB0 /* ViewController.swift */; };
 		46AA82DA2C253A340065FFB0 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 46AA82D92C253A340065FFB0 /* Base */; };
 		46AA82DC2C253A360065FFB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46AA82DB2C253A360065FFB0 /* Assets.xcassets */; };
 		46AA82DF2C253A360065FFB0 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 46AA82DE2C253A360065FFB0 /* Base */; };
@@ -79,7 +78,6 @@
 		46AA82CF2C253A340065FFB0 /* Umbrella.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Umbrella.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46AA82D22C253A340065FFB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46AA82D42C253A340065FFB0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		46AA82D62C253A340065FFB0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		46AA82D92C253A340065FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		46AA82DB2C253A360065FFB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		46AA82DE2C253A360065FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 				46AA831F2C253B760065FFB0 /* Umbrella.entitlements */,
 				46AA82D22C253A340065FFB0 /* AppDelegate.swift */,
 				46AA82D42C253A340065FFB0 /* SceneDelegate.swift */,
-				46AA82D62C253A340065FFB0 /* ViewController.swift */,
 				46AA82D82C253A340065FFB0 /* Main.storyboard */,
 				46AA82DB2C253A360065FFB0 /* Assets.xcassets */,
 				46AA82DD2C253A360065FFB0 /* LaunchScreen.storyboard */,
@@ -479,9 +476,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Umbrella/Pods-Umbrella-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Umbrella/Pods-Umbrella-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -496,9 +497,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Umbrella-UmbrellaUITests/Pods-Umbrella-UmbrellaUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Umbrella-UmbrellaUITests/Pods-Umbrella-UmbrellaUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -580,7 +585,6 @@
 			files = (
 				464E856A2C4C94BD004D1A1F /* MapViewModel.swift in Sources */,
 				46AA830C2C253B3C0065FFB0 /* NotificationViewController.swift in Sources */,
-				46AA82D72C253A340065FFB0 /* ViewController.swift in Sources */,
 				46F109992C2AB1D0006AD5F6 /* RainSoundViewModel.swift in Sources */,
 				46E3C8172C49505E006D161D /* HourlyWeather.swift in Sources */,
 				46AA83372C26DF380065FFB0 /* CumstomTabBar.swift in Sources */,
@@ -793,18 +797,20 @@
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "우산챙겨요";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"우산챙겨요(Umbrella) 앱의 지역 온도와 강수량 데이터를 불러오기 위한 현재 위치 정보수집을 동의하십니까? 설정에서 이를 변경 할 수 있습니다.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaehyeonLim9298;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -829,18 +835,20 @@
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "우산챙겨요";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"우산챙겨요(Umbrella) 앱의 지역 온도와 강수량 데이터를 불러오기 위한 현재 위치 정보수집을 동의하십니까? 설정에서 이를 변경 할 수 있습니다.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaehyeonLim9298;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -80,11 +80,4 @@ class MainViewModel: NSObject, CLLocationManagerDelegate {
             self.locationAddress.onNext(address)
         }
     }
-//    func updateWeatherData(lat: Double, lon: Double) {
-//            let location = CLLocation(latitude: lat, longitude: lon)
-//            updateLocation(location)
-//        }
-//    
-    
-    
 }
