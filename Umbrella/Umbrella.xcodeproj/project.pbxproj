@@ -38,6 +38,7 @@
 		46AA833F2C28332E0065FFB0 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA833E2C28332E0065FFB0 /* SettingCell.swift */; };
 		46AA83412C28342D0065FFB0 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83402C28342D0065FFB0 /* SettingViewModel.swift */; };
 		46AA83432C28343B0065FFB0 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83422C28343B0065FFB0 /* MainViewModel.swift */; };
+		46BB187B2E95502B0015B362 /* RainSoundPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BB187A2E95502B0015B362 /* RainSoundPlayerViewController.swift */; };
 		46C724012C56793500A781B6 /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C724002C56793500A781B6 /* Color+.swift */; };
 		46C724032C575E9300A781B6 /* rainrain.wav in Resources */ = {isa = PBXBuildFile; fileRef = 46C724022C575E9300A781B6 /* rainrain.wav */; };
 		46C724052C5760FD00A781B6 /* thunder.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 46C724042C5760FD00A781B6 /* thunder.mp3 */; };
@@ -106,6 +107,7 @@
 		46AA833E2C28332E0065FFB0 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		46AA83402C28342D0065FFB0 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		46AA83422C28343B0065FFB0 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		46BB187A2E95502B0015B362 /* RainSoundPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainSoundPlayerViewController.swift; sourceTree = "<group>"; };
 		46C724002C56793500A781B6 /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
 		46C724022C575E9300A781B6 /* rainrain.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rainrain.wav; sourceTree = "<group>"; };
 		46C724042C5760FD00A781B6 /* thunder.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = thunder.mp3; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				46AA83082C253B3B0065FFB0 /* SettingViewController.swift */,
 				46AA83092C253B3B0065FFB0 /* TimeSettingViewController.swift */,
 				46E3C8182C49ECDC006D161D /* MapViewController.swift */,
+				46BB187A2E95502B0015B362 /* RainSoundPlayerViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -596,6 +599,7 @@
 				46AA83172C253B570065FFB0 /* WeatherCell.swift in Sources */,
 				46AA832A2C253BF60065FFB0 /* Weatherkit.swift in Sources */,
 				46E3C8192C49ECDC006D161D /* MapViewController.swift in Sources */,
+				46BB187B2E95502B0015B362 /* RainSoundPlayerViewController.swift in Sources */,
 				46AA833F2C28332E0065FFB0 /* SettingCell.swift in Sources */,
 				46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */,
 				46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */,
