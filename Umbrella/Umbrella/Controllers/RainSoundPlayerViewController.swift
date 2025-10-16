@@ -15,6 +15,7 @@ class RainSoundPlayerViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 16
         $0.layer.masksToBounds = true
+        $0.image = UIImage(named: "joy-stamp-pGQbWXBC1dA-unsplash")
     }
     
     var titleLabel = UILabel().then {
@@ -23,6 +24,26 @@ class RainSoundPlayerViewController: UIViewController {
         $0.textAlignment = .center
         $0.text = "빗소리"
         
+    }
+    
+    private var progressView = UIProgressView().then {
+        $0.progressTintColor = .systemBlue
+        $0.trackTintColor = .systemGray5
+        $0.layer.cornerRadius = 2
+        $0.clipsToBounds = true
+        $0.progress = 0.0
+    }
+    
+    private var currentTimeLabel = UILabel().then {
+        $0.textColor = .white
+        $0.font = UIFont.systemFont(ofSize: 12)
+        $0.text = "0:00"
+    }
+    
+    private var totalTimeLabel = UILabel().then {
+        $0.textColor = .white
+        $0.font = UIFont.systemFont(ofSize: 12)
+        $0.text = "0:00"
     }
     
     private var isDarkMode: Bool {
@@ -44,6 +65,9 @@ extension RainSoundPlayerViewController {
     private func setupUI() {
         self.view.addSubview(rainImageView)
         self.view.addSubview(titleLabel)
+        self.view.addSubview(progressView)
+        self.view.addSubview(currentTimeLabel)
+        self.view.addSubview(totalTimeLabel)
         rainImageView.backgroundColor = .red
         
         self.view.backgroundColor = isDarkMode ? Theme.dark.backgroundColor : Theme.light.backgroundColor
@@ -59,6 +83,23 @@ extension RainSoundPlayerViewController {
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(rainImageView.snp.bottom).offset(16)
             $0.centerX.equalTo(rainImageView)
+        }
+        
+        progressView.snp.makeConstraints {
+             $0.top.equalTo(titleLabel.snp.bottom).offset(32)
+             $0.leading.equalToSuperview().offset(40)
+             $0.trailing.equalToSuperview().offset(-40)
+             $0.height.equalTo(4)
+         }
+        
+        currentTimeLabel.snp.makeConstraints {
+            $0.top.equalTo(progressView.snp.bottom).offset(8)
+            $0.leading.equalTo(progressView)
+        }
+        
+        totalTimeLabel.snp.makeConstraints {
+            $0.top.equalTo(progressView.snp.bottom).offset(8)
+            $0.trailing.equalTo(progressView)
         }
     }
     
