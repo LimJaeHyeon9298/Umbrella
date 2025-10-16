@@ -67,6 +67,22 @@ class RainSoundPlayerViewController: UIViewController {
         $0.contentMode = .scaleAspectFit
     }
     
+    private var shuffleButton = UIButton(type: .system).then {
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
+        $0.setImage(UIImage(systemName: "shuffle", withConfiguration: config), for: .normal)
+        $0.tintColor = .white
+        $0.contentMode = .scaleAspectFit
+        $0.alpha = 0.6
+    }
+    
+    private var repeatButton = UIButton(type: .system).then {
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
+        $0.setImage(UIImage(systemName: "repeat", withConfiguration: config), for: .normal)
+        $0.tintColor = .white
+        $0.contentMode = .scaleAspectFit
+        $0.alpha = 0.6
+    }
+    
     private var isDarkMode: Bool {
             return UserDefaults.standard.bool(forKey: "isDarkMode")
         }
@@ -92,6 +108,8 @@ extension RainSoundPlayerViewController {
         self.view.addSubview(previousButton)
         self.view.addSubview(playPauseButton)
         self.view.addSubview(nextButton)
+        self.view.addSubview(shuffleButton)
+        self.view.addSubview(repeatButton)
                 
         rainImageView.backgroundColor = .red
         
@@ -143,6 +161,18 @@ extension RainSoundPlayerViewController {
             $0.centerY.equalTo(playPauseButton)
             $0.leading.equalTo(playPauseButton.snp.trailing).offset(24)
             $0.size.equalTo(35)
+        }
+        
+        shuffleButton.snp.makeConstraints {
+            $0.centerY.equalTo(playPauseButton)
+            $0.trailing.equalTo(previousButton.snp.leading).offset(-20)
+            $0.size.equalTo(20)
+        }
+        
+        repeatButton.snp.makeConstraints {
+            $0.centerY.equalTo(playPauseButton)
+            $0.leading.equalTo(nextButton.snp.trailing).offset(20)
+            $0.size.equalTo(20)
         }
     }
     
