@@ -46,6 +46,27 @@ class RainSoundPlayerViewController: UIViewController {
         $0.text = "0:00"
     }
     
+    private var playPauseButton = UIButton().then {
+        
+        let config = UIImage.SymbolConfiguration(pointSize: 40, weight: .medium)
+        $0.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
+        $0.setImage(UIImage(systemName: "pause.fill", withConfiguration: config), for: .selected)
+        $0.tintColor = .white
+        $0.contentMode = .scaleAspectFill
+    }
+    
+    private var previousButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "backward.fill"), for: .normal)
+        $0.tintColor = .white
+        $0.contentMode = .scaleAspectFit
+    }
+    
+    private var nextButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "forward.fill"), for: .normal)
+        $0.tintColor = .white
+        $0.contentMode = .scaleAspectFit
+    }
+    
     private var isDarkMode: Bool {
             return UserDefaults.standard.bool(forKey: "isDarkMode")
         }
@@ -68,6 +89,10 @@ extension RainSoundPlayerViewController {
         self.view.addSubview(progressView)
         self.view.addSubview(currentTimeLabel)
         self.view.addSubview(totalTimeLabel)
+        self.view.addSubview(previousButton)
+        self.view.addSubview(playPauseButton)
+        self.view.addSubview(nextButton)
+                
         rainImageView.backgroundColor = .red
         
         self.view.backgroundColor = isDarkMode ? Theme.dark.backgroundColor : Theme.light.backgroundColor
@@ -101,10 +126,34 @@ extension RainSoundPlayerViewController {
             $0.top.equalTo(progressView.snp.bottom).offset(8)
             $0.trailing.equalTo(progressView)
         }
+        
+        playPauseButton.snp.makeConstraints {
+            $0.top.equalTo(currentTimeLabel.snp.bottom).offset(32)
+            $0.centerX.equalTo(progressView)
+            $0.size.equalTo(40)
+        }
+        
+        previousButton.snp.makeConstraints {
+            $0.centerY.equalTo(playPauseButton)
+            $0.trailing.equalTo(playPauseButton.snp.leading).offset(-24)
+            $0.size.equalTo(35)
+        }
+
+        nextButton.snp.makeConstraints {
+            $0.centerY.equalTo(playPauseButton)
+            $0.leading.equalTo(playPauseButton.snp.trailing).offset(24)
+            $0.size.equalTo(35)
+        }
     }
     
     private func setupBinds() {
         
+    }
+    
+    private func setAddTargets() {
+        playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
+        previousButton.addTarget(self, action: #selector(previousButtonTapped), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
     
     @objc func enableDarkmode() {
@@ -112,4 +161,8 @@ extension RainSoundPlayerViewController {
         let theme = isDarkMode ? Theme.dark : Theme.light
         self.view.backgroundColor = theme.backgroundColor
     }
+    
+    @objc func playPauseButtonTapped() {}
+    @objc func previousButtonTapped() {}
+    @objc func nextButtonTapped() {}
 }
