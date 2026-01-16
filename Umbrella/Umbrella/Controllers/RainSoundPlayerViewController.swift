@@ -8,8 +8,13 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class RainSoundPlayerViewController: UIViewController {
+    
+    private let viewModel: RainSoundPlayerViewModel
+    private let disposeBag = DisposeBag()
     
     private var rainImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -87,6 +92,15 @@ class RainSoundPlayerViewController: UIViewController {
             return UserDefaults.standard.bool(forKey: "isDarkMode")
         }
     
+    init(viewModel: RainSoundPlayerViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -96,6 +110,12 @@ class RainSoundPlayerViewController: UIViewController {
         let name = Notification.Name("darkModeHasChanged")
         NotificationCenter.default.addObserver(self, selector: #selector(enableDarkmode), name: name, object: nil)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+            super.viewWillDisappear(animated)
+            // 화면 나갈 때 재생 중이면 멈춤 (선택사항)
+            // viewModel.playPauseTrigger.accept(())
+        }
 }
 
 extension RainSoundPlayerViewController {
@@ -110,10 +130,13 @@ extension RainSoundPlayerViewController {
         self.view.addSubview(nextButton)
         self.view.addSubview(shuffleButton)
         self.view.addSubview(repeatButton)
-                
-        rainImageView.backgroundColor = .red
         
         self.view.backgroundColor = isDarkMode ? Theme.dark.backgroundColor : Theme.light.backgroundColor
+        
+        // ProgressView에 탭 제스처 추가 (seek 기능)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleProgressTap(_:)))
+        progressView.addGestureRecognizer(tapGesture)
+        progressView.isUserInteractionEnabled = true
     }
     
     private func setupConstraints() {
@@ -129,11 +152,11 @@ extension RainSoundPlayerViewController {
         }
         
         progressView.snp.makeConstraints {
-             $0.top.equalTo(titleLabel.snp.bottom).offset(32)
-             $0.leading.equalToSuperview().offset(40)
-             $0.trailing.equalToSuperview().offset(-40)
-             $0.height.equalTo(4)
-         }
+            $0.top.equalTo(titleLabel.snp.bottom).offset(32)
+            $0.leading.equalToSuperview().offset(40)
+            $0.trailing.equalToSuperview().offset(-40)
+            $0.height.equalTo(4)
+        }
         
         currentTimeLabel.snp.makeConstraints {
             $0.top.equalTo(progressView.snp.bottom).offset(8)
@@ -177,13 +200,61 @@ extension RainSoundPlayerViewController {
     }
     
     private func setupBinds() {
+        // MARK: - Outputs (ViewModel → UI)
         
+        // 앨범 이미지 바인딩
+        viewModel.albumImage
+            .bind(to: rainImageView.rx.image)
+            .disposed(by: disposeBag)
+        
+        // 제목 바인딩
+        viewModel.titleText
+            .bind(to: titleLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        // 재생/일시정지 상태 바인딩
+        viewModel.isPlaying
+            .bind(to: playPauseButton.rx.isSelected)
+            .disposed(by: disposeBag)
+        
+        // 현재 시간 바인딩
+        viewModel.currentTimeText
+            .bind(to: currentTimeLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        // 총 시간 바인딩
+        viewModel.totalTimeText
+            .bind(to: totalTimeLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        // 프로그레스 바인딩
+        viewModel.progress
+            .bind(to: progressView.rx.progress)
+            .disposed(by: disposeBag)
+        
+        // MARK: - Inputs (UI → ViewModel)
+        
+        // Play/Pause 버튼
+        playPauseButton.rx.tap
+            .bind(to: viewModel.playPauseTrigger)
+            .disposed(by: disposeBag)
+        
+        // Previous 버튼 (나중에 구현)
+        previousButton.rx.tap
+            .bind(to: viewModel.previousTrigger)
+            .disposed(by: disposeBag)
+        
+        // Next 버튼 (나중에 구현)
+        nextButton.rx.tap
+            .bind(to: viewModel.nextTrigger)
+            .disposed(by: disposeBag)
     }
     
-    private func setAddTargets() {
-        playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
-        previousButton.addTarget(self, action: #selector(previousButtonTapped), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+    // MARK: - Actions
+    @objc private func handleProgressTap(_ gesture: UITapGestureRecognizer) {
+        let location = gesture.location(in: progressView)
+        let progress = Float(location.x / progressView.bounds.width)
+        viewModel.seekTo.accept(progress)
     }
     
     @objc func enableDarkmode() {
@@ -191,8 +262,4 @@ extension RainSoundPlayerViewController {
         let theme = isDarkMode ? Theme.dark : Theme.light
         self.view.backgroundColor = theme.backgroundColor
     }
-    
-    @objc func playPauseButtonTapped() {}
-    @objc func previousButtonTapped() {}
-    @objc func nextButtonTapped() {}
 }
