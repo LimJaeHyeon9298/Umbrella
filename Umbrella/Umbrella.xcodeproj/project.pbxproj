@@ -43,6 +43,7 @@
 		46C724032C575E9300A781B6 /* rainrain.wav in Resources */ = {isa = PBXBuildFile; fileRef = 46C724022C575E9300A781B6 /* rainrain.wav */; };
 		46C724052C5760FD00A781B6 /* thunder.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 46C724042C5760FD00A781B6 /* thunder.mp3 */; };
 		46C724072C57613D00A781B6 /* birdsoundrain.wav in Resources */ = {isa = PBXBuildFile; fileRef = 46C724062C57613D00A781B6 /* birdsoundrain.wav */; };
+		46E007DF2F1A613300CD1C64 /* RainSoundPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E007DE2F1A613300CD1C64 /* RainSoundPlayerViewModel.swift */; };
 		46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8122C4906E8006D161D /* WeatherCard.swift */; };
 		46E3C8152C494DBA006D161D /* HourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8142C494DBA006D161D /* HourlyWeatherCell.swift */; };
 		46E3C8172C49505E006D161D /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E3C8162C49505E006D161D /* HourlyWeather.swift */; };
@@ -120,6 +121,7 @@
 		46C724022C575E9300A781B6 /* rainrain.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rainrain.wav; sourceTree = "<group>"; };
 		46C724042C5760FD00A781B6 /* thunder.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = thunder.mp3; sourceTree = "<group>"; };
 		46C724062C57613D00A781B6 /* birdsoundrain.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = birdsoundrain.wav; sourceTree = "<group>"; };
+		46E007DE2F1A613300CD1C64 /* RainSoundPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainSoundPlayerViewModel.swift; sourceTree = "<group>"; };
 		46E3C8122C4906E8006D161D /* WeatherCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCard.swift; sourceTree = "<group>"; };
 		46E3C8142C494DBA006D161D /* HourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherCell.swift; sourceTree = "<group>"; };
 		46E3C8162C49505E006D161D /* HourlyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeather.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				46AA83402C28342D0065FFB0 /* SettingViewModel.swift */,
 				46F109982C2AB1D0006AD5F6 /* RainSoundViewModel.swift */,
 				464E85692C4C94BD004D1A1F /* MapViewModel.swift */,
+				46E007DE2F1A613300CD1C64 /* RainSoundPlayerViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -469,6 +472,7 @@
 				46AA83412C28342D0065FFB0 /* SettingViewModel.swift in Sources */,
 				46C724012C56793500A781B6 /* Color+.swift in Sources */,
 				46AA83122C253B3C0065FFB0 /* TimeSettingViewController.swift in Sources */,
+				46E007DF2F1A613300CD1C64 /* RainSoundPlayerViewModel.swift in Sources */,
 				46AA83432C28343B0065FFB0 /* MainViewModel.swift in Sources */,
 				46F109972C2AB133006AD5F6 /* SoundItems.swift in Sources */,
 				46AA83252C253B8F0065FFB0 /* Theme.swift in Sources */,
