@@ -106,10 +106,16 @@ class RainSoundPlayerViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupBinds()
+        setupNavigationBar()
         
         let name = Notification.Name("darkModeHasChanged")
         NotificationCenter.default.addObserver(self, selector: #selector(enableDarkmode), name: name, object: nil)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            navigationController?.isNavigationBarHidden = false  // 네비게이션 바 보이기
+        }
     
     override func viewWillDisappear(_ animated: Bool) {
             super.viewWillDisappear(animated)
@@ -249,6 +255,19 @@ extension RainSoundPlayerViewController {
             .bind(to: viewModel.nextTrigger)
             .disposed(by: disposeBag)
     }
+    
+    private func setupNavigationBar() {
+            // 네비게이션 바 색상 설정
+            navigationController?.navigationBar.tintColor = .white
+            
+            // 투명 배경 (선택사항)
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithTransparentBackground()
+            appearance.backgroundColor = isDarkMode ? Theme.dark.backgroundColor : Theme.light.backgroundColor
+            
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
     
     // MARK: - Actions
     @objc private func handleProgressTap(_ gesture: UITapGestureRecognizer) {

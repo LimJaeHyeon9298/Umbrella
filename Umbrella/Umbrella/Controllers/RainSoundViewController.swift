@@ -29,7 +29,7 @@ class RainSoundViewController:UIViewController {
     init(viewModel:RainSoundViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        setupAudioPlayers()
+       // setupAudioPlayers()
         configureAudioSession()
     }
     
@@ -104,20 +104,30 @@ class RainSoundViewController:UIViewController {
        }
     
     func binds() {
-        viewModel.items
-            .bind(to: collectionView.rx.items(cellIdentifier: SoundCollectionViewCell.reuseIdentifier,
-                                              cellType: SoundCollectionViewCell.self)) { [weak self] index, item, cell in
-                guard let self = self else { return }
+            // CollectionView에 items 바인딩
+            viewModel.items
+                .bind(to: collectionView.rx.items(
+                    cellIdentifier: SoundCollectionViewCell.reuseIdentifier,
+                    cellType: SoundCollectionViewCell.self
+                )) { index, item, cell in
                     cell.configure(with: item)
-                    cell.tapSubject
-                        .subscribe(onNext: { [weak self] (fileName, fileType) in
-                        print("Tapped on sound: \(fileName).\(fileType)")
-                        self?.toggleSound(for: fileName, fileType: fileType)
-                    })
-                      .disposed(by: cell.disposeBag)
-                  }
-                  .disposed(by: disposeBag)
-              }
+                }
+                .disposed(by: disposeBag)
+            
+            // Cell 선택 이벤트 처리
+            collectionView.rx.modelSelected(SoundItems.self)
+                .subscribe(onNext: { [weak self] item in
+                    self?.navigateToPlayer(with: item)
+                })
+                .disposed(by: disposeBag)
+        }
+        
+        // MARK: - Navigation
+        private func navigateToPlayer(with item: SoundItems) {
+            let playerViewModel = RainSoundPlayerViewModel(soundItems: item)
+            let playerVC = RainSoundPlayerViewController(viewModel: playerViewModel)
+            navigationController?.pushViewController(playerVC, animated: true)
+        }
     
     func toggleSound(for fileName: String, fileType: String) {
         guard let player = audioPlayers[fileName] else {
