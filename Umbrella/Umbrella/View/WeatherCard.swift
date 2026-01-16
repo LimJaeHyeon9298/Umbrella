@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import Then
-import FLAnimatedImage
 
 class WeatherCard:UIView {
     private let weatherIcon = UIImageView()
