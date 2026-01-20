@@ -73,8 +73,11 @@ class RainSoundPlayerViewController: UIViewController {
     }
     
     private var shuffleButton = UIButton(type: .system).then {
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
-        $0.setImage(UIImage(systemName: "shuffle", withConfiguration: config), for: .normal)
+        let normalConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
+        let selectedConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
+        
+        $0.setImage(UIImage(systemName: "shuffle", withConfiguration: normalConfig), for: .normal)
+        $0.setImage(UIImage(systemName: "shuffle", withConfiguration: selectedConfig), for: .selected)
         $0.tintColor = .white
         $0.contentMode = .scaleAspectFit
         $0.alpha = 0.6
@@ -257,6 +260,10 @@ extension RainSoundPlayerViewController {
 //            .bind(to: repeatButton.rx.alpha)
 //            .disposed(by: disposeBag)
         
+        viewModel.isShuffleEnabled
+                .bind(to: shuffleButton.rx.isSelected)
+                .disposed(by: disposeBag)
+        
         
         // MARK: - Inputs (UI → ViewModel)
         
@@ -270,14 +277,21 @@ extension RainSoundPlayerViewController {
             .bind(to: viewModel.previousTrigger)
             .disposed(by: disposeBag)
         
-        // Next 버튼 (나중에 구현)
+        // Next 버튼
         nextButton.rx.tap
             .bind(to: viewModel.nextTrigger)
             .disposed(by: disposeBag)
         
+        // Repeat 버튼
         repeatButton.rx.tap
             .bind(to: viewModel.repeatTrigger)
             .disposed(by: disposeBag)
+        
+        // Shuffle 버튼
+        shuffleButton.rx.tap
+               .bind(to: viewModel.shuffleTrigger)
+               .disposed(by: disposeBag)
+       
     }
     
     private func setupNavigationBar() {

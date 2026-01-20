@@ -26,6 +26,10 @@ class RainSoundPlayerViewModel {
     let nextTrigger = PublishRelay<Void>()
     let seekTo = PublishRelay<Float>() // 0.0 ~ 1.0 (progressView의 비율)
     let repeatTrigger = PublishRelay<Void>()
+    let shuffleTrigger = PublishRelay<Void>()
+    
+    private var shuffledIndices: [Int] = []  // 셔플된 인덱스 배열
+    private var currentShufflePosition: Int = 0  // 현재 셔플 위치
     
     // MARK: - Outputs (ViewModel에서 UI로)
     let isPlaying = BehaviorRelay<Bool>(value: false)
@@ -35,6 +39,7 @@ class RainSoundPlayerViewModel {
     let albumImage = BehaviorRelay<UIImage?>(value: nil)
     let titleText = BehaviorRelay<String>(value: "")
     let isRepeatEnabled = BehaviorRelay<Bool>(value: false)
+    let isShuffleEnabled = BehaviorRelay<Bool>(value: false)
     
     // 현재 아이템
     private var currentItem: SoundItems {
@@ -125,40 +130,136 @@ class RainSoundPlayerViewModel {
                 self?.toggleRepeat()
             })
             .disposed(by: disposeBag)
+        
+        shuffleTrigger
+            .subscribe(onNext: { [weak self] in
+                self?.toggleShuffle()
+            })
+            .disposed(by: disposeBag)
     }
     
     // MARK: - Track Navigation
     private func moveToPrevious() {
-        let newIndex = currentIndex.value - 1
-        
-        // 첫 번째 트랙이면 마지막으로
-        if newIndex < 0 {
-            currentIndex.accept(allItems.count - 1)
+        if isShuffleEnabled.value {
+            moveToPreviousShuffle()
         } else {
-            currentIndex.accept(newIndex)
+            moveToPreviousNormal()
         }
-        
-        loadNewTrack()
+    }
+    private func moveToNext() {
+        if isShuffleEnabled.value {
+            moveToNextShuffle()
+        } else {
+            moveToNextNormal()
+        }
     }
     
-    private func moveToNext() {
-        let newIndex = currentIndex.value + 1
-        
-        // 마지막 트랙이면 첫 번째로
-        if newIndex >= allItems.count {
-            currentIndex.accept(0)
-        } else {
-            currentIndex.accept(newIndex)
+    // 일반 모드 Previous
+     private func moveToPreviousNormal() {
+         let newIndex = currentIndex.value - 1
+         
+         if newIndex < 0 {
+             currentIndex.accept(allItems.count - 1)
+         } else {
+             currentIndex.accept(newIndex)
+         }
+         
+         loadNewTrack()
+     }
+    
+    // 일반 모드 Next
+        private func moveToNextNormal() {
+            let newIndex = currentIndex.value + 1
+            
+            if newIndex >= allItems.count {
+                currentIndex.accept(0)
+            } else {
+                currentIndex.accept(newIndex)
+            }
+            
+            loadNewTrack()
         }
-        
-        loadNewTrack()
-    }
+    
+    // Shuffle 모드 Previous
+       private func moveToPreviousShuffle() {
+           guard !shuffledIndices.isEmpty else {
+               createShuffledPlaylist()
+               return
+           }
+           
+           currentShufflePosition -= 1
+           
+           if currentShufflePosition < 0 {
+               currentShufflePosition = shuffledIndices.count - 1
+           }
+           
+           let newIndex = shuffledIndices[currentShufflePosition]
+           currentIndex.accept(newIndex)
+           loadNewTrack()
+           
+           print("Shuffle Previous: position \(currentShufflePosition), track: \(allItems[newIndex].title)")
+       }
+       
+       // Shuffle 모드 Next
+       private func moveToNextShuffle() {
+           guard !shuffledIndices.isEmpty else {
+               createShuffledPlaylist()
+               return
+           }
+           
+           currentShufflePosition += 1
+           
+           if currentShufflePosition >= shuffledIndices.count {
+               // 셔플 리스트 끝나면 새로 섞기
+               createShuffledPlaylist()
+               currentShufflePosition = 0
+           }
+           
+           let newIndex = shuffledIndices[currentShufflePosition]
+           currentIndex.accept(newIndex)
+           loadNewTrack()
+           
+           print("Shuffle Next: position \(currentShufflePosition), track: \(allItems[newIndex].title)")
+       }
     
     private func toggleRepeat() {
         let newValue = !isRepeatEnabled.value
         isRepeatEnabled.accept(newValue)
         print("Repeat mode: \(newValue ? "ON" : "OFF")")
     }
+    
+    private func toggleShuffle() {
+        let newValue = !isShuffleEnabled.value
+        isShuffleEnabled.accept(newValue)
+        
+        if newValue {
+            // Shuffle ON: 셔플 배열 생성
+            createShuffledPlaylist()
+            print("Shuffle mode: ON")
+        } else {
+            // Shuffle OFF: 셔플 배열 초기화
+            shuffledIndices.removeAll()
+            print("Shuffle mode: OFF")
+        }
+    }
+    
+    private func createShuffledPlaylist() {
+           // 현재 재생 중인 트랙을 제외한 나머지를 셔플
+           var indices = Array(0..<allItems.count)
+           let currentIdx = currentIndex.value
+           
+           // 현재 트랙 제거
+           indices.removeAll { $0 == currentIdx }
+           
+           // 나머지를 섞기
+           indices.shuffle()
+           
+           // 현재 트랙을 맨 앞에 배치
+           shuffledIndices = [currentIdx] + indices
+           currentShufflePosition = 0
+           
+           print("Shuffled playlist: \(shuffledIndices)")
+       }
     
     private func loadNewTrack() {
         // 재생 중이었는지 확인
