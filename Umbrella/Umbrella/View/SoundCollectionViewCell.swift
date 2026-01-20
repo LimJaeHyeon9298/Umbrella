@@ -13,14 +13,11 @@ import RxSwift
 
 class SoundCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
     static let reuseIdentifier = "SoundCell"
-    var player:AVAudioPlayer?
-    var soundFileName:String?
-    var soundFileType:String?
+    var disposeBag = DisposeBag()  // prepareForReuse에서 초기화
     
-    let tapSubject = PublishSubject<(String, String)>()
-       let disposeBag = DisposeBag()
-    
+    // MARK: - UI Components
     var imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 16
@@ -31,9 +28,9 @@ class SoundCollectionViewCell: UICollectionViewCell {
         $0.textColor = .white
         $0.font = UIFont.boldSystemFont(ofSize: 16)
         $0.textAlignment = .center
-        
     }
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpLayout()
@@ -43,6 +40,7 @@ class SoundCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Setup
     func setUpLayout() {
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
@@ -54,22 +52,18 @@ class SoundCollectionViewCell: UICollectionViewCell {
         titleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        contentView.addGestureRecognizer(tapGesture)
     }
     
-    func configure(with item:SoundItems) {
+    func configure(with item: SoundItems) {
         imageView.image = item.backgroundImage
         titleLabel.text = item.title
-        soundFileName = item.fileName
-        soundFileType = item.fileType
     }
     
-    @objc func handleTap() {
-            guard let fileName = soundFileName, let fileType = soundFileType else { return }
-            tapSubject.onNext((fileName, fileType))
-     }
+    // MARK: - Reuse
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()  // DisposeBag 초기화로 구독 해제
+    }
 }
 
 
