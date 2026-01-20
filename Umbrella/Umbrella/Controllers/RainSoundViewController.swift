@@ -104,30 +104,44 @@ class RainSoundViewController:UIViewController {
        }
     
     func binds() {
-            // CollectionView에 items 바인딩
-            viewModel.items
-                .bind(to: collectionView.rx.items(
-                    cellIdentifier: SoundCollectionViewCell.reuseIdentifier,
-                    cellType: SoundCollectionViewCell.self
-                )) { index, item, cell in
-                    cell.configure(with: item)
-                }
-                .disposed(by: disposeBag)
-            
-            // Cell 선택 이벤트 처리
-            collectionView.rx.modelSelected(SoundItems.self)
-                .subscribe(onNext: { [weak self] item in
-                    self?.navigateToPlayer(with: item)
-                })
-                .disposed(by: disposeBag)
-        }
+        // CollectionView에 items 바인딩
+        viewModel.items
+            .bind(to: collectionView.rx.items(
+                cellIdentifier: SoundCollectionViewCell.reuseIdentifier,
+                cellType: SoundCollectionViewCell.self
+            )) { index, item, cell in
+                cell.configure(with: item)
+            }
+            .disposed(by: disposeBag)
         
-        // MARK: - Navigation
-        private func navigateToPlayer(with item: SoundItems) {
-            let playerViewModel = RainSoundPlayerViewModel(soundItems: item)
-            let playerVC = RainSoundPlayerViewController(viewModel: playerViewModel)
-            navigationController?.pushViewController(playerVC, animated: true)
-        }
+        // Cell 선택 이벤트 처리 - indexPath도 함께 받기
+        Observable.zip(
+            collectionView.rx.modelSelected(SoundItems.self),
+            collectionView.rx.itemSelected
+        )
+        .subscribe(onNext: { [weak self] (item, indexPath) in
+            self?.navigateToPlayer(startIndex: indexPath.row)
+        })
+        .disposed(by: disposeBag)
+    }
+
+    // MARK: - Navigation
+    private func navigateToPlayer(startIndex: Int) {
+        // ViewModel에서 전체 리스트 가져오기
+        var allItems: [SoundItems] = []
+        
+        viewModel.items
+            .take(1)
+            .subscribe(onNext: { items in
+                allItems = items
+            })
+            .disposed(by: DisposeBag())
+        
+        // 전체 리스트와 시작 인덱스 전달
+        let playerViewModel = RainSoundPlayerViewModel(allItems: allItems, startIndex: startIndex)
+        let playerVC = RainSoundPlayerViewController(viewModel: playerViewModel)
+        navigationController?.pushViewController(playerVC, animated: true)
+    }
     
     func toggleSound(for fileName: String, fileType: String) {
         guard let player = audioPlayers[fileName] else {

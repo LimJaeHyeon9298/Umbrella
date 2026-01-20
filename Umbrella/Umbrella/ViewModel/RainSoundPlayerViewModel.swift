@@ -12,16 +12,21 @@ import AVFoundation
 
 class RainSoundPlayerViewModel {
     
-    let soundItem: SoundItems
+    // MARK: - Properties
+    private let allItems: [SoundItems]  // 전체 리스트
+    private let currentIndex: BehaviorRelay<Int>  // 현재 인덱스
+    
     private var audioPlayer: AVAudioPlayer?
     private var timer: Timer?
     private let disposeBag = DisposeBag()
     
+    // MARK: - Inputs (UI에서 ViewModel로)
     let playPauseTrigger = PublishRelay<Void>()
     let previousTrigger = PublishRelay<Void>()
     let nextTrigger = PublishRelay<Void>()
-    let seekTo = PublishRelay<Float>()
+    let seekTo = PublishRelay<Float>() // 0.0 ~ 1.0 (progressView의 비율)
     
+    // MARK: - Outputs (ViewModel에서 UI로)
     let isPlaying = BehaviorRelay<Bool>(value: false)
     let currentTimeText = BehaviorRelay<String>(value: "0:00")
     let totalTimeText = BehaviorRelay<String>(value: "0:00")
@@ -29,13 +34,19 @@ class RainSoundPlayerViewModel {
     let albumImage = BehaviorRelay<UIImage?>(value: nil)
     let titleText = BehaviorRelay<String>(value: "")
     
-    init(soundItems: SoundItems) {
-        self.soundItem = soundItems
+    // 현재 아이템
+    private var currentItem: SoundItems {
+        return allItems[currentIndex.value]
+    }
+    
+    // MARK: - Init
+    init(allItems: [SoundItems], startIndex: Int) {
+        self.allItems = allItems
+        self.currentIndex = BehaviorRelay(value: startIndex)
         
         setupInitialValues()
         setupAudioPlayer()
         setupBindings()
-        
     }
     
     deinit {
@@ -44,30 +55,35 @@ class RainSoundPlayerViewModel {
         print("RainSoundPlayerViewModel deinit")
     }
     
+    // MARK: - Setup
     private func setupInitialValues() {
-        albumImage.accept(soundItem.backgroundImage)
-        titleText.accept(soundItem.fileName)
+        albumImage.accept(currentItem.backgroundImage)
+        titleText.accept(currentItem.title)
     }
     
-    
-    
     private func setupAudioPlayer() {
-        guard let url = Bundle.main.url(forResource: soundItem.fileName,
-                                        withExtension: soundItem.fileType) else {
-            print("Failed to find sound file: \(soundItem.fileName).\(soundItem.fileType)")
+        guard let url = Bundle.main.url(forResource: currentItem.fileName,
+                                       withExtension: currentItem.fileType) else {
+            print("Failed to find sound file: \(currentItem.fileName).\(currentItem.fileType)")
             return
         }
         
         do {
+            // 기존 플레이어 정리
+            audioPlayer?.stop()
+            
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.prepareToPlay()
             
             if let duration = audioPlayer?.duration {
                 totalTimeText.accept(formatTime(duration))
-                
             }
             
-            print("Audio player loaded: \(soundItem.fileName)")
+            // 재생 상태 초기화
+            currentTimeText.accept("0:00")
+            progress.accept(0.0)
+            
+            print("Audio player loaded: \(currentItem.fileName)")
         } catch {
             print("Failed to load audio player: \(error.localizedDescription)")
         }
@@ -87,6 +103,74 @@ class RainSoundPlayerViewModel {
                 self?.seek(to: progress)
             })
             .disposed(by: disposeBag)
+        
+        // Previous 버튼
+        previousTrigger
+            .subscribe(onNext: { [weak self] in
+                self?.moveToPrevious()
+            })
+            .disposed(by: disposeBag)
+        
+        // Next 버튼
+        nextTrigger
+            .subscribe(onNext: { [weak self] in
+                self?.moveToNext()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Track Navigation
+    private func moveToPrevious() {
+        let newIndex = currentIndex.value - 1
+        
+        // 첫 번째 트랙이면 마지막으로
+        if newIndex < 0 {
+            currentIndex.accept(allItems.count - 1)
+        } else {
+            currentIndex.accept(newIndex)
+        }
+        
+        loadNewTrack()
+    }
+    
+    private func moveToNext() {
+        let newIndex = currentIndex.value + 1
+        
+        // 마지막 트랙이면 첫 번째로
+        if newIndex >= allItems.count {
+            currentIndex.accept(0)
+        } else {
+            currentIndex.accept(newIndex)
+        }
+        
+        loadNewTrack()
+    }
+    
+    private func loadNewTrack() {
+        // 재생 중이었는지 확인
+        let wasPlaying = isPlaying.value
+        
+        // 기존 재생 정지
+        if wasPlaying {
+            stopTimer()
+            audioPlayer?.stop()
+        }
+        
+        // UI 업데이트
+        albumImage.accept(currentItem.backgroundImage)
+        titleText.accept(currentItem.title)
+        
+        // 새 플레이어 로드
+        setupAudioPlayer()
+        
+        // 이전에 재생 중이었으면 자동 재생
+        if wasPlaying {
+            audioPlayer?.play()
+            startTimer()
+            isPlaying.accept(true)
+        } else {
+            isPlaying.accept(false)
+        }
     }
     
     // MARK: - Player Controls
@@ -130,6 +214,11 @@ class RainSoundPlayerViewModel {
         
         currentTimeText.accept(formatTime(current))
         progress.accept(Float(current / total))
+        
+        // 트랙 끝나면 자동으로 다음
+        if current >= total - 0.1 && total > 0 {
+            moveToNext()
+        }
     }
     
     // MARK: - Helpers
