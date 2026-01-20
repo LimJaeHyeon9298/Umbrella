@@ -225,12 +225,26 @@ class RainSoundPlayerViewModel {
     private func toggleRepeat() {
         let newValue = !isRepeatEnabled.value
         isRepeatEnabled.accept(newValue)
+        
+        // Repeat ON이면 Shuffle OFF
+        if newValue && isShuffleEnabled.value {
+            isShuffleEnabled.accept(false)
+            shuffledIndices.removeAll()
+            print("Shuffle disabled (Repeat enabled)")
+        }
+        
         print("Repeat mode: \(newValue ? "ON" : "OFF")")
     }
     
     private func toggleShuffle() {
         let newValue = !isShuffleEnabled.value
         isShuffleEnabled.accept(newValue)
+        
+        // Shuffle ON이면 Repeat OFF
+        if newValue && isRepeatEnabled.value {
+            isRepeatEnabled.accept(false)
+            print("Repeat disabled (Shuffle enabled)")
+        }
         
         if newValue {
             // Shuffle ON: 셔플 배열 생성
