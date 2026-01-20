@@ -33,7 +33,7 @@ class RainSoundPlayerViewController: UIViewController {
     
     private var progressView = UIProgressView().then {
         $0.progressTintColor = .systemBlue
-        $0.trackTintColor = .systemGray5
+        $0.trackTintColor = .white
         $0.layer.cornerRadius = 2
         $0.clipsToBounds = true
         $0.progress = 0.0
