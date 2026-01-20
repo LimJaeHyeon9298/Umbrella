@@ -25,6 +25,7 @@ class RainSoundPlayerViewModel {
     let previousTrigger = PublishRelay<Void>()
     let nextTrigger = PublishRelay<Void>()
     let seekTo = PublishRelay<Float>() // 0.0 ~ 1.0 (progressView의 비율)
+    let repeatTrigger = PublishRelay<Void>()
     
     // MARK: - Outputs (ViewModel에서 UI로)
     let isPlaying = BehaviorRelay<Bool>(value: false)
@@ -33,6 +34,7 @@ class RainSoundPlayerViewModel {
     let progress = BehaviorRelay<Float>(value: 0.0)
     let albumImage = BehaviorRelay<UIImage?>(value: nil)
     let titleText = BehaviorRelay<String>(value: "")
+    let isRepeatEnabled = BehaviorRelay<Bool>(value: false)
     
     // 현재 아이템
     private var currentItem: SoundItems {
@@ -117,6 +119,12 @@ class RainSoundPlayerViewModel {
                 self?.moveToNext()
             })
             .disposed(by: disposeBag)
+        
+        repeatTrigger
+            .subscribe(onNext: { [weak self] in
+                self?.toggleRepeat()
+            })
+            .disposed(by: disposeBag)
     }
     
     // MARK: - Track Navigation
@@ -144,6 +152,12 @@ class RainSoundPlayerViewModel {
         }
         
         loadNewTrack()
+    }
+    
+    private func toggleRepeat() {
+        let newValue = !isRepeatEnabled.value
+        isRepeatEnabled.accept(newValue)
+        print("Repeat mode: \(newValue ? "ON" : "OFF")")
     }
     
     private func loadNewTrack() {
@@ -217,9 +231,22 @@ class RainSoundPlayerViewModel {
         
         // 트랙 끝나면 자동으로 다음
         if current >= total - 0.1 && total > 0 {
-            moveToNext()
+            handleTrackEnd()
         }
     }
+    
+    private func handleTrackEnd() {
+          if isRepeatEnabled.value {
+              // Repeat 모드: 현재 트랙 처음부터 다시 재생
+              audioPlayer?.currentTime = 0
+              audioPlayer?.play()
+              print("Repeating current track")
+          } else {
+              // 일반 모드: 다음 트랙으로 이동
+              moveToNext()
+              print("Moving to next track")
+          }
+      }
     
     // MARK: - Helpers
     private func formatTime(_ time: TimeInterval) -> String {

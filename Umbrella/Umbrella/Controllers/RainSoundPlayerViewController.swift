@@ -81,9 +81,12 @@ class RainSoundPlayerViewController: UIViewController {
     }
     
     private var repeatButton = UIButton(type: .system).then {
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
-        $0.setImage(UIImage(systemName: "repeat", withConfiguration: config), for: .normal)
-        $0.tintColor = .white
+        let normalConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
+        let selectedConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)  // 두껍게만
+        
+        $0.setImage(UIImage(systemName: "repeat", withConfiguration: normalConfig), for: .normal)
+        $0.setImage(UIImage(systemName: "repeat.1", withConfiguration: selectedConfig), for: .selected)
+        $0.tintColor = .white  // 흰색 고정
         $0.contentMode = .scaleAspectFit
         $0.alpha = 0.6
     }
@@ -238,6 +241,23 @@ extension RainSoundPlayerViewController {
             .bind(to: progressView.rx.progress)
             .disposed(by: disposeBag)
         
+        viewModel.isRepeatEnabled
+            .bind(to: repeatButton.rx.isSelected)
+            .disposed(by: disposeBag)
+        
+        // Repeat 버튼 색상
+//        viewModel.isRepeatEnabled
+//            .map { $0 ? UIColor.systemBlue : UIColor.white }
+//            .bind(to: repeatButton.rx.tintColor)
+//            .disposed(by: disposeBag)
+        
+        // Repeat 버튼 투명도
+//        viewModel.isRepeatEnabled
+//            .map { $0 ? 1.0 : 0.6 }
+//            .bind(to: repeatButton.rx.alpha)
+//            .disposed(by: disposeBag)
+        
+        
         // MARK: - Inputs (UI → ViewModel)
         
         // Play/Pause 버튼
@@ -253,6 +273,10 @@ extension RainSoundPlayerViewController {
         // Next 버튼 (나중에 구현)
         nextButton.rx.tap
             .bind(to: viewModel.nextTrigger)
+            .disposed(by: disposeBag)
+        
+        repeatButton.rx.tap
+            .bind(to: viewModel.repeatTrigger)
             .disposed(by: disposeBag)
     }
     
