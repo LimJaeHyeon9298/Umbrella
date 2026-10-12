@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -13,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         UILabel.appearance().textColor = UIColor.white
-        window?.rootViewController = MainTabController()
+        window?.rootViewController = UIHostingController(rootView: HubRootView())
         window?.makeKeyAndVisible()
     }
 }
