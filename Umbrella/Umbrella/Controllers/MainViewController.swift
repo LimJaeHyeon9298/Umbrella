@@ -13,7 +13,6 @@ import Then
 import SnapKit
 import RxSwift
 import RxCocoa
-import FLAnimatedImage
 
 class MainViewController: UIViewController {
     
