@@ -1,6 +1,15 @@
 {
-  "originHash" : "0c88a20438520365288757efd0809a9dfeb28f6d1010f48808914536dd66d136",
+  "originHash" : "9409e5bc0a2c395b980c28b195b96f953c90352e0c3b362c1a73ab26c7376ebe",
   "pins" : [
+    {
+      "identity" : "hub-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/LimJaeHyeon9298/hub-kit.git",
+      "state" : {
+        "revision" : "88f28cc32fbc2161604b6d2db876b6a43221bbda",
+        "version" : "0.2.0"
+      }
+    },
     {
       "identity" : "rxswift",
       "kind" : "remoteSourceControl",

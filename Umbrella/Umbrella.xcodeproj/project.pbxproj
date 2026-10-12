@@ -31,6 +31,8 @@
 		46AA832C2C253CCC0065FFB0 /* 우산챙겨요.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46AA832B2C253CCC0065FFB0 /* 우산챙겨요.plist */; };
 		46AA832E2C256C690065FFB0 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA832D2C256C690065FFB0 /* MainTabController.swift */; };
 		46AA83322C2572690065FFB0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA83312C2572690065FFB0 /* SnapKit */; };
+		A1B2C3D40000000000000003 /* HubKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000002 /* HubKitUI */; };
+		A1B2C3D40000000000000005 /* HubRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000004 /* HubRootView.swift */; };
 		46AA83352C25727A0065FFB0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA83342C25727A0065FFB0 /* Then */; };
 		46AA83372C26DF380065FFB0 /* CumstomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83362C26DF380065FFB0 /* CumstomTabBar.swift */; };
 		46AA833A2C26DF780065FFB0 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA83392C26DF780065FFB0 /* RxCocoa */; };
@@ -88,6 +90,7 @@
 		46AA82CF2C253A340065FFB0 /* Umbrella.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Umbrella.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46AA82D22C253A340065FFB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46AA82D42C253A340065FFB0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000004 /* HubRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubRootView.swift; sourceTree = "<group>"; };
 		46AA82D92C253A340065FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		46AA82DB2C253A360065FFB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		46AA82DE2C253A360065FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -138,6 +141,7 @@
 			files = (
 				46AA833A2C26DF780065FFB0 /* RxCocoa in Frameworks */,
 				46AA83322C2572690065FFB0 /* SnapKit in Frameworks */,
+				A1B2C3D40000000000000003 /* HubKitUI in Frameworks */,
 				46AA833C2C26DF780065FFB0 /* RxSwift in Frameworks */,
 				46AA83352C25727A0065FFB0 /* Then in Frameworks */,
 			);
@@ -192,6 +196,7 @@
 				46AA831F2C253B760065FFB0 /* Umbrella.entitlements */,
 				46AA82D22C253A340065FFB0 /* AppDelegate.swift */,
 				46AA82D42C253A340065FFB0 /* SceneDelegate.swift */,
+				A1B2C3D40000000000000004 /* HubRootView.swift */,
 				46AA82D82C253A340065FFB0 /* Main.storyboard */,
 				46AA82DB2C253A360065FFB0 /* Assets.xcassets */,
 				46AA82DD2C253A360065FFB0 /* LaunchScreen.storyboard */,
@@ -321,6 +326,7 @@
 				46AA83342C25727A0065FFB0 /* Then */,
 				46AA83392C26DF780065FFB0 /* RxCocoa */,
 				46AA833B2C26DF780065FFB0 /* RxSwift */,
+				A1B2C3D40000000000000002 /* HubKitUI */,
 			);
 			productName = Umbrella;
 			productReference = 46AA82CF2C253A340065FFB0 /* Umbrella.app */;
@@ -398,6 +404,7 @@
 				46AA83302C2572690065FFB0 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				46AA83332C25727A0065FFB0 /* XCRemoteSwiftPackageReference "Then" */,
 				46AA83382C26DF780065FFB0 /* XCRemoteSwiftPackageReference "rxswift" */,
+				A1B2C3D40000000000000001 /* XCRemoteSwiftPackageReference "hub-kit" */,
 			);
 			productRefGroup = 46AA82D02C253A340065FFB0 /* Products */;
 			projectDirPath = "";
@@ -465,6 +472,7 @@
 				46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */,
 				46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */,
 				46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */,
+				A1B2C3D40000000000000005 /* HubRootView.swift in Sources */,
 				46AA830B2C253B3C0065FFB0 /* MainViewController.swift in Sources */,
 				46AA830E2C253B3C0065FFB0 /* RainSoundViewController.swift in Sources */,
 				46AA83162C253B570065FFB0 /* SearchResultCell.swift in Sources */,
@@ -866,6 +874,14 @@
 				version = 6.7.1;
 			};
 		};
+		A1B2C3D40000000000000001 /* XCRemoteSwiftPackageReference "hub-kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LimJaeHyeon9298/hub-kit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -888,6 +904,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 46AA83382C26DF780065FFB0 /* XCRemoteSwiftPackageReference "rxswift" */;
 			productName = RxSwift;
+		};
+		A1B2C3D40000000000000002 /* HubKitUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D40000000000000001 /* XCRemoteSwiftPackageReference "hub-kit" */;
+			productName = HubKitUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

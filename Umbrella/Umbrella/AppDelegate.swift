@@ -6,11 +6,18 @@
 //
 
 import UIKit
+import HubKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate{
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self // <- 추가
+        // apiKey는 앱에 넣어도 되는 공개 키다. registersDevice는 기본값(꺼짐)으로 둔다.
+        Hub.configure(HubConfiguration(
+            appId: "umbrella",
+            baseURL: URL(string: "https://fxhnbyunwfusaeskilnh.supabase.co")!,
+            apiKey: "sb_publishable_mEPChJ7YzXIt39vfq_-Jtg_QGkP_df1"
+        ))
         
         sleep(2) 
         return true
