@@ -117,6 +117,40 @@ final class SoundPlayer {
         if let image = UIImage(named: scene.imageName) {
             info[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
         }
+        if #available(iOS 26.0, *) {
+            addAnimatedArtwork(to: &info)
+        }
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+    }
+
+    /// 반복 영상 장면이면 잠금 화면에 움직이는 그림을 넘긴다. 정사각형과 세로형을 따로 준다.
+    @available(iOS 26.0, *)
+    private func addAnimatedArtwork(to info: inout [String: Any]) {
+        let supported = MPNowPlayingInfoCenter.supportedAnimatedArtworkKeys
+        let variants = [
+            (MPNowPlayingInfoProperty1x1AnimatedArtwork, scene.videoURL, UIImage(named: scene.imageName), scene.id),
+            (MPNowPlayingInfoProperty3x4AnimatedArtwork, scene.tallVideoURL, UIImage(named: scene.tallImageName), "\(scene.id)-3x4"),
+        ]
+        #if DEBUG
+        if scene.videoName != nil { print("[Petrichor] 잠금 화면 영상 지원 키: \(supported)") }
+        #endif
+        for (key, url, preview, artworkID) in variants where supported.contains(key) {
+            guard let url, let preview else { continue }
+            info[key] = MPMediaItemAnimatedArtwork(
+                artworkID: artworkID,
+                previewImageRequestHandler: { size, completion in
+                    #if DEBUG
+                    print("[Petrichor] \(artworkID) 미리보기 요청 \(size)")
+                    #endif
+                    completion(preview)
+                },
+                videoAssetFileURLRequestHandler: { size, completion in
+                    #if DEBUG
+                    print("[Petrichor] \(artworkID) 영상 요청 \(size)")
+                    #endif
+                    completion(url)
+                }
+            )
+        }
     }
 }

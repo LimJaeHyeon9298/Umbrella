@@ -56,6 +56,11 @@
 		B1B2C3D40000000000000002 /* RainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D40000000000000001 /* RainScene.swift */; };
 		B1B2C3D40000000000000004 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D40000000000000003 /* SoundPlayer.swift */; };
 		B1B2C3D40000000000000006 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D40000000000000005 /* PlayerView.swift */; };
+		C1B2C3D40000000000000001 /* storm.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000000 /* storm.mp4 */; };
+		C1B2C3D40000000000000003 /* storm-3x4.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000002 /* storm-3x4.mp4 */; };
+		C1B2C3D40000000000000005 /* storm.png in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000004 /* storm.png */; };
+		C1B2C3D40000000000000007 /* storm-3x4.png in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000006 /* storm-3x4.png */; };
+		C1B2C3D40000000000000009 /* LoopingVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000008 /* LoopingVideoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +143,11 @@
 		B1B2C3D40000000000000001 /* RainScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainScene.swift; sourceTree = "<group>"; };
 		B1B2C3D40000000000000003 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		B1B2C3D40000000000000005 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		C1B2C3D40000000000000000 /* storm.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = storm.mp4; sourceTree = "<group>"; };
+		C1B2C3D40000000000000002 /* storm-3x4.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "storm-3x4.mp4"; sourceTree = "<group>"; };
+		C1B2C3D40000000000000004 /* storm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storm.png; sourceTree = "<group>"; };
+		C1B2C3D40000000000000006 /* storm-3x4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "storm-3x4.png"; sourceTree = "<group>"; };
+		C1B2C3D40000000000000008 /* LoopingVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				B1B2C3D40000000000000005 /* PlayerView.swift */,
+				C1B2C3D40000000000000008 /* LoopingVideoView.swift */,
 				46AA83132C253B570065FFB0 /* SearchResultCell.swift */,
 				46AA83142C253B570065FFB0 /* WeatherCell.swift */,
 				46AA83362C26DF380065FFB0 /* CumstomTabBar.swift */,
@@ -274,6 +285,10 @@
 			children = (
 				46AA832B2C253CCC0065FFB0 /* 우산챙겨요.plist */,
 				46AA83202C253B850065FFB0 /* rain.mp3 */,
+				C1B2C3D40000000000000006 /* storm-3x4.png */,
+				C1B2C3D40000000000000004 /* storm.png */,
+				C1B2C3D40000000000000002 /* storm-3x4.mp4 */,
+				C1B2C3D40000000000000000 /* storm.mp4 */,
 				46C724042C5760FD00A781B6 /* thunder.mp3 */,
 				46C724062C57613D00A781B6 /* birdsoundrain.wav */,
 				46C724022C575E9300A781B6 /* rainrain.wav */,
@@ -432,6 +447,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				46AA83222C253B850065FFB0 /* rain.mp3 in Resources */,
+				C1B2C3D40000000000000007 /* storm-3x4.png in Resources */,
+				C1B2C3D40000000000000005 /* storm.png in Resources */,
+				C1B2C3D40000000000000003 /* storm-3x4.mp4 in Resources */,
+				C1B2C3D40000000000000001 /* storm.mp4 in Resources */,
 				46AA82DC2C253A360065FFB0 /* Assets.xcassets in Resources */,
 				46C724052C5760FD00A781B6 /* thunder.mp3 in Resources */,
 				46C724032C575E9300A781B6 /* rainrain.wav in Resources */,
@@ -482,6 +501,7 @@
 				46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */,
 				46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */,
 				B1B2C3D40000000000000006 /* PlayerView.swift in Sources */,
+				C1B2C3D40000000000000009 /* LoopingVideoView.swift in Sources */,
 				B1B2C3D40000000000000004 /* SoundPlayer.swift in Sources */,
 				B1B2C3D40000000000000002 /* RainScene.swift in Sources */,
 				A1B2C3D40000000000000005 /* HubRootView.swift in Sources */,
@@ -678,7 +698,7 @@
 				CODE_SIGN_ENTITLEMENTS = Umbrella/Umbrella.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
@@ -715,7 +735,7 @@
 				CODE_SIGN_ENTITLEMENTS = Umbrella/Umbrella.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;

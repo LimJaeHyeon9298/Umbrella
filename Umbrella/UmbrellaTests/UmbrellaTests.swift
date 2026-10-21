@@ -24,6 +24,11 @@ final class UmbrellaTests: XCTestCase {
         for scene in RainScene.all {
             XCTAssertNotNil(scene.soundURL, "\(scene.id): 소리 파일이 번들에 없다")
             XCTAssertNotNil(UIImage(named: scene.imageName), "\(scene.id): 이미지가 없다")
+            if scene.videoName != nil {
+                XCTAssertNotNil(scene.videoURL, "\(scene.id): 영상이 없다")
+                XCTAssertNotNil(scene.tallVideoURL, "\(scene.id): 세로 영상이 없다")
+                XCTAssertNotNil(UIImage(named: scene.tallImageName), "\(scene.id): 세로 미리보기 이미지가 없다")
+            }
         }
     }
 

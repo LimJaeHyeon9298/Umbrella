@@ -33,13 +33,19 @@ struct PlayerView: View {
         .foregroundStyle(.white)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
-            Image(player.scene.imageName)
-                .resizable()
-                .scaledToFill()
-                .overlay(Color.black.opacity(0.3))
-                .id(player.scene.id)
-                .transition(.opacity)
-                .ignoresSafeArea()
+            Group {
+                if let url = player.scene.videoURL {
+                    LoopingVideoView(url: url)
+                } else {
+                    Image(player.scene.imageName)
+                        .resizable()
+                        .scaledToFill()
+                }
+            }
+            .overlay(Color.black.opacity(0.3))
+            .id(player.scene.id)
+            .transition(.opacity)
+            .ignoresSafeArea()
         }
         .animation(.easeInOut(duration: 0.8), value: player.scene)
         .sheet(isPresented: $isPickingScene) {
