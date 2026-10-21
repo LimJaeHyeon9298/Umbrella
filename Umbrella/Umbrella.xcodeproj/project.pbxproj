@@ -31,8 +31,6 @@
 		46AA832C2C253CCC0065FFB0 /* 우산챙겨요.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46AA832B2C253CCC0065FFB0 /* 우산챙겨요.plist */; };
 		46AA832E2C256C690065FFB0 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA832D2C256C690065FFB0 /* MainTabController.swift */; };
 		46AA83322C2572690065FFB0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA83312C2572690065FFB0 /* SnapKit */; };
-		A1B2C3D40000000000000003 /* HubKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000002 /* HubKitUI */; };
-		A1B2C3D40000000000000005 /* HubRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000004 /* HubRootView.swift */; };
 		46AA83352C25727A0065FFB0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA83342C25727A0065FFB0 /* Then */; };
 		46AA83372C26DF380065FFB0 /* CumstomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA83362C26DF380065FFB0 /* CumstomTabBar.swift */; };
 		46AA833A2C26DF780065FFB0 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 46AA83392C26DF780065FFB0 /* RxCocoa */; };
@@ -53,6 +51,11 @@
 		46F109972C2AB133006AD5F6 /* SoundItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F109962C2AB133006AD5F6 /* SoundItems.swift */; };
 		46F109992C2AB1D0006AD5F6 /* RainSoundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F109982C2AB1D0006AD5F6 /* RainSoundViewModel.swift */; };
 		46F1099B2C2AB230006AD5F6 /* SoundCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F1099A2C2AB230006AD5F6 /* SoundCollectionViewCell.swift */; };
+		A1B2C3D40000000000000003 /* HubKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000002 /* HubKitUI */; };
+		A1B2C3D40000000000000005 /* HubRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000004 /* HubRootView.swift */; };
+		B1B2C3D40000000000000002 /* RainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D40000000000000001 /* RainScene.swift */; };
+		B1B2C3D40000000000000004 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D40000000000000003 /* SoundPlayer.swift */; };
+		B1B2C3D40000000000000006 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D40000000000000005 /* PlayerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,7 +93,6 @@
 		46AA82CF2C253A340065FFB0 /* Umbrella.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Umbrella.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46AA82D22C253A340065FFB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46AA82D42C253A340065FFB0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		A1B2C3D40000000000000004 /* HubRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubRootView.swift; sourceTree = "<group>"; };
 		46AA82D92C253A340065FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		46AA82DB2C253A360065FFB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		46AA82DE2C253A360065FFB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -132,6 +134,10 @@
 		46F109962C2AB133006AD5F6 /* SoundItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundItems.swift; sourceTree = "<group>"; };
 		46F109982C2AB1D0006AD5F6 /* RainSoundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainSoundViewModel.swift; sourceTree = "<group>"; };
 		46F1099A2C2AB230006AD5F6 /* SoundCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundCollectionViewCell.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000004 /* HubRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HubRootView.swift; sourceTree = "<group>"; };
+		B1B2C3D40000000000000001 /* RainScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainScene.swift; sourceTree = "<group>"; };
+		B1B2C3D40000000000000003 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
+		B1B2C3D40000000000000005 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,6 +247,7 @@
 		46AA83152C253B570065FFB0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B1B2C3D40000000000000005 /* PlayerView.swift */,
 				46AA83132C253B570065FFB0 /* SearchResultCell.swift */,
 				46AA83142C253B570065FFB0 /* WeatherCell.swift */,
 				46AA83362C26DF380065FFB0 /* CumstomTabBar.swift */,
@@ -277,6 +284,7 @@
 		46AA83242C253B8F0065FFB0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B1B2C3D40000000000000001 /* RainScene.swift */,
 				46AA83232C253B8F0065FFB0 /* Theme.swift */,
 				46F109962C2AB133006AD5F6 /* SoundItems.swift */,
 				46E3C8162C49505E006D161D /* HourlyWeather.swift */,
@@ -295,6 +303,7 @@
 		46AA833D2C2832E10065FFB0 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				B1B2C3D40000000000000003 /* SoundPlayer.swift */,
 				46AA83422C28343B0065FFB0 /* MainViewModel.swift */,
 				46AA83402C28342D0065FFB0 /* SettingViewModel.swift */,
 				46F109982C2AB1D0006AD5F6 /* RainSoundViewModel.swift */,
@@ -472,6 +481,9 @@
 				46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */,
 				46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */,
 				46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */,
+				B1B2C3D40000000000000006 /* PlayerView.swift in Sources */,
+				B1B2C3D40000000000000004 /* SoundPlayer.swift in Sources */,
+				B1B2C3D40000000000000002 /* RainScene.swift in Sources */,
 				A1B2C3D40000000000000005 /* HubRootView.swift in Sources */,
 				46AA830B2C253B3C0065FFB0 /* MainViewController.swift in Sources */,
 				46AA830E2C253B3C0065FFB0 /* RainSoundViewController.swift in Sources */,
@@ -591,7 +603,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -648,7 +660,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -678,12 +690,12 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaehyeonLim9298;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -715,12 +727,12 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.3;
+				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaehyeonLim9298;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
