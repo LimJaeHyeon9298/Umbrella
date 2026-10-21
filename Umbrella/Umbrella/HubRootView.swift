@@ -6,13 +6,12 @@
 import SwiftUI
 import HubKitUI
 
-/// 기존 UIKit 루트(MainTabController)를 감싸 HubKit의 업데이트·공지 화면을 그 위에 띄운다.
+/// 재생 화면 위에 HubKit의 업데이트·공지 화면을 띄운다.
 struct HubRootView: View {
     @State private var info: LaunchInfo?
 
     var body: some View {
-        MainTabView()
-            .ignoresSafeArea()
+        PlayerView()
             .hubPresentation(info)
             .task { await load() }
             // UIKit 라이프사이클에서는 scenePhase가 갱신되지 않아 알림으로 받는다.
@@ -34,9 +33,4 @@ struct HubRootView: View {
         """)
         #endif
     }
-}
-
-private struct MainTabView: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> MainTabController { MainTabController() }
-    func updateUIViewController(_ uiViewController: MainTabController, context: Context) {}
 }

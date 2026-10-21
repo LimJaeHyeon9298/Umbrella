@@ -18,8 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             baseURL: URL(string: "https://fxhnbyunwfusaeskilnh.supabase.co")!,
             apiKey: "sb_publishable_mEPChJ7YzXIt39vfq_-Jtg_QGkP_df1"
         ))
-        
-        sleep(2) 
         return true
     }
 
