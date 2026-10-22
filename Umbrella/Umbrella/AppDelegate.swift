@@ -7,6 +7,7 @@
 
 import UIKit
 import HubKit
+import TipKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate{
@@ -18,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             baseURL: URL(string: "https://fxhnbyunwfusaeskilnh.supabase.co")!,
             apiKey: "sb_publishable_mEPChJ7YzXIt39vfq_-Jtg_QGkP_df1"
         ))
+        try? Tips.configure()
         return true
     }
 

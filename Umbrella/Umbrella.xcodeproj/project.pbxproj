@@ -61,6 +61,9 @@
 		C1B2C3D40000000000000005 /* storm.png in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000004 /* storm.png */; };
 		C1B2C3D40000000000000007 /* storm-3x4.png in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000006 /* storm-3x4.png */; };
 		C1B2C3D40000000000000009 /* LoopingVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000008 /* LoopingVideoView.swift */; };
+		D1B2C3D40000000000000001 /* FocusTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B2C3D40000000000000000 /* FocusTimer.swift */; };
+		D1B2C3D40000000000000003 /* RainOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B2C3D40000000000000002 /* RainOverlay.swift */; };
+		D1B2C3D40000000000000005 /* LockScreenTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B2C3D40000000000000004 /* LockScreenTip.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +151,9 @@
 		C1B2C3D40000000000000004 /* storm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storm.png; sourceTree = "<group>"; };
 		C1B2C3D40000000000000006 /* storm-3x4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "storm-3x4.png"; sourceTree = "<group>"; };
 		C1B2C3D40000000000000008 /* LoopingVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoView.swift; sourceTree = "<group>"; };
+		D1B2C3D40000000000000000 /* FocusTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTimer.swift; sourceTree = "<group>"; };
+		D1B2C3D40000000000000002 /* RainOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainOverlay.swift; sourceTree = "<group>"; };
+		D1B2C3D40000000000000004 /* LockScreenTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenTip.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -257,6 +263,8 @@
 		46AA83152C253B570065FFB0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D1B2C3D40000000000000004 /* LockScreenTip.swift */,
+				D1B2C3D40000000000000002 /* RainOverlay.swift */,
 				B1B2C3D40000000000000005 /* PlayerView.swift */,
 				C1B2C3D40000000000000008 /* LoopingVideoView.swift */,
 				46AA83132C253B570065FFB0 /* SearchResultCell.swift */,
@@ -318,6 +326,7 @@
 		46AA833D2C2832E10065FFB0 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				D1B2C3D40000000000000000 /* FocusTimer.swift */,
 				B1B2C3D40000000000000003 /* SoundPlayer.swift */,
 				46AA83422C28343B0065FFB0 /* MainViewModel.swift */,
 				46AA83402C28342D0065FFB0 /* SettingViewModel.swift */,
@@ -500,6 +509,9 @@
 				46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */,
 				46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */,
 				46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */,
+				D1B2C3D40000000000000005 /* LockScreenTip.swift in Sources */,
+				D1B2C3D40000000000000003 /* RainOverlay.swift in Sources */,
+				D1B2C3D40000000000000001 /* FocusTimer.swift in Sources */,
 				B1B2C3D40000000000000006 /* PlayerView.swift in Sources */,
 				C1B2C3D40000000000000009 /* LoopingVideoView.swift in Sources */,
 				B1B2C3D40000000000000004 /* SoundPlayer.swift in Sources */,
@@ -698,7 +710,7 @@
 				CODE_SIGN_ENTITLEMENTS = Umbrella/Umbrella.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
@@ -735,7 +747,7 @@
 				CODE_SIGN_ENTITLEMENTS = Umbrella/Umbrella.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
