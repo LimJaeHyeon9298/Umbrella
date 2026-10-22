@@ -120,3 +120,27 @@ struct PaywallView: View {
         }
     }
 }
+
+extension View {
+    /// 시트 높이를 내용에 맞춘다. 화면 절반으로 고정하면 작은 아이폰에서 위가 잘린다.
+    func fittedSheetHeight() -> some View {
+        modifier(FittedSheetHeight())
+    }
+}
+
+private struct FittedSheetHeight: ViewModifier {
+    @State private var height: CGFloat = 420
+
+    func body(content: Content) -> some View {
+        content
+            .fixedSize(horizontal: false, vertical: true)
+            .background {
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear { height = proxy.size.height }
+                        .onChange(of: proxy.size.height) { _, newHeight in height = newHeight }
+                }
+            }
+            .presentationDetents([.height(height)])
+    }
+}

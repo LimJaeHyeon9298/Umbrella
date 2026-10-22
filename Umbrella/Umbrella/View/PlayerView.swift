@@ -131,7 +131,7 @@ struct PlayerView: View {
                     pendingScene = nil
                     self.sheet = nil
                 }
-                .presentationDetents([.medium])
+                .fittedSheetHeight()
             case .settings:
                 SettingsSheet(store: store)
                     .presentationDetents([.medium, .large])
