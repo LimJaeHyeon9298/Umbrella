@@ -3,8 +3,8 @@
 //  Umbrella
 //
 
+import Foundation
 import Observation
-import UIKit
 import UserNotifications
 
 /// 25분 집중, 5분 휴식을 반복한다. 지금 단계는 시작 시각에서 계산하므로 따로 돌아가는 타이머가 없다.
@@ -34,14 +34,11 @@ final class FocusTimer {
     func start() {
         let now = Date()
         startDate = now
-        // 켜 두고 보는 타이머라 화면이 꺼지지 않게 한다.
-        UIApplication.shared.isIdleTimerDisabled = true
         scheduleNotifications(from: now)
     }
 
     func stop() {
         startDate = nil
-        UIApplication.shared.isIdleTimerDisabled = false
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: Self.notificationIDs)
     }
 

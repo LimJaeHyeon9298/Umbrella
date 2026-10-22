@@ -5,6 +5,7 @@
 //  Created by 임재현 on 6/21/24.
 //
 
+import StoreKitTest
 import XCTest
 @testable import Umbrella
 
@@ -46,6 +47,38 @@ final class UmbrellaTests: XCTestCase {
         let secondCycle = FocusTimer.phase(at: start.addingTimeInterval(31 * minute), since: start)
         XCTAssertEqual(secondCycle.phase, .focus)
         XCTAssertEqual(secondCycle.endsAt, start.addingTimeInterval(55 * minute))
+    }
+
+    @MainActor
+    func testPurchaseUnlocksBaseCollection() async throws {
+        let session = try SKTestSession(configurationFileNamed: "Petrichor")
+        session.resetToDefaultState()
+        session.clearTransactions()
+        session.disableDialogs = true
+
+        let store = Store()
+        await store.refresh()
+        // shortcut: 명령줄(xcodebuild) 시뮬레이터에서는 시험용 상품이 0개로 와서 건너뛴다, 원인을 찾으면 건너뛰기를 없앤다
+        try XCTSkipIf(store.product == nil, "시험용 상품을 불러오지 못했다 (Petrichor.storekit)")
+        XCTAssertFalse(store.isUnlocked)
+
+        let purchased = try await store.purchase()
+        XCTAssertTrue(purchased)
+        XCTAssertTrue(store.isUnlocked)
+
+        await store.refresh()
+        XCTAssertTrue(store.isUnlocked, "다시 확인해도 구매 기록이 남아 있어야 한다")
+    }
+
+    func testPreviewStopsLockedSceneAndCallsBack() async {
+        let player = SoundPlayer()
+        let locked = RainScene.all.first { !$0.isFree }!
+        let ended = expectation(description: "미리듣기 끝")
+        player.startPreview(locked, seconds: 0.4) { ended.fulfill() }
+        XCTAssertNotNil(player.previewEndDate)
+        await fulfillment(of: [ended], timeout: 3)
+        XCTAssertNil(player.previewEndDate)
+        XCTAssertFalse(player.isPlaying)
     }
 
     func testExample() throws {

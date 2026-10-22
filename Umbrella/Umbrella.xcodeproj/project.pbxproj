@@ -58,12 +58,14 @@
 		B1B2C3D40000000000000006 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B2C3D40000000000000005 /* PlayerView.swift */; };
 		C1B2C3D40000000000000001 /* storm.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000000 /* storm.mp4 */; };
 		C1B2C3D40000000000000003 /* storm-3x4.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000002 /* storm-3x4.mp4 */; };
-		C1B2C3D40000000000000005 /* storm.png in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000004 /* storm.png */; };
-		C1B2C3D40000000000000007 /* storm-3x4.png in Resources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000006 /* storm-3x4.png */; };
 		C1B2C3D40000000000000009 /* LoopingVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B2C3D40000000000000008 /* LoopingVideoView.swift */; };
 		D1B2C3D40000000000000001 /* FocusTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B2C3D40000000000000000 /* FocusTimer.swift */; };
 		D1B2C3D40000000000000003 /* RainOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B2C3D40000000000000002 /* RainOverlay.swift */; };
 		D1B2C3D40000000000000005 /* LockScreenTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B2C3D40000000000000004 /* LockScreenTip.swift */; };
+		E1B2C3D40000000000000001 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2C3D40000000000000000 /* Store.swift */; };
+		E1B2C3D40000000000000003 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2C3D40000000000000002 /* PaywallView.swift */; };
+		E1B2C3D40000000000000005 /* SettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2C3D40000000000000004 /* SettingsSheet.swift */; };
+		E1B2C3D40000000000000007 /* Petrichor.storekit in Resources */ = {isa = PBXBuildFile; fileRef = E1B2C3D40000000000000006 /* Petrichor.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,6 +136,7 @@
 		46C724022C575E9300A781B6 /* rainrain.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rainrain.wav; sourceTree = "<group>"; };
 		46C724042C5760FD00A781B6 /* thunder.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = thunder.mp3; sourceTree = "<group>"; };
 		46C724062C57613D00A781B6 /* birdsoundrain.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = birdsoundrain.wav; sourceTree = "<group>"; };
+		46C8A904308A1D0F00C48774 /* Petrichor.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Petrichor.storekit; sourceTree = "<group>"; };
 		46E007DE2F1A613300CD1C64 /* RainSoundPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainSoundPlayerViewModel.swift; sourceTree = "<group>"; };
 		46E3C8122C4906E8006D161D /* WeatherCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCard.swift; sourceTree = "<group>"; };
 		46E3C8142C494DBA006D161D /* HourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherCell.swift; sourceTree = "<group>"; };
@@ -148,12 +151,14 @@
 		B1B2C3D40000000000000005 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		C1B2C3D40000000000000000 /* storm.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = storm.mp4; sourceTree = "<group>"; };
 		C1B2C3D40000000000000002 /* storm-3x4.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "storm-3x4.mp4"; sourceTree = "<group>"; };
-		C1B2C3D40000000000000004 /* storm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storm.png; sourceTree = "<group>"; };
-		C1B2C3D40000000000000006 /* storm-3x4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "storm-3x4.png"; sourceTree = "<group>"; };
 		C1B2C3D40000000000000008 /* LoopingVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoView.swift; sourceTree = "<group>"; };
 		D1B2C3D40000000000000000 /* FocusTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTimer.swift; sourceTree = "<group>"; };
 		D1B2C3D40000000000000002 /* RainOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainOverlay.swift; sourceTree = "<group>"; };
 		D1B2C3D40000000000000004 /* LockScreenTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenTip.swift; sourceTree = "<group>"; };
+		E1B2C3D40000000000000000 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		E1B2C3D40000000000000002 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		E1B2C3D40000000000000004 /* SettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSheet.swift; sourceTree = "<group>"; };
+		E1B2C3D40000000000000006 /* Petrichor.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Petrichor.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +194,8 @@
 		46AA82C62C253A340065FFB0 = {
 			isa = PBXGroup;
 			children = (
+				E1B2C3D40000000000000006 /* Petrichor.storekit */,
+				46C8A904308A1D0F00C48774 /* Petrichor.storekit */,
 				46AA82D12C253A340065FFB0 /* Umbrella */,
 				46AA82E82C253A360065FFB0 /* UmbrellaTests */,
 				46AA82F22C253A360065FFB0 /* UmbrellaUITests */,
@@ -263,6 +270,8 @@
 		46AA83152C253B570065FFB0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E1B2C3D40000000000000004 /* SettingsSheet.swift */,
+				E1B2C3D40000000000000002 /* PaywallView.swift */,
 				D1B2C3D40000000000000004 /* LockScreenTip.swift */,
 				D1B2C3D40000000000000002 /* RainOverlay.swift */,
 				B1B2C3D40000000000000005 /* PlayerView.swift */,
@@ -293,8 +302,6 @@
 			children = (
 				46AA832B2C253CCC0065FFB0 /* 우산챙겨요.plist */,
 				46AA83202C253B850065FFB0 /* rain.mp3 */,
-				C1B2C3D40000000000000006 /* storm-3x4.png */,
-				C1B2C3D40000000000000004 /* storm.png */,
 				C1B2C3D40000000000000002 /* storm-3x4.mp4 */,
 				C1B2C3D40000000000000000 /* storm.mp4 */,
 				46C724042C5760FD00A781B6 /* thunder.mp3 */,
@@ -326,6 +333,7 @@
 		46AA833D2C2832E10065FFB0 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				E1B2C3D40000000000000000 /* Store.swift */,
 				D1B2C3D40000000000000000 /* FocusTimer.swift */,
 				B1B2C3D40000000000000003 /* SoundPlayer.swift */,
 				46AA83422C28343B0065FFB0 /* MainViewModel.swift */,
@@ -456,8 +464,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				46AA83222C253B850065FFB0 /* rain.mp3 in Resources */,
-				C1B2C3D40000000000000007 /* storm-3x4.png in Resources */,
-				C1B2C3D40000000000000005 /* storm.png in Resources */,
 				C1B2C3D40000000000000003 /* storm-3x4.mp4 in Resources */,
 				C1B2C3D40000000000000001 /* storm.mp4 in Resources */,
 				46AA82DC2C253A360065FFB0 /* Assets.xcassets in Resources */,
@@ -474,6 +480,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1B2C3D40000000000000007 /* Petrichor.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,6 +516,9 @@
 				46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */,
 				46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */,
 				46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */,
+				E1B2C3D40000000000000005 /* SettingsSheet.swift in Sources */,
+				E1B2C3D40000000000000003 /* PaywallView.swift in Sources */,
+				E1B2C3D40000000000000001 /* Store.swift in Sources */,
 				D1B2C3D40000000000000005 /* LockScreenTip.swift in Sources */,
 				D1B2C3D40000000000000003 /* RainOverlay.swift in Sources */,
 				D1B2C3D40000000000000001 /* FocusTimer.swift in Sources */,
