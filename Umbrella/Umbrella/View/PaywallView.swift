@@ -5,9 +5,13 @@
 
 import SwiftUI
 
-/// 잠긴 장면을 눌렀을 때 뜬다. 한 번 결제로 기본 컬렉션을 연다.
+/// 한 번 결제로 기본 컬렉션을 연다. 잠긴 장면을 눌렀을 때는 미리듣기도 함께 고를 수 있다.
 struct PaywallView: View {
     let store: Store
+    /// 눌렀던 잠긴 장면. 있으면 위에 보여준다.
+    var scene: RainScene?
+    /// 있으면 "1분 미리듣기"를 가장 크게 보여준다. 미리듣기가 끝난 뒤에는 nil로 연다.
+    var onPreview: (() -> Void)?
     let onUnlocked: () -> Void
 
     @State private var isWorking = false
@@ -15,27 +19,47 @@ struct PaywallView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: "cloud.rain.fill")
-                .font(.system(size: 44))
-                .foregroundStyle(.tint)
-                .accessibilityHidden(true)
-            Text("기본 컬렉션 열기")
-                .font(.title2.bold())
+            if let scene {
+                Image(scene.imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 96, height: 128)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .accessibilityHidden(true)
+                VStack(spacing: 4) {
+                    Text(scene.title)
+                        .font(.title2.bold())
+                    Text("기본 컬렉션에 있는 장면이에요")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                Image(systemName: "cloud.rain.fill")
+                    .font(.system(size: 44))
+                    .foregroundStyle(.tint)
+                    .accessibilityHidden(true)
+                Text("기본 컬렉션 열기")
+                    .font(.title2.bold())
+            }
             VStack(alignment: .leading, spacing: 10) {
                 Label("지금 있는 모든 장면", systemImage: "checkmark")
                 Label("새 기본 장면 업데이트 포함", systemImage: "checkmark")
                 Label("한 번 결제, 구독 아님", systemImage: "checkmark")
             }
             .font(.callout)
-            Button {
-                Task { await buy() }
-            } label: {
-                Text(buttonTitle)
-                    .frame(maxWidth: .infinity)
+            if let onPreview {
+                Button(action: onPreview) {
+                    Text("1분 미리듣기")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                buyButton
+                    .buttonStyle(.bordered)
+            } else {
+                buyButton
+                    .buttonStyle(.borderedProminent)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .disabled(store.product == nil || isWorking)
             Button("구매 복원") {
                 Task { await restore() }
             }
@@ -49,6 +73,17 @@ struct PaywallView: View {
             }
         }
         .padding(24)
+    }
+
+    private var buyButton: some View {
+        Button {
+            Task { await buy() }
+        } label: {
+            Text(buttonTitle)
+                .frame(maxWidth: .infinity)
+        }
+        .controlSize(.large)
+        .disabled(store.product == nil || isWorking)
     }
 
     private var buttonTitle: String {

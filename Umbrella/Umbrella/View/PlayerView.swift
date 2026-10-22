@@ -18,6 +18,8 @@ struct PlayerView: View {
     @State private var store = Store()
     /// 결제 화면을 띄운 잠긴 장면. 결제가 끝나면 바로 튼다.
     @State private var pendingScene: RainScene?
+    /// 결제 화면에 미리듣기 버튼을 보여줄지. 미리듣기가 끝난 뒤에는 결제만 권한다.
+    @State private var offersPreview = false
     @AppStorage(SettingsSheet.keepScreenOnKey) private var keepScreenOn = false
     @State private var sheet: Sheet?
     @State private var controlsVisible = true
@@ -34,6 +36,7 @@ struct PlayerView: View {
             if let end = player.previewEndDate {
                 PreviewBadge(end: end) {
                     pendingScene = player.scene
+                    offersPreview = false
                     sheet = .paywall
                 }
             }
@@ -116,16 +119,14 @@ struct PlayerView: View {
                         player.select(scene)
                         self.sheet = nil
                     } else {
-                        self.sheet = nil
-                        player.startPreview(scene) {
-                            pendingScene = scene
-                            self.sheet = .paywall
-                        }
+                        pendingScene = scene
+                        offersPreview = true
+                        self.sheet = .paywall
                     }
                 }
                 .presentationDetents([.height(320)])
             case .paywall:
-                PaywallView(store: store) {
+                PaywallView(store: store, scene: pendingScene, onPreview: offersPreview ? startPreview : nil) {
                     if let pendingScene { player.select(pendingScene) }
                     pendingScene = nil
                     self.sheet = nil
@@ -199,6 +200,17 @@ struct PlayerView: View {
         }
         .padding(.horizontal, 20)
         .padding(.top, 8)
+    }
+
+    /// 결제 화면에서 고른 잠긴 장면을 1분 틀고, 끝나면 결제만 권하는 화면을 다시 띄운다.
+    private func startPreview() {
+        guard let scene = pendingScene else { return }
+        offersPreview = false
+        sheet = nil
+        player.startPreview(scene) {
+            pendingScene = scene
+            sheet = .paywall
+        }
     }
 
     private func showControls() {
@@ -304,7 +316,7 @@ private struct ScenePicker: View {
                         card(scene)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel(scene.isFree || isUnlocked ? scene.title : "\(scene.title), 잠김, 1분 미리듣기")
+                    .accessibilityLabel(scene.isFree || isUnlocked ? scene.title : "\(scene.title), 잠김, 1분 미리듣기 가능")
                 }
             }
             .scrollTargetLayout()
