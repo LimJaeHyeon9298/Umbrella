@@ -13,9 +13,14 @@ import UIKit
 final class SoundPlayer {
     private(set) var scene: RainScene
     private(set) var isPlaying = false
+    /// 예약 종료 시각과 고른 분. 꺼져 있으면 nil과 0.
+    private(set) var sleepEndDate: Date?
+    private(set) var sleepMinutes = 0
 
     @ObservationIgnored private var player: AVAudioPlayer?
     @ObservationIgnored private var observers: [NSObjectProtocol] = []
+    @ObservationIgnored private var sleepTask: Task<Void, Never>?
+    private static let sleepFadeSeconds: Double = 8
     private static let lastSceneKey = "petrichor.lastSceneID"
 
     init() {
@@ -57,6 +62,29 @@ final class SoundPlayer {
 
     func toggle() {
         isPlaying ? pause() : play()
+    }
+
+    /// `minutes`분 뒤에 소리를 서서히 줄이고 멈춘다. 0이면 예약을 끈다.
+    func setSleepTimer(minutes: Int) {
+        sleepTask?.cancel()
+        sleepMinutes = minutes
+        guard minutes > 0 else {
+            sleepEndDate = nil
+            return
+        }
+        let end = Date().addingTimeInterval(TimeInterval(minutes * 60))
+        sleepEndDate = end
+        // 소리가 나는 동안은 백그라운드에서도 앱이 깨어 있어서 이 작업이 계속 돈다.
+        sleepTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(end.timeIntervalSinceNow))
+            guard !Task.isCancelled, let self else { return }
+            player?.setVolume(0, fadeDuration: Self.sleepFadeSeconds)
+            try? await Task.sleep(for: .seconds(Self.sleepFadeSeconds))
+            guard !Task.isCancelled else { return }
+            pause()
+            sleepEndDate = nil
+            sleepMinutes = 0
+        }
     }
 
     private func makePlayer() -> AVAudioPlayer? {

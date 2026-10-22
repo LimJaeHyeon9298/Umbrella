@@ -32,6 +32,22 @@ final class UmbrellaTests: XCTestCase {
         }
     }
 
+    func testFocusTimerAlternatesFocusAndRest() {
+        let start = Date(timeIntervalSince1970: 0)
+        let minute: TimeInterval = 60
+        let atStart = FocusTimer.phase(at: start, since: start)
+        XCTAssertEqual(atStart.phase, .focus)
+        XCTAssertEqual(atStart.endsAt, start.addingTimeInterval(25 * minute))
+
+        let atRest = FocusTimer.phase(at: start.addingTimeInterval(25 * minute), since: start)
+        XCTAssertEqual(atRest.phase, .rest)
+        XCTAssertEqual(atRest.endsAt, start.addingTimeInterval(30 * minute))
+
+        let secondCycle = FocusTimer.phase(at: start.addingTimeInterval(31 * minute), since: start)
+        XCTAssertEqual(secondCycle.phase, .focus)
+        XCTAssertEqual(secondCycle.endsAt, start.addingTimeInterval(55 * minute))
+    }
+
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
