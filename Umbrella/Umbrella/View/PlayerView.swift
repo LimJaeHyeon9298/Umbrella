@@ -85,7 +85,7 @@ struct PlayerView: View {
         }
         // 미리듣기가 아닌데 잠긴 장면에 있으면(미리듣기 후 결제 안 함, 환불 등) 무료 장면으로 돌린다.
         // 결제 화면이 떠 있는 동안에는 방금 들은 장면을 뒤에 그대로 둔다.
-        .onChange(of: store.isLoaded && !store.isUnlocked && !player.scene.isFree && player.previewEndDate == nil && sheet != .paywall, initial: true) { _, isLocked in
+        .onChange(of: store.isLoaded && !store.canPlay(player.scene) && player.previewEndDate == nil && sheet != .paywall, initial: true) { _, isLocked in
             guard isLocked, let free = RainScene.all.first(where: \.isFree) else { return }
             player.select(free, play: false)
         }
@@ -114,8 +114,8 @@ struct PlayerView: View {
         .sheet(item: $sheet, onDismiss: showControls) { sheet in
             switch sheet {
             case .scenes:
-                ScenePicker(current: player.scene, isUnlocked: store.isUnlocked) { scene in
-                    if scene.isFree || store.isUnlocked {
+                ScenePicker(current: player.scene, canPlay: store.canPlay) { scene in
+                    if store.canPlay(scene) {
                         player.select(scene)
                         self.sheet = nil
                     } else {
@@ -303,7 +303,7 @@ private struct TimerSheet: View {
 /// 장면을 한 장씩 넘겨 고른다.
 private struct ScenePicker: View {
     let current: RainScene
-    let isUnlocked: Bool
+    let canPlay: (RainScene) -> Bool
     let onSelect: (RainScene) -> Void
 
     var body: some View {
@@ -316,7 +316,7 @@ private struct ScenePicker: View {
                         card(scene)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel(scene.isFree || isUnlocked ? scene.title : "\(scene.title), 잠김, 1분 미리듣기 가능")
+                    .accessibilityLabel(canPlay(scene) ? scene.title : "\(scene.title), 잠김, 1분 미리듣기 가능")
                 }
             }
             .scrollTargetLayout()
@@ -332,7 +332,7 @@ private struct ScenePicker: View {
             .frame(width: 180, height: 240)
             .overlay(alignment: .bottomLeading) {
                 HStack(spacing: 6) {
-                    if !scene.isFree && !isUnlocked {
+                    if !canPlay(scene) {
                         Image(systemName: "lock.fill")
                     }
                     Text(scene.title)

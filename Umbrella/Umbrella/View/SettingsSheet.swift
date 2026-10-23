@@ -23,7 +23,7 @@ struct SettingsSheet: View {
                     Text("집중 타이머를 켜면 이 설정과 상관없이 화면이 켜져 있어요.")
                 }
                 Section("구매") {
-                    if store.isUnlocked {
+                    if store.ownsBaseCollection {
                         Label("기본 컬렉션이 열려 있어요", systemImage: "checkmark.seal")
                     }
                     Button("구매 복원") {
@@ -61,7 +61,7 @@ struct SettingsSheet: View {
         defer { isRestoring = false }
         do {
             try await store.restore()
-            restoreMessage = store.isUnlocked ? "구매를 복원했어요." : "복원할 구매 내역이 없어요."
+            restoreMessage = store.ownsBaseCollection ? "구매를 복원했어요." : "복원할 구매 내역이 없어요."
         } catch {
             restoreMessage = "구매 내역을 불러오지 못했어요. 잠시 후 다시 시도해 주세요."
         }

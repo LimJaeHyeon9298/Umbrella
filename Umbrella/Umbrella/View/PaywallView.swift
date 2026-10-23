@@ -3,9 +3,10 @@
 //  Umbrella
 //
 
+import StoreKit
 import SwiftUI
 
-/// 한 번 결제로 기본 컬렉션을 연다. 잠긴 장면을 눌렀을 때는 미리듣기도 함께 고를 수 있다.
+/// 잠긴 장면을 여는 상품을 판다. 기본 장면이면 기본 컬렉션, 특별 장면이면 그 장면의 상품. 미리듣기도 함께 고를 수 있다.
 struct PaywallView: View {
     let store: Store
     /// 눌렀던 잠긴 장면. 있으면 위에 보여준다.
@@ -29,7 +30,7 @@ struct PaywallView: View {
                 VStack(spacing: 4) {
                     Text(scene.title)
                         .font(.title2.bold())
-                    Text("기본 컬렉션에 있는 장면이에요")
+                    Text(isSpecial ? "특별 컬렉션 장면이에요" : "기본 컬렉션에 있는 장면이에요")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -42,8 +43,13 @@ struct PaywallView: View {
                     .font(.title2.bold())
             }
             VStack(alignment: .leading, spacing: 10) {
-                Label("지금 있는 모든 장면", systemImage: "checkmark")
-                Label("새 기본 장면 업데이트 포함", systemImage: "checkmark")
+                if isSpecial {
+                    Label("이 장면을 계속 이용", systemImage: "checkmark")
+                    Label("기본 컬렉션과 별도 상품", systemImage: "checkmark")
+                } else {
+                    Label("지금 있는 모든 장면", systemImage: "checkmark")
+                    Label("새 기본 장면 업데이트 포함", systemImage: "checkmark")
+                }
                 Label("한 번 결제, 구독 아님", systemImage: "checkmark")
             }
             .font(.callout)
@@ -83,11 +89,19 @@ struct PaywallView: View {
                 .frame(maxWidth: .infinity)
         }
         .controlSize(.large)
-        .disabled(store.product == nil || isWorking)
+        .disabled(product == nil || isWorking)
+    }
+
+    private var isSpecial: Bool {
+        scene?.specialProductID != nil
+    }
+
+    private var product: Product? {
+        store.product(for: scene)
     }
 
     private var buttonTitle: String {
-        if let product = store.product {
+        if let product {
             return "\(product.displayPrice)에 열기"
         }
         return store.isLoaded ? "지금은 구매할 수 없어요" : "가격을 불러오는 중"
@@ -97,7 +111,7 @@ struct PaywallView: View {
         isWorking = true
         defer { isWorking = false }
         do {
-            if try await store.purchase() {
+            if let product, try await store.purchase(product) {
                 onUnlocked()
             }
         } catch {
@@ -110,7 +124,7 @@ struct PaywallView: View {
         defer { isWorking = false }
         do {
             try await store.restore()
-            if store.isUnlocked {
+            if scene.map(store.canPlay) ?? store.ownsBaseCollection {
                 onUnlocked()
             } else {
                 message = "복원할 구매 내역이 없어요."

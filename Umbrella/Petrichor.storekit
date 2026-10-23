@@ -31,6 +31,26 @@
       "productID": "com.jaehyeonLim9298.petrichor.basecollection",
       "referenceName": "Base Collection",
       "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "2.99",
+      "familyShareable": false,
+      "internalID": "6740000002",
+      "localizations": [
+        {
+          "description": "Unlock the special sample scene.",
+          "displayName": "Special Sample",
+          "locale": "en_US"
+        },
+        {
+          "description": "특별 컬렉션 시험용 장면을 엽니다.",
+          "displayName": "특별 장면 (시험용)",
+          "locale": "ko"
+        }
+      ],
+      "productID": "com.jaehyeonLim9298.petrichor.special.sample",
+      "referenceName": "Special Sample (test only)",
+      "type": "NonConsumable"
     }
   ],
   "settings": {
