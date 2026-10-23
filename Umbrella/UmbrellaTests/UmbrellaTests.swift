@@ -5,6 +5,8 @@
 //  Created by 임재현 on 6/21/24.
 //
 
+import StoreKit
+import StoreKitTest
 import XCTest
 @testable import Umbrella
 
@@ -46,6 +48,59 @@ final class UmbrellaTests: XCTestCase {
         let secondCycle = FocusTimer.phase(at: start.addingTimeInterval(31 * minute), since: start)
         XCTAssertEqual(secondCycle.phase, .focus)
         XCTAssertEqual(secondCycle.endsAt, start.addingTimeInterval(55 * minute))
+    }
+
+    @MainActor
+    func testPurchaseUnlocksBaseCollection() async throws {
+        let session = try SKTestSession(configurationFileNamed: "Petrichor")
+        session.resetToDefaultState()
+        session.clearTransactions()
+        session.disableDialogs = true
+
+        let store = Store()
+        await store.refresh()
+        // shortcut: 명령줄(xcodebuild) 시뮬레이터에서는 시험용 상품이 0개로 와서 건너뛴다, 원인을 찾으면 건너뛰기를 없앤다
+        try XCTSkipIf(store.products.isEmpty, "시험용 상품을 불러오지 못했다 (Petrichor.storekit)")
+        let product = try XCTUnwrap(store.products[Store.baseCollectionID])
+        XCTAssertFalse(store.ownsBaseCollection)
+
+        let purchased = try await store.purchase(product)
+        XCTAssertTrue(purchased)
+        XCTAssertTrue(store.ownsBaseCollection)
+
+        await store.refresh()
+        XCTAssertTrue(store.ownsBaseCollection, "다시 확인해도 구매 기록이 남아 있어야 한다")
+    }
+
+    func testPreviewStopsLockedSceneAndCallsBack() async {
+        let player = SoundPlayer()
+        let locked = RainScene.all.first { !$0.isFree }!
+        let ended = expectation(description: "미리듣기 끝")
+        player.startPreview(locked, seconds: 0.4) { ended.fulfill() }
+        XCTAssertNotNil(player.previewEndDate)
+        await fulfillment(of: [ended], timeout: 3)
+        XCTAssertNil(player.previewEndDate)
+        XCTAssertFalse(player.isPlaying)
+    }
+
+    func testBaseCollectionDoesNotUnlockSpecialScenes() {
+        let base = Store.baseCollectionID
+        let special = RainScene.Access.special(productID: "special.a")
+        XCTAssertTrue(Store.canPlay(.free, owned: []))
+        XCTAssertFalse(Store.canPlay(.base, owned: []))
+        XCTAssertTrue(Store.canPlay(.base, owned: [base]))
+        XCTAssertFalse(Store.canPlay(special, owned: [base]), "기본 컬렉션으로 특별 장면이 열리면 안 된다")
+        XCTAssertTrue(Store.canPlay(special, owned: ["special.a"]))
+        XCTAssertFalse(Store.canPlay(.base, owned: ["special.a"]), "특별 상품으로 기본 장면이 열리면 안 된다")
+    }
+
+    func testEveryProductIsInStoreKitConfiguration() throws {
+        let url = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "Petrichor", withExtension: "storekit"))
+        let json = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
+        let configured = Set((json["products"] as? [[String: Any]] ?? []).compactMap { $0["productID"] as? String })
+        for productID in Store.allProductIDs {
+            XCTAssertTrue(configured.contains(productID), "\(productID)가 Petrichor.storekit에 없다")
+        }
     }
 
     func testExample() throws {

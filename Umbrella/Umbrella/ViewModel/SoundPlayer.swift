@@ -16,10 +16,13 @@ final class SoundPlayer {
     /// 예약 종료 시각과 고른 분. 꺼져 있으면 nil과 0.
     private(set) var sleepEndDate: Date?
     private(set) var sleepMinutes = 0
+    /// 잠긴 장면 미리듣기가 끝나는 시각. 미리듣기 중이 아니면 nil.
+    private(set) var previewEndDate: Date?
 
     @ObservationIgnored private var player: AVAudioPlayer?
     @ObservationIgnored private var observers: [NSObjectProtocol] = []
     @ObservationIgnored private var sleepTask: Task<Void, Never>?
+    @ObservationIgnored private var previewTask: Task<Void, Never>?
     private static let sleepFadeSeconds: Double = 8
     private static let lastSceneKey = "petrichor.lastSceneID"
 
@@ -32,15 +35,21 @@ final class SoundPlayer {
         updateNowPlaying()
     }
 
-    /// 장면을 바꾸고 바로 재생한다.
-    func select(_ newScene: RainScene) {
+    /// 장면을 바꾼다. `play`가 true면 바로 재생한다.
+    func select(_ newScene: RainScene, play shouldPlay: Bool = true) {
+        endPreview()
         if newScene != scene {
             player?.stop()
             player = nil
             scene = newScene
             UserDefaults.standard.set(newScene.id, forKey: Self.lastSceneKey)
         }
-        play()
+        if shouldPlay {
+            play()
+        } else {
+            isPlaying = false
+            updateNowPlaying()
+        }
     }
 
     func play() {
@@ -62,6 +71,32 @@ final class SoundPlayer {
 
     func toggle() {
         isPlaying ? pause() : play()
+    }
+
+    /// 잠긴 장면을 `seconds`초 동안 틀어 준다. 끝나면 소리를 줄여 멈추고 `onEnd`를 부른다.
+    func startPreview(_ previewScene: RainScene, seconds: Double = 60, onEnd: @escaping () -> Void) {
+        select(previewScene)
+        let end = Date().addingTimeInterval(seconds)
+        let fade = min(3, seconds / 2)
+        previewEndDate = end
+        // 소리가 나는 동안은 백그라운드에서도 앱이 깨어 있어서 화면을 꺼도 끝에 멈춘다.
+        previewTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(end.timeIntervalSinceNow - fade))
+            guard !Task.isCancelled, let self else { return }
+            player?.setVolume(0, fadeDuration: fade)
+            try? await Task.sleep(for: .seconds(fade))
+            guard !Task.isCancelled else { return }
+            pause()
+            previewEndDate = nil
+            onEnd()
+        }
+    }
+
+    /// 미리듣기를 멈추지 않고 미리듣기 상태만 끝낸다. 구매했거나 장면을 바꿀 때 쓴다.
+    func endPreview() {
+        previewTask?.cancel()
+        previewTask = nil
+        previewEndDate = nil
     }
 
     /// `minutes`분 뒤에 소리를 서서히 줄이고 멈춘다. 0이면 예약을 끈다.

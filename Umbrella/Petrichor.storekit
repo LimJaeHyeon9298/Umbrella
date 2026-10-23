@@ -1,0 +1,67 @@
+{
+  "appPolicies": {
+    "eula": "",
+    "policies": [
+      {
+        "locale": "en_US",
+        "policyText": "",
+        "policyURL": ""
+      }
+    ]
+  },
+  "identifier": "5C1F8A2E",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "4.99",
+      "familyShareable": false,
+      "internalID": "6740000001",
+      "localizations": [
+        {
+          "description": "Unlock every base scene, including new base scenes as they arrive.",
+          "displayName": "Base Collection",
+          "locale": "en_US"
+        },
+        {
+          "description": "지금 있는 장면과 앞으로 추가되는 기본 장면을 엽니다.",
+          "displayName": "기본 컬렉션",
+          "locale": "ko"
+        }
+      ],
+      "productID": "com.jaehyeonLim9298.petrichor.basecollection",
+      "referenceName": "Base Collection",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "2.99",
+      "familyShareable": false,
+      "internalID": "6740000002",
+      "localizations": [
+        {
+          "description": "Unlock the special sample scene.",
+          "displayName": "Special Sample",
+          "locale": "en_US"
+        },
+        {
+          "description": "특별 컬렉션 시험용 장면을 엽니다.",
+          "displayName": "특별 장면 (시험용)",
+          "locale": "ko"
+        }
+      ],
+      "productID": "com.jaehyeonLim9298.petrichor.special.sample",
+      "referenceName": "Special Sample (test only)",
+      "type": "NonConsumable"
+    }
+  ],
+  "settings": {
+    "_failTransactionsEnabled": false,
+    "_locale": "en_US",
+    "_storeKitErrors": [],
+    "_storefront": "USA"
+  },
+  "subscriptionGroups": [],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}

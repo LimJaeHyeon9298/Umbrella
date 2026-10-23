@@ -9,12 +9,18 @@ import TipKit
 /// 홈 화면. 장면을 화면 가득 보여주고 빗소리를 재생한다.
 struct PlayerView: View {
     private enum Sheet: String, Identifiable {
-        case scenes, timer
+        case scenes, timer, paywall, settings
         var id: String { rawValue }
     }
 
     @State private var player = SoundPlayer()
     @State private var focus = FocusTimer()
+    @State private var store = Store()
+    /// 결제 화면을 띄운 잠긴 장면. 결제가 끝나면 바로 튼다.
+    @State private var pendingScene: RainScene?
+    /// 결제 화면에 미리듣기 버튼을 보여줄지. 미리듣기가 끝난 뒤에는 결제만 권한다.
+    @State private var offersPreview = false
+    @AppStorage(SettingsSheet.keepScreenOnKey) private var keepScreenOn = false
     @State private var sheet: Sheet?
     @State private var controlsVisible = true
     @State private var interactions = 0
@@ -27,6 +33,13 @@ struct PlayerView: View {
     var body: some View {
         VStack(spacing: 24) {
             Spacer()
+            if let end = player.previewEndDate {
+                PreviewBadge(end: end) {
+                    pendingScene = player.scene
+                    offersPreview = false
+                    sheet = .paywall
+                }
+            }
             if let start = focus.startDate {
                 FocusCountdown(start: start)
             }
@@ -67,6 +80,15 @@ struct PlayerView: View {
         .statusBarHidden(!controlsVisible)
         .animation(.easeInOut(duration: 0.8), value: player.scene)
         .animation(.easeInOut(duration: 0.6), value: controlsVisible)
+        .onChange(of: focus.startDate != nil || (keepScreenOn && player.isPlaying), initial: true) { _, keepAwake in
+            UIApplication.shared.isIdleTimerDisabled = keepAwake
+        }
+        // 미리듣기가 아닌데 잠긴 장면에 있으면(미리듣기 후 결제 안 함, 환불 등) 무료 장면으로 돌린다.
+        // 결제 화면이 떠 있는 동안에는 방금 들은 장면을 뒤에 그대로 둔다.
+        .onChange(of: store.isLoaded && !store.canPlay(player.scene) && player.previewEndDate == nil && sheet != .paywall, initial: true) { _, isLocked in
+            guard isLocked, let free = RainScene.all.first(where: \.isFree) else { return }
+            player.select(free, play: false)
+        }
         .onChange(of: player.isPlaying && player.scene.videoName != nil, initial: true) { _, playingVideo in
             LockScreenTip.isPlayingVideo = playingVideo
         }
@@ -92,12 +114,27 @@ struct PlayerView: View {
         .sheet(item: $sheet, onDismiss: showControls) { sheet in
             switch sheet {
             case .scenes:
-                ScenePicker(current: player.scene) { scene in
-                    // shortcut: 결제 전이라 잠긴 장면도 재생된다, 3단계에서 결제 화면으로 막는다
-                    player.select(scene)
-                    self.sheet = nil
+                ScenePicker(current: player.scene, canPlay: store.canPlay) { scene in
+                    if store.canPlay(scene) {
+                        player.select(scene)
+                        self.sheet = nil
+                    } else {
+                        pendingScene = scene
+                        offersPreview = true
+                        self.sheet = .paywall
+                    }
                 }
                 .presentationDetents([.height(320)])
+            case .paywall:
+                PaywallView(store: store, scene: pendingScene, onPreview: offersPreview ? startPreview : nil) {
+                    if let pendingScene { player.select(pendingScene) }
+                    pendingScene = nil
+                    self.sheet = nil
+                }
+                .fittedSheetHeight()
+            case .settings:
+                SettingsSheet(store: store)
+                    .presentationDetents([.medium, .large])
             case .timer:
                 TimerSheet(player: player, focus: focus)
                     .presentationDetents([.medium])
@@ -126,6 +163,12 @@ struct PlayerView: View {
                 } label: {
                     Label("타이머", systemImage: player.sleepEndDate == nil && focus.startDate == nil ? "timer" : "timer.circle.fill")
                 }
+                Button {
+                    sheet = .settings
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+                .accessibilityLabel("설정")
             }
             .buttonStyle(.bordered)
         }
@@ -159,9 +202,43 @@ struct PlayerView: View {
         .padding(.top, 8)
     }
 
+    /// 결제 화면에서 고른 잠긴 장면을 1분 틀고, 끝나면 결제만 권하는 화면을 다시 띄운다.
+    private func startPreview() {
+        guard let scene = pendingScene else { return }
+        offersPreview = false
+        sheet = nil
+        player.startPreview(scene) {
+            pendingScene = scene
+            sheet = .paywall
+        }
+    }
+
     private func showControls() {
         controlsVisible = true
         interactions += 1
+    }
+}
+
+/// 잠긴 장면을 미리 듣는 동안 남은 시간과 결제 버튼을 보여준다. 버튼을 숨겨도 남는다.
+private struct PreviewBadge: View {
+    let end: Date
+    let onUnlock: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            TimelineView(.periodic(from: .now, by: 1)) { context in
+                let remaining = Duration.seconds(max(0, end.timeIntervalSince(context.date)))
+                Text("미리듣기 · \(remaining.formatted(.time(pattern: .minuteSecond)))")
+                    .font(.subheadline.monospacedDigit().weight(.medium))
+            }
+            Button("열기", action: onUnlock)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+        }
+        .padding(.leading, 16)
+        .padding(.trailing, 8)
+        .padding(.vertical, 8)
+        .background(.ultraThinMaterial, in: Capsule())
     }
 }
 
@@ -226,6 +303,7 @@ private struct TimerSheet: View {
 /// 장면을 한 장씩 넘겨 고른다.
 private struct ScenePicker: View {
     let current: RainScene
+    let canPlay: (RainScene) -> Bool
     let onSelect: (RainScene) -> Void
 
     var body: some View {
@@ -238,7 +316,7 @@ private struct ScenePicker: View {
                         card(scene)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel(scene.isFree ? scene.title : "\(scene.title), 잠김")
+                    .accessibilityLabel(canPlay(scene) ? scene.title : "\(scene.title), 잠김, 1분 미리듣기 가능")
                 }
             }
             .scrollTargetLayout()
@@ -254,7 +332,7 @@ private struct ScenePicker: View {
             .frame(width: 180, height: 240)
             .overlay(alignment: .bottomLeading) {
                 HStack(spacing: 6) {
-                    if !scene.isFree {
+                    if !canPlay(scene) {
                         Image(systemName: "lock.fill")
                     }
                     Text(scene.title)
