@@ -305,6 +305,22 @@
         }
       }
     },
+    "구매를 확인하지 못했어요. 잠시 후 다시 시도해 주세요.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn’t verify the purchase. Please try again later."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구매를 확인하지 못했어요. 잠시 후 다시 시도해 주세요."
+          }
+        }
+      }
+    },
     "기본 컬렉션 열기": {
       "localizations": {
         "en": {
@@ -461,6 +477,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "버전"
+          }
+        }
+      }
+    },
+    "보호자 승인을 기다리고 있어요. 승인되면 자동으로 열려요.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for approval. It will unlock automatically once approved."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보호자 승인을 기다리고 있어요. 승인되면 자동으로 열려요."
           }
         }
       }

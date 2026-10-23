@@ -1,38 +1,52 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "CFBundleDisplayName": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Petrichor"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "comment" : "Bundle display name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petrichor"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Petrichor"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petrichor"
           }
         }
       }
     },
-    "NSLocationWhenInUseUsageDescription": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Petrichor uses your location to match scenes to the weather where you are. You can change this anytime in Settings."
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Umbrella"
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "comment" : "Privacy - Location When In Use Usage Description",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petrichor uses your location to match scenes to the weather where you are. You can change this anytime in Settings."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "지금 있는 곳의 날씨에 맞는 장면을 보여주기 위해 위치를 사용해요. 설정에서 언제든지 바꿀 수 있어요."
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금 있는 곳의 날씨에 맞는 장면을 보여주기 위해 위치를 사용해요. 설정에서 언제든지 바꿀 수 있어요."
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

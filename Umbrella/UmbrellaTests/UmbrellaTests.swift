@@ -64,8 +64,8 @@ final class UmbrellaTests: XCTestCase {
         let product = try XCTUnwrap(store.products[Store.baseCollectionID])
         XCTAssertFalse(store.ownsBaseCollection)
 
-        let purchased = try await store.purchase(product)
-        XCTAssertTrue(purchased)
+        let outcome = try await store.purchase(product)
+        XCTAssertEqual(outcome, .purchased)
         XCTAssertTrue(store.ownsBaseCollection)
 
         await store.refresh()
@@ -101,6 +101,169 @@ final class UmbrellaTests: XCTestCase {
         for productID in Store.allProductIDs {
             XCTAssertTrue(configured.contains(productID), "\(productID)가 Petrichor.storekit에 없다")
         }
+    }
+
+    // MARK: - 결제 판정
+
+    func testOwnedIgnoresRevokedAndUnverifiedEntitlements() {
+        let base = Store.baseCollectionID
+        let owned = Store.owned(from: [
+            .init(productID: base, isRevoked: false, isVerified: true),
+            .init(productID: "special.refunded", isRevoked: true, isVerified: true),
+            .init(productID: "special.forged", isRevoked: false, isVerified: false),
+        ])
+        XCTAssertEqual(owned, [base])
+    }
+
+    func testApplyingTransactionsInsertsRevokesAndIgnoresForgeries() {
+        let base = Store.baseCollectionID
+        var owned: Set<String> = []
+        owned = Store.applying(.init(productID: base, isRevoked: false, isVerified: false), to: owned)
+        XCTAssertTrue(owned.isEmpty, "서명이 맞지 않는 구매로 열리면 안 된다")
+
+        owned = Store.applying(.init(productID: base, isRevoked: false, isVerified: true), to: owned)
+        owned = Store.applying(.init(productID: base, isRevoked: false, isVerified: true), to: owned)
+        XCTAssertEqual(owned, [base], "같은 거래가 두 번 와도 한 번만 반영된다")
+
+        owned = Store.applying(.init(productID: base, isRevoked: true, isVerified: false), to: owned)
+        XCTAssertEqual(owned, [base], "서명이 맞지 않는 환불로 권한을 잃으면 안 된다")
+
+        owned = Store.applying(.init(productID: base, isRevoked: true, isVerified: true), to: owned)
+        XCTAssertTrue(owned.isEmpty, "환불되면 권한을 잃는다")
+        XCTAssertFalse(Store.canPlay(.base, owned: owned))
+
+        owned = Store.applying(.init(productID: "special.a", isRevoked: true, isVerified: true), to: owned)
+        XCTAssertTrue(owned.isEmpty, "가진 적 없는 상품의 환불은 아무것도 바꾸지 않는다")
+    }
+
+    // MARK: - 미리듣기, 예약 종료
+
+    func testSelectingAnotherSceneCancelsPreview() async throws {
+        let player = SoundPlayer()
+        let locked = try XCTUnwrap(RainScene.all.first { !$0.isFree })
+        let free = try XCTUnwrap(RainScene.all.first(where: \.isFree))
+        let ended = expectation(description: "미리듣기 끝 콜백")
+        ended.isInverted = true
+        player.startPreview(locked, seconds: 0.4) { ended.fulfill() }
+        player.select(free)
+        await fulfillment(of: [ended], timeout: 1.2)
+        XCTAssertNil(player.previewEndDate)
+        XCTAssertTrue(player.isPlaying, "다른 장면을 고르면 그 장면이 계속 재생된다")
+        XCTAssertEqual(player.scene, free)
+    }
+
+    func testSleepTimerFadesOutAndResets() async throws {
+        let player = SoundPlayer()
+        player.select(try XCTUnwrap(RainScene.all.first(where: \.isFree)))
+        player.startSleepTimer(after: 0.4, minutes: 15)
+        XCTAssertNotNil(player.sleepEndDate)
+        XCTAssertEqual(player.sleepMinutes, 15)
+        try await Task.sleep(for: .seconds(1.2))
+        XCTAssertFalse(player.isPlaying)
+        XCTAssertNil(player.sleepEndDate)
+        XCTAssertEqual(player.sleepMinutes, 0)
+    }
+
+    func testTurningSleepTimerOffKeepsPlaying() async throws {
+        let player = SoundPlayer()
+        player.select(try XCTUnwrap(RainScene.all.first(where: \.isFree)))
+        player.startSleepTimer(after: 0.4, minutes: 15)
+        player.setSleepTimer(minutes: 0)
+        try await Task.sleep(for: .seconds(1.0))
+        XCTAssertTrue(player.isPlaying)
+        XCTAssertNil(player.sleepEndDate)
+    }
+
+    // MARK: - 집중 타이머 경계
+
+    func testFocusTimerBoundaries() {
+        let start = Date(timeIntervalSince1970: 1_000)
+        let minute: TimeInterval = 60
+        let beforeStart = FocusTimer.phase(at: start.addingTimeInterval(-5 * minute), since: start)
+        XCTAssertEqual(beforeStart.phase, .focus)
+        XCTAssertEqual(beforeStart.endsAt, start.addingTimeInterval(25 * minute), "시작 전이면 첫 집중이 끝나는 시각을 보여준다")
+
+        XCTAssertEqual(FocusTimer.phase(at: start.addingTimeInterval(25 * minute - 1), since: start).phase, .focus)
+        XCTAssertEqual(FocusTimer.phase(at: start.addingTimeInterval(25 * minute), since: start).phase, .rest)
+        XCTAssertEqual(FocusTimer.phase(at: start.addingTimeInterval(30 * minute - 1), since: start).phase, .rest)
+        let nextCycle = FocusTimer.phase(at: start.addingTimeInterval(30 * minute), since: start)
+        XCTAssertEqual(nextCycle.phase, .focus)
+        XCTAssertEqual(nextCycle.endsAt, start.addingTimeInterval(55 * minute))
+    }
+
+    func testFocusTimerNotificationSchedule() {
+        let minutes = FocusTimer.transitions(count: 4).map { ($0.offset / 60, $0.isFocusEnd) }
+        XCTAssertEqual(minutes.map(\.0), [25, 30, 55, 60])
+        XCTAssertEqual(minutes.map(\.1), [true, false, true, false])
+    }
+
+    // MARK: - 번역
+
+    func testEveryCatalogEntryHasEnglishAndKorean() throws {
+        let catalog = try Self.stringCatalog()
+        for (key, entry) in catalog {
+            for language in ["en", "ko"] {
+                let value = ((entry["localizations"] as? [String: Any])?[language] as? [String: Any])
+                    .flatMap { $0["stringUnit"] as? [String: Any] }?["value"] as? String
+                XCTAssertFalse(value?.isEmpty ?? true, "\(key): \(language) 번역이 없다")
+            }
+        }
+    }
+
+    func testEveryKoreanStringInCodeIsInCatalog() throws {
+        let catalog = try Self.stringCatalog()
+        let appFolder = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Umbrella")
+        let files = ["View/PlayerView.swift", "View/PaywallView.swift", "View/SettingsSheet.swift", "View/LockScreenTip.swift",
+                     "Models/RainScene.swift", "ViewModel/FocusTimer.swift"]
+        var checked = 0
+        for file in files {
+            let source = try String(contentsOf: appFolder.appendingPathComponent(file), encoding: .utf8)
+            for line in source.split(separator: "\n") where !line.trimmingCharacters(in: .whitespaces).hasPrefix("//") {
+                for literal in Self.koreanLiterals(in: String(line)) {
+                    XCTAssertNotNil(catalog[literal], "\(file): \"\(literal)\"가 번역 파일에 없다")
+                    checked += 1
+                }
+            }
+        }
+        // 문구를 하나도 못 찾으면 이 테스트는 아무것도 확인하지 않은 채 통과한다.
+        XCTAssertGreaterThan(checked, 40, "코드에서 한국어 문구를 거의 찾지 못했다. 검사 방식이 깨졌을 수 있다")
+    }
+
+    private static func stringCatalog() throws -> [String: [String: Any]] {
+        let url = try XCTUnwrap(Bundle.main.url(forResource: "Localizable", withExtension: "xcstrings")
+            ?? URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Umbrella/Localizable.xcstrings"))
+        let json = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
+        return try XCTUnwrap(json["strings"] as? [String: [String: Any]])
+    }
+
+    /// 한 줄에서 한글이 들어간 문자열 리터럴을 찾아, 문자열 보간을 %@로 바꿔 돌려준다.
+    private static func koreanLiterals(in line: String) -> [String] {
+        var results: [String] = []
+        var current = ""
+        var inString = false
+        var depth = 0
+        var chars = Array(line)[...]
+        while let c = chars.popFirst() {
+            if !inString {
+                if c == "\"" { inString = true; current = "" }
+                continue
+            }
+            if depth > 0 {
+                if c == "(" { depth += 1 } else if c == ")" { depth -= 1 }
+                continue
+            }
+            if c == "\\", chars.first == "(" {
+                chars.removeFirst()
+                depth = 1
+                current += "%@"
+            } else if c == "\"" {
+                inString = false
+                if current.unicodeScalars.contains(where: { (0xAC00...0xD7A3).contains($0.value) }) { results.append(current) }
+            } else {
+                current.append(c)
+            }
+        }
+        return results
     }
 
     func testExample() throws {

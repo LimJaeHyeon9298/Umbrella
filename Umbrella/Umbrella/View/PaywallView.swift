@@ -110,9 +110,17 @@ struct PaywallView: View {
     private func buy() async {
         isWorking = true
         defer { isWorking = false }
+        guard let product else { return }
         do {
-            if let product, try await store.purchase(product) {
+            switch try await store.purchase(product) {
+            case .purchased:
                 onUnlocked()
+            case .pending:
+                message = String(localized: "보호자 승인을 기다리고 있어요. 승인되면 자동으로 열려요.")
+            case .unverified:
+                message = String(localized: "구매를 확인하지 못했어요. 잠시 후 다시 시도해 주세요.")
+            case .cancelled:
+                break
             }
         } catch {
             message = String(localized: "구매를 완료하지 못했어요. 잠시 후 다시 시도해 주세요.")
