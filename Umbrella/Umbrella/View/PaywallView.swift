@@ -30,7 +30,7 @@ struct PaywallView: View {
                 VStack(spacing: 4) {
                     Text(scene.title)
                         .font(.title2.bold())
-                    Text(isSpecial ? "특별 컬렉션 장면이에요" : "기본 컬렉션에 있는 장면이에요")
+                    Text(isSpecial ? String(localized: "특별 컬렉션 장면이에요") : String(localized: "기본 컬렉션에 있는 장면이에요"))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -102,9 +102,9 @@ struct PaywallView: View {
 
     private var buttonTitle: String {
         if let product {
-            return "\(product.displayPrice)에 열기"
+            return String(localized: "\(product.displayPrice)에 열기")
         }
-        return store.isLoaded ? "지금은 구매할 수 없어요" : "가격을 불러오는 중"
+        return store.isLoaded ? String(localized: "지금은 구매할 수 없어요") : String(localized: "가격을 불러오는 중")
     }
 
     private func buy() async {
@@ -115,7 +115,7 @@ struct PaywallView: View {
                 onUnlocked()
             }
         } catch {
-            message = "구매를 완료하지 못했어요. 잠시 후 다시 시도해 주세요."
+            message = String(localized: "구매를 완료하지 못했어요. 잠시 후 다시 시도해 주세요.")
         }
     }
 
@@ -127,10 +127,10 @@ struct PaywallView: View {
             if scene.map(store.canPlay) ?? store.ownsBaseCollection {
                 onUnlocked()
             } else {
-                message = "복원할 구매 내역이 없어요."
+                message = String(localized: "복원할 구매 내역이 없어요.")
             }
         } catch {
-            message = "구매 내역을 불러오지 못했어요. 잠시 후 다시 시도해 주세요."
+            message = String(localized: "구매 내역을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.")
         }
     }
 }

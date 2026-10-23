@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F1B2C3D40000000000000003 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F1B2C3D40000000000000002 /* InfoPlist.xcstrings */; };
+		F1B2C3D40000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F1B2C3D40000000000000000 /* Localizable.xcstrings */; };
 		464E856A2C4C94BD004D1A1F /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464E85692C4C94BD004D1A1F /* MapViewModel.swift */; };
 		46AA82D32C253A340065FFB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D22C253A340065FFB0 /* AppDelegate.swift */; };
 		46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AA82D42C253A340065FFB0 /* SceneDelegate.swift */; };
@@ -99,6 +101,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F1B2C3D40000000000000002 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		F1B2C3D40000000000000000 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		464E85692C4C94BD004D1A1F /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		46AA82CF2C253A340065FFB0 /* Umbrella.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Umbrella.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46AA82D22C253A340065FFB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 				46AA830A2C253B3B0065FFB0 /* Controllers */,
 				46AA833D2C2832E10065FFB0 /* ViewModel */,
 				46AA831F2C253B760065FFB0 /* Umbrella.entitlements */,
+				F1B2C3D40000000000000000 /* Localizable.xcstrings */,
+				F1B2C3D40000000000000002 /* InfoPlist.xcstrings */,
 				46AA82D22C253A340065FFB0 /* AppDelegate.swift */,
 				46AA82D42C253A340065FFB0 /* SceneDelegate.swift */,
 				A1B2C3D40000000000000004 /* HubRootView.swift */,
@@ -439,6 +445,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 46AA82C62C253A340065FFB0;
 			packageReferences = (
@@ -464,6 +471,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				46AA83222C253B850065FFB0 /* rain.mp3 in Resources */,
+				F1B2C3D40000000000000001 /* Localizable.xcstrings in Resources */,
+				F1B2C3D40000000000000003 /* InfoPlist.xcstrings in Resources */,
 				C1B2C3D40000000000000003 /* storm-3x4.mp4 in Resources */,
 				C1B2C3D40000000000000001 /* storm.mp4 in Resources */,
 				46AA82DC2C253A360065FFB0 /* Assets.xcassets in Resources */,
@@ -724,9 +733,9 @@
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "우산챙겨요";
+				INFOPLIST_KEY_CFBundleDisplayName = Petrichor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"우산챙겨요(Umbrella) 앱의 지역 온도와 강수량 데이터를 불러오기 위한 현재 위치 정보수집을 동의하십니까? 설정에서 이를 변경 할 수 있습니다.\"";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Petrichor uses your location to match scenes to the weather where you are. You can change this anytime in Settings.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -761,9 +770,9 @@
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Umbrella/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "우산챙겨요";
+				INFOPLIST_KEY_CFBundleDisplayName = Petrichor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"우산챙겨요(Umbrella) 앱의 지역 온도와 강수량 데이터를 불러오기 위한 현재 위치 정보수집을 동의하십니까? 설정에서 이를 변경 할 수 있습니다.\"";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Petrichor uses your location to match scenes to the weather where you are. You can change this anytime in Settings.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

@@ -155,7 +155,7 @@ struct PlayerView: View {
                     .frame(width: 80, height: 80)
                     .background(.ultraThinMaterial, in: Circle())
             }
-            .accessibilityLabel(player.isPlaying ? "일시정지" : "재생")
+            .accessibilityLabel(player.isPlaying ? String(localized: "일시정지") : String(localized: "재생"))
             HStack(spacing: 12) {
                 Button("장면 고르기") { sheet = .scenes }
                 Button {
@@ -250,7 +250,7 @@ private struct FocusCountdown: View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
             let (phase, endsAt) = FocusTimer.phase(at: context.date, since: start)
             let remaining = Duration.seconds(max(0, endsAt.timeIntervalSince(context.date)))
-            Text("\(phase == .focus ? "집중" : "휴식") · \(remaining.formatted(.time(pattern: .minuteSecond)))")
+            Text("\(phase == .focus ? String(localized: "집중") : String(localized: "휴식")) · \(remaining.formatted(.time(pattern: .minuteSecond)))")
                 .font(.title3.monospacedDigit().weight(.medium))
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -316,7 +316,7 @@ private struct ScenePicker: View {
                         card(scene)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel(canPlay(scene) ? scene.title : "\(scene.title), 잠김, 1분 미리듣기 가능")
+                    .accessibilityLabel(canPlay(scene) ? scene.title : String(localized: "\(scene.title), 잠김, 1분 미리듣기 가능"))
                 }
             }
             .scrollTargetLayout()

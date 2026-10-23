@@ -61,9 +61,9 @@ struct SettingsSheet: View {
         defer { isRestoring = false }
         do {
             try await store.restore()
-            restoreMessage = store.ownsBaseCollection ? "구매를 복원했어요." : "복원할 구매 내역이 없어요."
+            restoreMessage = store.ownsBaseCollection ? String(localized: "구매를 복원했어요.") : String(localized: "복원할 구매 내역이 없어요.")
         } catch {
-            restoreMessage = "구매 내역을 불러오지 못했어요. 잠시 후 다시 시도해 주세요."
+            restoreMessage = String(localized: "구매 내역을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.")
         }
     }
 }
