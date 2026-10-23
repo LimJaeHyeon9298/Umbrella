@@ -23,12 +23,24 @@ final class FocusTimer {
     /// `start`에 시작했을 때 `date` 시점의 단계와 그 단계가 끝나는 시각.
     static func phase(at date: Date, since start: Date) -> (phase: Phase, endsAt: Date) {
         let cycle = focusDuration + restDuration
-        let inCycle = max(0, date.timeIntervalSince(start)).truncatingRemainder(dividingBy: cycle)
-        let cycleStart = date.addingTimeInterval(-inCycle)
+        // 시작 전(기기 시계가 되돌아간 경우 등)은 첫 집중 구간으로 본다.
+        let elapsed = max(0, date.timeIntervalSince(start))
+        let cycleStart = start.addingTimeInterval((elapsed / cycle).rounded(.down) * cycle)
+        let inCycle = elapsed - cycleStart.timeIntervalSince(start)
         if inCycle < focusDuration {
             return (.focus, cycleStart.addingTimeInterval(focusDuration))
         }
         return (.rest, cycleStart.addingTimeInterval(cycle))
+    }
+
+    /// 시작 후 단계가 바뀌는 시점들. `isFocusEnd`면 집중이 끝나고 휴식이 시작된다.
+    static func transitions(count: Int) -> [(offset: TimeInterval, isFocusEnd: Bool)] {
+        let cycle = focusDuration + restDuration
+        return (0..<count).map { n in
+            let cycles = Double(n / 2)
+            let isFocusEnd = n % 2 == 0
+            return (cycles * cycle + (isFocusEnd ? focusDuration : cycle), isFocusEnd)
+        }
     }
 
     func start() {
@@ -52,11 +64,7 @@ final class FocusTimer {
         center.requestAuthorization(options: [.alert, .sound]) { granted, _ in
             guard granted else { return }
             // shortcut: 앞으로 4시간치(16번)만 미리 건다, 더 오래 켜 두면 그 뒤로는 알림이 없다
-            for n in 0..<Self.notificationCount {
-                let cycles = Double(n / 2)
-                let isFocusEnd = n % 2 == 0
-                let offset = cycles * (Self.focusDuration + Self.restDuration)
-                    + (isFocusEnd ? Self.focusDuration : Self.focusDuration + Self.restDuration)
+            for (n, (offset, isFocusEnd)) in Self.transitions(count: Self.notificationCount).enumerated() {
                 let content = UNMutableNotificationContent()
                 content.title = isFocusEnd ? String(localized: "휴식 시간이에요") : String(localized: "다시 집중할 시간이에요")
                 content.body = isFocusEnd ? String(localized: "5분 동안 쉬어 가세요.") : String(localized: "25분 동안 집중해 볼까요?")

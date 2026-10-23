@@ -101,20 +101,26 @@ final class SoundPlayer {
 
     /// `minutes`분 뒤에 소리를 서서히 줄이고 멈춘다. 0이면 예약을 끈다.
     func setSleepTimer(minutes: Int) {
+        startSleepTimer(after: TimeInterval(minutes * 60), minutes: minutes)
+    }
+
+    /// 시험에서 짧은 시간으로 부르려고 초 단위로 둔다.
+    func startSleepTimer(after seconds: TimeInterval, minutes: Int) {
         sleepTask?.cancel()
         sleepMinutes = minutes
-        guard minutes > 0 else {
+        guard seconds > 0 else {
             sleepEndDate = nil
             return
         }
-        let end = Date().addingTimeInterval(TimeInterval(minutes * 60))
+        let end = Date().addingTimeInterval(seconds)
+        let fade = min(Self.sleepFadeSeconds, seconds / 2)
         sleepEndDate = end
         // 소리가 나는 동안은 백그라운드에서도 앱이 깨어 있어서 이 작업이 계속 돈다.
         sleepTask = Task { @MainActor [weak self] in
-            try? await Task.sleep(for: .seconds(end.timeIntervalSinceNow))
+            try? await Task.sleep(for: .seconds(end.timeIntervalSinceNow - fade))
             guard !Task.isCancelled, let self else { return }
-            player?.setVolume(0, fadeDuration: Self.sleepFadeSeconds)
-            try? await Task.sleep(for: .seconds(Self.sleepFadeSeconds))
+            player?.setVolume(0, fadeDuration: fade)
+            try? await Task.sleep(for: .seconds(fade))
             guard !Task.isCancelled else { return }
             pause()
             sleepEndDate = nil

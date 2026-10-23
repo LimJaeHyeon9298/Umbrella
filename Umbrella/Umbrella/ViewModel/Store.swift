@@ -11,6 +11,23 @@ import StoreKit
 @MainActor
 @Observable
 final class Store {
+    /// 구매 기록 하나에서 필요한 것만 뽑은 것. StoreKit 없이 판정 로직을 시험하려고 둔다.
+    struct Entitlement: Equatable, Sendable {
+        let productID: String
+        let isRevoked: Bool
+        /// 애플 서명이 맞는지. 맞지 않으면 무시한다.
+        let isVerified: Bool
+    }
+
+    enum PurchaseOutcome: Equatable {
+        case purchased
+        case cancelled
+        /// 보호자 승인 등을 기다리는 중. 승인되면 Transaction.updates로 들어온다.
+        case pending
+        /// 애플 서명이 맞지 않아 인정하지 않았다.
+        case unverified
+    }
+
     nonisolated static let baseCollectionID = "com.jaehyeonLim9298.petrichor.basecollection"
 
     /// 앱이 파는 모든 상품. 특별 컬렉션 상품은 장면 목록에서 모은다.
@@ -27,6 +44,32 @@ final class Store {
             return owned.contains(baseCollectionID)
         case .special(let productID):
             return owned.contains(productID)
+        }
+    }
+
+    /// 구매 기록 목록에서 지금 가진 상품. 서명이 맞지 않거나 환불된 것은 뺀다.
+    nonisolated static func owned(from entitlements: [Entitlement]) -> Set<String> {
+        Set(entitlements.filter { $0.isVerified && !$0.isRevoked }.map(\.productID))
+    }
+
+    /// 새로 들어온 거래 하나를 반영한다. 환불이면 빼고, 서명이 맞지 않으면 아무것도 바꾸지 않는다.
+    nonisolated static func applying(_ update: Entitlement, to owned: Set<String>) -> Set<String> {
+        guard update.isVerified else { return owned }
+        var result = owned
+        if update.isRevoked {
+            result.remove(update.productID)
+        } else {
+            result.insert(update.productID)
+        }
+        return result
+    }
+
+    nonisolated static func entitlement(from result: VerificationResult<Transaction>) -> Entitlement {
+        switch result {
+        case .verified(let transaction):
+            return Entitlement(productID: transaction.productID, isRevoked: transaction.revocationDate != nil, isVerified: true)
+        case .unverified(let transaction, _):
+            return Entitlement(productID: transaction.productID, isRevoked: transaction.revocationDate != nil, isVerified: false)
         }
     }
 
@@ -85,31 +128,30 @@ final class Store {
     func refresh() async {
         let loaded = (try? await Product.products(for: Self.allProductIDs)) ?? []
         products = Dictionary(uniqueKeysWithValues: loaded.map { ($0.id, $0) })
-        var owned: Set<String> = []
+        var entitlements: [Entitlement] = []
         for await result in Transaction.currentEntitlements {
-            if case .verified(let transaction) = result, transaction.revocationDate == nil {
-                owned.insert(transaction.productID)
-            }
+            entitlements.append(Self.entitlement(from: result))
         }
-        ownedProductIDs = owned
+        ownedProductIDs = Self.owned(from: entitlements)
         isLoaded = true
     }
 
-    /// 구매가 끝나면 true. 취소했거나 승인 대기(자녀 보호 등)면 false.
-    func purchase(_ product: Product) async throws -> Bool {
+    func purchase(_ product: Product) async throws -> PurchaseOutcome {
         switch try await product.purchase() {
         case .success(let result):
-            guard case .verified(let transaction) = result else { return false }
+            guard case .verified(let transaction) = result else { return .unverified }
             await transaction.finish()
-            ownedProductIDs.insert(transaction.productID)
+            ownedProductIDs = Self.applying(Self.entitlement(from: result), to: ownedProductIDs)
             #if DEBUG
             debugShowsLocked = false
             #endif
-            return true
-        case .userCancelled, .pending:
-            return false
+            return .purchased
+        case .userCancelled:
+            return .cancelled
+        case .pending:
+            return .pending
         @unknown default:
-            return false
+            return .cancelled
         }
     }
 
@@ -120,12 +162,9 @@ final class Store {
     }
 
     private func handle(_ result: VerificationResult<Transaction>) async {
-        guard case .verified(let transaction) = result else { return }
-        if transaction.revocationDate == nil {
-            ownedProductIDs.insert(transaction.productID)
-        } else {
-            ownedProductIDs.remove(transaction.productID)
+        ownedProductIDs = Self.applying(Self.entitlement(from: result), to: ownedProductIDs)
+        if case .verified(let transaction) = result {
+            await transaction.finish()
         }
-        await transaction.finish()
     }
 }
