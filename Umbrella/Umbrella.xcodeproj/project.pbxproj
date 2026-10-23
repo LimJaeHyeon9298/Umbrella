@@ -933,7 +933,7 @@
 			repositoryURL = "https://github.com/LimJaeHyeon9298/hub-kit.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.0;
+				minimumVersion = 0.4.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/LimJaeHyeon9298/hub-kit.git",
       "state" : {
-        "revision" : "88f28cc32fbc2161604b6d2db876b6a43221bbda",
-        "version" : "0.2.0"
+        "revision" : "69fc3e0f0494ef030b6111ce1ed4e5134ce53678",
+        "version" : "0.4.0"
       }
     },
     {
