@@ -58,8 +58,8 @@ final class FocusTimer {
                 let offset = cycles * (Self.focusDuration + Self.restDuration)
                     + (isFocusEnd ? Self.focusDuration : Self.focusDuration + Self.restDuration)
                 let content = UNMutableNotificationContent()
-                content.title = isFocusEnd ? "휴식 시간이에요" : "다시 집중할 시간이에요"
-                content.body = isFocusEnd ? "5분 동안 쉬어 가세요." : "25분 동안 집중해 볼까요?"
+                content.title = isFocusEnd ? String(localized: "휴식 시간이에요") : String(localized: "다시 집중할 시간이에요")
+                content.body = isFocusEnd ? String(localized: "5분 동안 쉬어 가세요.") : String(localized: "25분 동안 집중해 볼까요?")
                 content.sound = .default
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(1, start.addingTimeInterval(offset).timeIntervalSinceNow), repeats: false)
                 center.add(UNNotificationRequest(identifier: "focus-\(n)", content: content, trigger: trigger))

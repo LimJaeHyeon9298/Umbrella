@@ -33,6 +33,7 @@ final class UmbrellaUITests: XCTestCase {
     /// 잠긴 장면을 누르면 미리듣기와 결제를 고르는 화면이 뜬다.
     func testLockedSceneOffersPreviewAndPurchase() throws {
         let app = XCUIApplication()
+        app.launchArguments += ["-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR"]
         app.launch()
         attachScreenshot(of: app, named: "1-player")
 
@@ -44,6 +45,22 @@ final class UmbrellaUITests: XCTestCase {
 
         XCTAssertTrue(app.buttons["1분 미리듣기"].waitForExistence(timeout: 5))
         attachScreenshot(of: app, named: "3-paywall")
+    }
+
+    /// 영어 기기에서 같은 흐름이 영어로 보인다.
+    func testLockedSceneInEnglish() throws {
+        let app = XCUIApplication()
+        app.launchArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+        attachScreenshot(of: app, named: "en-1-player")
+
+        app.buttons["Scenes"].tap()
+        let locked = app.buttons["Thunderstorm Night, locked, 1-minute preview available"]
+        XCTAssertTrue(locked.waitForExistence(timeout: 5))
+        locked.tap()
+
+        XCTAssertTrue(app.buttons["Preview for 1 Minute"].waitForExistence(timeout: 5))
+        attachScreenshot(of: app, named: "en-2-paywall")
     }
 
     private func attachScreenshot(of app: XCUIApplication, named name: String) {

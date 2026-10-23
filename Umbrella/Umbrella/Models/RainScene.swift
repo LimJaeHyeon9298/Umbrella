@@ -47,14 +47,14 @@ struct RainScene: Identifiable, Hashable {
 
     // shortcut: 기존 빗소리 4개와 임시 이미지다, 실제 장면 8개가 정해지면 교체한다
     static let all: [RainScene] = [
-        RainScene(id: "window", title: "창가의 비", soundName: "rain", soundExtension: "mp3",
+        RainScene(id: "window", title: String(localized: "창가의 비"), soundName: "rain", soundExtension: "mp3",
                   imageName: "kevin-wang-bI423DxLEYk-unsplash (1)", access: .free),
-        RainScene(id: "forest", title: "새벽 숲의 비", soundName: "birdsoundrain", soundExtension: "wav",
+        RainScene(id: "forest", title: String(localized: "새벽 숲의 비"), soundName: "birdsoundrain", soundExtension: "wav",
                   imageName: "mike-kotsch-HNx4QLRgy2k-unsplash", access: .free),
-        RainScene(id: "thunder", title: "천둥 치는 밤", soundName: "thunder", soundExtension: "mp3",
+        RainScene(id: "thunder", title: String(localized: "천둥 치는 밤"), soundName: "thunder", soundExtension: "mp3",
                   imageName: "storm", access: .base, videoName: "storm"),
         // shortcut: 특별 컬렉션 흐름을 시험하려고 임시로 특별 장면으로 뒀다, 실제 특별 장면이 생기면 교체하고 이 상품은 App Store Connect에 등록하지 않는다
-        RainScene(id: "shower", title: "짧은 소나기", soundName: "rainrain", soundExtension: "wav",
+        RainScene(id: "shower", title: String(localized: "짧은 소나기"), soundName: "rainrain", soundExtension: "wav",
                   imageName: "alex-dukhanov-ZxZQk7777R4-unsplash",
                   access: .special(productID: "com.jaehyeonLim9298.petrichor.special.sample")),
     ]

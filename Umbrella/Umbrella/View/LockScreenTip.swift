@@ -11,8 +11,8 @@ struct LockScreenTip: Tip {
     /// 영상 장면을 재생하는 동안에만 띄운다.
     @Parameter static var isPlayingVideo: Bool = false
 
-    static let titleText = "잠금 화면에서도 비가 내려요"
-    static let messageText = "재생 중에 잠금 화면의 그림을 누르면 화면 가득 펼쳐져요."
+    static let titleText = String(localized: "잠금 화면에서도 비가 내려요")
+    static let messageText = String(localized: "재생 중에 잠금 화면의 그림을 누르면 화면 가득 펼쳐져요.")
 
     var title: Text {
         Text(Self.titleText)
