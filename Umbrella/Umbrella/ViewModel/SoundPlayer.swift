@@ -23,6 +23,7 @@ final class SoundPlayer {
     @ObservationIgnored private var observers: [NSObjectProtocol] = []
     @ObservationIgnored private var sleepTask: Task<Void, Never>?
     @ObservationIgnored private var previewTask: Task<Void, Never>?
+    @ObservationIgnored private var playStartedAt: Date?
     private static let sleepFadeSeconds: Double = 8
     private static let lastSceneKey = "petrichor.lastSceneID"
 
@@ -39,6 +40,7 @@ final class SoundPlayer {
     func select(_ newScene: RainScene, play shouldPlay: Bool = true) {
         endPreview()
         if newScene != scene {
+            logPlaybackStopped()
             player?.stop()
             player = nil
             scene = newScene
@@ -59,11 +61,16 @@ final class SoundPlayer {
         player.volume = 0
         player.play()
         player.setVolume(1, fadeDuration: 1.5)
+        if !isPlaying {
+            playStartedAt = Date()
+            Analytics.track("scene_played", ["scene": scene.id, "access": Self.accessName(scene.access)])
+        }
         isPlaying = true
         updateNowPlaying()
     }
 
     func pause() {
+        logPlaybackStopped()
         player?.pause()
         isPlaying = false
         updateNowPlaying()
@@ -76,6 +83,7 @@ final class SoundPlayer {
     /// 잠긴 장면을 `seconds`초 동안 틀어 준다. 끝나면 소리를 줄여 멈추고 `onEnd`를 부른다.
     func startPreview(_ previewScene: RainScene, seconds: Double = 60, onEnd: @escaping () -> Void) {
         select(previewScene)
+        Analytics.track("preview_started", ["scene": previewScene.id])
         let end = Date().addingTimeInterval(seconds)
         let fade = min(3, seconds / 2)
         previewEndDate = end
@@ -88,6 +96,7 @@ final class SoundPlayer {
             guard !Task.isCancelled else { return }
             pause()
             previewEndDate = nil
+            Analytics.track("preview_finished", ["scene": previewScene.id])
             onEnd()
         }
     }
@@ -128,6 +137,21 @@ final class SoundPlayer {
         }
     }
 
+    /// 재생을 멈출 때 얼마나 들었는지 남긴다.
+    private func logPlaybackStopped() {
+        guard isPlaying, let start = playStartedAt else { return }
+        playStartedAt = nil
+        Analytics.track("playback_stopped", ["scene": scene.id, "listened": Analytics.listeningBucket(seconds: Date().timeIntervalSince(start))])
+    }
+
+    static func accessName(_ access: RainScene.Access) -> String {
+        switch access {
+        case .free: "free"
+        case .base: "base"
+        case .special: "special"
+        }
+    }
+
     private func makePlayer() -> AVAudioPlayer? {
         guard let url = scene.soundURL, let player = try? AVAudioPlayer(contentsOf: url) else { return nil }
         // shortcut: mp3는 반복 이음매에 짧은 공백이 생길 수 있다, 실제 소리는 wav나 caf로 받고 그래도 들리면 AVAudioEngine으로 바꾼다
@@ -160,6 +184,7 @@ final class SoundPlayer {
                   let type = AVAudioSession.InterruptionType(rawValue: raw) else { return }
             switch type {
             case .began:
+                logPlaybackStopped()
                 isPlaying = false
                 updateNowPlaying()
             case .ended:

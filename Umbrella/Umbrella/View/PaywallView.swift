@@ -111,8 +111,12 @@ struct PaywallView: View {
         isWorking = true
         defer { isWorking = false }
         guard let product else { return }
+        let properties: [String: Any] = ["product": product.id, "scene": scene?.id ?? "none"]
+        Analytics.track("purchase_tapped", properties)
         do {
-            switch try await store.purchase(product) {
+            let outcome = try await store.purchase(product)
+            Analytics.track("purchase_result", properties.merging(["result": "\(outcome)"]) { $1 })
+            switch outcome {
             case .purchased:
                 onUnlocked()
             case .pending:
@@ -123,6 +127,7 @@ struct PaywallView: View {
                 break
             }
         } catch {
+            Analytics.track("purchase_result", properties.merging(["result": "failed"]) { $1 })
             message = String(localized: "구매를 완료하지 못했어요. 잠시 후 다시 시도해 주세요.")
         }
     }
@@ -132,12 +137,15 @@ struct PaywallView: View {
         defer { isWorking = false }
         do {
             try await store.restore()
-            if scene.map(store.canPlay) ?? store.ownsBaseCollection {
+            let restored = scene.map(store.canPlay) ?? store.ownsBaseCollection
+            Analytics.track("restore_result", ["source": "paywall", "result": restored ? "restored" : "nothing"])
+            if restored {
                 onUnlocked()
             } else {
                 message = String(localized: "복원할 구매 내역이 없어요.")
             }
         } catch {
+            Analytics.track("restore_result", ["source": "paywall", "result": "failed"])
             message = String(localized: "구매 내역을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.")
         }
     }

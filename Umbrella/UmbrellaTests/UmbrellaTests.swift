@@ -266,6 +266,15 @@ final class UmbrellaTests: XCTestCase {
         return results
     }
 
+    func testListeningTimeBuckets() {
+        XCTAssertEqual(Analytics.listeningBucket(seconds: 0), "under_1m")
+        XCTAssertEqual(Analytics.listeningBucket(seconds: 59.9), "under_1m")
+        XCTAssertEqual(Analytics.listeningBucket(seconds: 60), "1_5m")
+        XCTAssertEqual(Analytics.listeningBucket(seconds: 300), "5_30m")
+        XCTAssertEqual(Analytics.listeningBucket(seconds: 1800), "30_60m")
+        XCTAssertEqual(Analytics.listeningBucket(seconds: 3600), "over_60m")
+    }
+
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.

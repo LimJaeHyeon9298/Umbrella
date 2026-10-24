@@ -1,0 +1,3 @@
+// 앱 타깃 공통 설정. 비밀 값은 깃에 올리지 않는 Secrets.xcconfig에서 읽는다.
+// Secrets.xcconfig가 없으면 분석이 꺼진 채로 빌드된다. 만드는 법은 Secrets.example.xcconfig 참고.
+#include? "Secrets.xcconfig"
