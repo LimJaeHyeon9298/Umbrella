@@ -35,9 +35,7 @@ struct PlayerView: View {
             Spacer()
             if let end = player.previewEndDate {
                 PreviewBadge(end: end) {
-                    pendingScene = player.scene
-                    offersPreview = false
-                    sheet = .paywall
+                    showPaywall(for: player.scene, source: "preview_badge", offersPreview: false)
                 }
             }
             if let start = focus.startDate {
@@ -100,6 +98,7 @@ struct PlayerView: View {
         // 안내 말풍선은 6초 뒤 버튼으로 접힌다. 그 뒤로는 버튼을 눌러 다시 본다.
         .task(id: lockTipShowing) {
             guard lockTipShowing else { return }
+            Analytics.track("lock_screen_tip_shown")
             try? await Task.sleep(for: .seconds(6))
             guard !Task.isCancelled else { return }
             lockScreenTip.invalidate(reason: .tipClosed)
@@ -119,9 +118,8 @@ struct PlayerView: View {
                         player.select(scene)
                         self.sheet = nil
                     } else {
-                        pendingScene = scene
-                        offersPreview = true
-                        self.sheet = .paywall
+                        Analytics.track("locked_scene_tapped", ["scene": scene.id])
+                        showPaywall(for: scene, source: "picker", offersPreview: true)
                     }
                 }
                 .presentationDetents([.height(320)])
@@ -157,7 +155,10 @@ struct PlayerView: View {
             }
             .accessibilityLabel(player.isPlaying ? String(localized: "일시정지") : String(localized: "재생"))
             HStack(spacing: 12) {
-                Button("장면 고르기") { sheet = .scenes }
+                Button("장면 고르기") {
+                    sheet = .scenes
+                    Analytics.track("scene_picker_opened")
+                }
                 Button {
                     sheet = .timer
                 } label: {
@@ -208,9 +209,15 @@ struct PlayerView: View {
         offersPreview = false
         sheet = nil
         player.startPreview(scene) {
-            pendingScene = scene
-            sheet = .paywall
+            showPaywall(for: scene, source: "preview_end", offersPreview: false)
         }
+    }
+
+    private func showPaywall(for scene: RainScene, source: String, offersPreview: Bool) {
+        pendingScene = scene
+        self.offersPreview = offersPreview
+        sheet = .paywall
+        Analytics.track("paywall_shown", ["scene": scene.id, "source": source])
     }
 
     private func showControls() {
@@ -270,7 +277,10 @@ private struct TimerSheet: View {
                 Section {
                     Toggle("집중 타이머", isOn: Binding(
                         get: { focus.startDate != nil },
-                        set: { $0 ? focus.start() : focus.stop() }
+                        set: { on in
+                            on ? focus.start() : focus.stop()
+                            Analytics.track("focus_timer_toggled", ["on": on])
+                        }
                     ))
                 } footer: {
                     Text("25분 집중하고 5분 쉬는 것을 반복해요. 켜 두는 동안 화면이 꺼지지 않아요.")
@@ -278,7 +288,10 @@ private struct TimerSheet: View {
                 Section {
                     Picker("예약 종료", selection: Binding(
                         get: { player.sleepMinutes },
-                        set: { player.setSleepTimer(minutes: $0) }
+                        set: { minutes in
+                            player.setSleepTimer(minutes: minutes)
+                            Analytics.track("sleep_timer_set", ["minutes": minutes])
+                        }
                     )) {
                         Text("끄기").tag(0)
                         Text("15분").tag(15)

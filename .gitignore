@@ -132,3 +132,6 @@ iOSInjectionProject/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/xcode,macos,swift
+
+# 분석 키 등 비밀 값 (Config/Secrets.example.xcconfig 참고)
+Umbrella/Config/Secrets.xcconfig

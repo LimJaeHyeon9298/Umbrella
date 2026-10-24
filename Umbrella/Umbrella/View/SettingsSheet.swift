@@ -19,6 +19,9 @@ struct SettingsSheet: View {
             Form {
                 Section {
                     Toggle("재생 중 화면 켜 두기", isOn: $keepScreenOn)
+                        .onChange(of: keepScreenOn) { _, on in
+                            Analytics.track("keep_screen_on_toggled", ["on": on])
+                        }
                 } footer: {
                     Text("집중 타이머를 켜면 이 설정과 상관없이 화면이 켜져 있어요.")
                 }
@@ -61,8 +64,10 @@ struct SettingsSheet: View {
         defer { isRestoring = false }
         do {
             try await store.restore()
+            Analytics.track("restore_result", ["source": "settings", "result": store.ownsBaseCollection ? "restored" : "nothing"])
             restoreMessage = store.ownsBaseCollection ? String(localized: "구매를 복원했어요.") : String(localized: "복원할 구매 내역이 없어요.")
         } catch {
+            Analytics.track("restore_result", ["source": "settings", "result": "failed"])
             restoreMessage = String(localized: "구매 내역을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.")
         }
     }

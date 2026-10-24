@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A2B2C3D40000000000000005 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B2C3D40000000000000004 /* Analytics.swift */; };
+		A2B2C3D40000000000000003 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A2B2C3D40000000000000002 /* AmplitudeSwift */; };
 		F1B2C3D40000000000000003 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F1B2C3D40000000000000002 /* InfoPlist.xcstrings */; };
 		F1B2C3D40000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F1B2C3D40000000000000000 /* Localizable.xcstrings */; };
 		464E856A2C4C94BD004D1A1F /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464E85692C4C94BD004D1A1F /* MapViewModel.swift */; };
@@ -101,6 +103,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A2B2C3D40000000000000004 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		A2B2C3D40000000000000006 /* App.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = App.xcconfig; sourceTree = "<group>"; };
+		A2B2C3D40000000000000007 /* Secrets.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.example.xcconfig; sourceTree = "<group>"; };
 		F1B2C3D40000000000000002 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		F1B2C3D40000000000000000 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		464E85692C4C94BD004D1A1F /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
@@ -172,6 +177,7 @@
 			files = (
 				46AA833A2C26DF780065FFB0 /* RxCocoa in Frameworks */,
 				46AA83322C2572690065FFB0 /* SnapKit in Frameworks */,
+				A2B2C3D40000000000000003 /* AmplitudeSwift in Frameworks */,
 				A1B2C3D40000000000000003 /* HubKitUI in Frameworks */,
 				46AA833C2C26DF780065FFB0 /* RxSwift in Frameworks */,
 				46AA83352C25727A0065FFB0 /* Then in Frameworks */,
@@ -195,9 +201,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A2B2C3D40000000000000008 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				A2B2C3D40000000000000006 /* App.xcconfig */,
+				A2B2C3D40000000000000007 /* Secrets.example.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		46AA82C62C253A340065FFB0 = {
 			isa = PBXGroup;
 			children = (
+				A2B2C3D40000000000000008 /* Config */,
 				E1B2C3D40000000000000006 /* Petrichor.storekit */,
 				46C8A904308A1D0F00C48774 /* Petrichor.storekit */,
 				46AA82D12C253A340065FFB0 /* Umbrella */,
@@ -296,6 +312,7 @@
 		46AA831B2C253B650065FFB0 /* Utilites */ = {
 			isa = PBXGroup;
 			children = (
+				A2B2C3D40000000000000004 /* Analytics.swift */,
 				46AA83182C253B650065FFB0 /* extenstions.swift */,
 				46AA831A2C253B650065FFB0 /* SearchResultDelegate.swift */,
 				46C724002C56793500A781B6 /* Color+.swift */,
@@ -370,6 +387,7 @@
 			name = Umbrella;
 			packageProductDependencies = (
 				46AA83312C2572690065FFB0 /* SnapKit */,
+				A2B2C3D40000000000000002 /* AmplitudeSwift */,
 				46AA83342C25727A0065FFB0 /* Then */,
 				46AA83392C26DF780065FFB0 /* RxCocoa */,
 				46AA833B2C26DF780065FFB0 /* RxSwift */,
@@ -452,6 +470,7 @@
 				46AA83302C2572690065FFB0 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				46AA83332C25727A0065FFB0 /* XCRemoteSwiftPackageReference "Then" */,
 				46AA83382C26DF780065FFB0 /* XCRemoteSwiftPackageReference "rxswift" */,
+				A2B2C3D40000000000000001 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
 				A1B2C3D40000000000000001 /* XCRemoteSwiftPackageReference "hub-kit" */,
 			);
 			productRefGroup = 46AA82D02C253A340065FFB0 /* Products */;
@@ -525,6 +544,7 @@
 				46AA83112C253B3C0065FFB0 /* SettingViewController.swift in Sources */,
 				46E3C8132C4906E8006D161D /* WeatherCard.swift in Sources */,
 				46AA82D52C253A340065FFB0 /* SceneDelegate.swift in Sources */,
+				A2B2C3D40000000000000005 /* Analytics.swift in Sources */,
 				E1B2C3D40000000000000005 /* SettingsSheet.swift in Sources */,
 				E1B2C3D40000000000000003 /* PaywallView.swift in Sources */,
 				E1B2C3D40000000000000001 /* Store.swift in Sources */,
@@ -723,6 +743,7 @@
 		};
 		46AA82FA2C253A360065FFB0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2B2C3D40000000000000006 /* App.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -760,6 +781,7 @@
 		};
 		46AA82FB2C253A360065FFB0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2B2C3D40000000000000006 /* App.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -945,6 +967,14 @@
 				minimumVersion = 0.4.0;
 			};
 		};
+		A2B2C3D40000000000000001 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.19.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -972,6 +1002,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A1B2C3D40000000000000001 /* XCRemoteSwiftPackageReference "hub-kit" */;
 			productName = HubKitUI;
+		};
+		A2B2C3D40000000000000002 /* AmplitudeSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A2B2C3D40000000000000001 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			productName = AmplitudeSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -17,7 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         Hub.configure(HubConfiguration(
             appId: "umbrella",
             baseURL: URL(string: "https://fxhnbyunwfusaeskilnh.supabase.co")!,
-            apiKey: "sb_publishable_mEPChJ7YzXIt39vfq_-Jtg_QGkP_df1"
+            apiKey: "sb_publishable_mEPChJ7YzXIt39vfq_-Jtg_QGkP_df1",
+            eventHandler: { Analytics.track($0) }
         ))
         try? Tips.configure()
         return true
